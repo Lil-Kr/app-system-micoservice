@@ -17,4 +17,4 @@ spring:
         namespace: app-mico-service-dev
   config:
     import:
-      - optional:nacos:app-infra-console-server.yaml
+      - optional:nacos:app-infra-console.yaml

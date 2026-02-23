@@ -17,4 +17,4 @@ spring:
         namespace: app-mico-service-test
   config:
     import:
-      - optional:nacos:app-message-provider.yaml
+      - optional:nacos:app-user-api.yaml

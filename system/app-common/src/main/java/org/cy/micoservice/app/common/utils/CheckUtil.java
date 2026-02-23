@@ -4,6 +4,8 @@ import java.util.regex.Pattern;
 
 public class CheckUtil {
 
+  private CheckUtil() {}
+
   /**邮箱正则匹配表达式**/
   public static final String EMAIL_REGEXP = "^(\\w+([-.][A-Za-z0-9]+)*){3,18}@\\w+([-.][A-Za-z0-9]+)*\\.\\w+([-.][A-Za-z0-9]+)*$";
 

@@ -20,6 +20,8 @@ public class EncryptUtils {
   //
   private static final AES aes = new AES(Mode.CBC, Padding.PKCS5Padding, key, iv);
 
+  private EncryptUtils() {}
+
   /**
    * AES模式 加密
    * @param code

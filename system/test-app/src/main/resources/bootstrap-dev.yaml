@@ -46,7 +46,7 @@ jetcache:
       # 本地缓存最大元素数量
       limit: 100
       # key转换器
-      keyConvertor: fastjson2 #other choose：fastjson/jackson
+      keyConvertor: fastjson2 #other choose: fastjson/jackson
       # 本地缓存过期时间(毫秒)
       expireAfterWriteInMillis: 300000
   ## 远程缓存配置(Redis)
@@ -66,7 +66,7 @@ jetcache:
       # 本地缓存过期时间(毫秒)
       expireAfterWriteInMillis: 1800000
       ## remote 缓存连接地址
-      uri: redis://green-123!%40qj@192.168.9.200:6606/
+      uri: redis://app-123456!qj@192.168.9.200:6606/
 
 # spring boot 3.x 专属 Actuator + prometheus 配置
 management:
@@ -77,14 +77,14 @@ management:
       base-path: /actuator
   metrics:
     tags:
-      application: ${spring.application.name} # 全局标签，所有指标都会携带该 key-value
+      application: ${spring.application.name} # 全局标签, 所有指标都会携带该 key-value
     export:
       prometheus:
         enabled: true
   # 可选：健康检查详细程度
   endpoint:
     health:
-      show-details: always  # 始终显示健康检查详细信息, 按需配置（never/when_authorized/always）
+      show-details: always  # 始终显示健康检查详细信息, 按需配置(never/when_authorized/always)
 
 infra:
   console:

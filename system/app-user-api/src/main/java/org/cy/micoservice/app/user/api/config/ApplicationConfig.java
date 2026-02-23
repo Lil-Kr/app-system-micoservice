@@ -17,12 +17,12 @@ public class ApplicationConfig {
   /**
    * topic:
    */
-  @Value("${blog.cookie.domain:web.blog}")
+  @Value("${app.cookie.domain:web-app}")
   private String cookieDomain;
 
   /**
    * topic: 发送用户进入应用信号, 用于用户的未读消息预加载
    */
-  @Value("${im.user.enter.producer-topic:blog-user-enter-topic}")
+  @Value("${im.user.enter.producer-topic:app-user-enter-topic}")
   private String userEnterTopic;
 }

@@ -86,7 +86,7 @@ public class ImConnectorNacosRegister {
   }
 
   /**
-   * 可选：服务停止时主动注销实例(加速下线, 非必须, 心跳超时也会自动删)
+   * 可选: 服务停止时主动注销实例(加速下线, 非必须, 心跳超时也会自动删)
    */
   public void deregisterTempInstance() {
     if (namingService != null) {

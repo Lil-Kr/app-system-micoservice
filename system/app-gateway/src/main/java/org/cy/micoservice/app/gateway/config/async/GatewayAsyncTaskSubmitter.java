@@ -98,7 +98,7 @@ public class GatewayAsyncTaskSubmitter {
   );
 
   public <T> CompletableFuture<T> supplyAsync(String taskName, Supplier<T> task, Supplier<T> fallback, Long timeoutMs) {
-    // 队列打满时直接走兜底，防止雪崩
+    // 队列打满时直接走兜底, 防止雪崩
     if (submitTaskPool.getQueue().size() > OVER_LIMIT_QUEUE_SIZE_2) {
       log.warn("[{}] async queue overloaded, use fallback", taskName);
       return CompletableFuture.completedFuture(fallback.get());

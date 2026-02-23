@@ -11,7 +11,7 @@ import java.util.Date;
  */
 public class RunCodeUtil {
 
-  private static final int count = 0 ; //总数量：一般在实际业务中是需要在数据库中获取到当前的数据总数量
+  private static final int count = 0 ; //总数量: 一般在实际业务中是需要在数据库中获取到当前的数据总数量
   private static final String STR_FORMAT = "000"; //需要格式化的流水号规则
 
   /**
@@ -28,7 +28,7 @@ public class RunCodeUtil {
   }
 
   /**
-   * @return 获取年月日+三位流水号(根据当天生成的单据数量, 生成流水号如：20190522001,20190601001)
+   * @return 获取年月日+三位流水号(根据当天生成的单据数量, 生成流水号如: 20190522001,20190601001)
    */
   public static String getFourPipelineNumbers() {
     // 所要获取的流水编码code

@@ -1,11 +1,5 @@
-server:
-  ## dubbo: 7599
-  port: 7501
-  tomcat:
-    uri-encoding: UTF-8
-  servlet:
-    context-path: /api
-
+## dubbo: 7599
+## http: 7501
 spring:
   application:
     name: app-user-api

@@ -13,9 +13,9 @@ import org.springframework.context.annotation.Bean;
 @Slf4j
 public class CacheAutoconfigurationBean {
 
-    @Bean
-    public CacheService<Object> cacheService() {
-        log.info("初始化cacheService");
-        return new CacheServiceImpl<Object>();
-    }
+  @Bean
+  public CacheService<Object> cacheService() {
+    log.info("init cacheService");
+    return new CacheServiceImpl<Object>();
+  }
 }

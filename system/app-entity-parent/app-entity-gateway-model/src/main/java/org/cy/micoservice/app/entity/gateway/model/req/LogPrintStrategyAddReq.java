@@ -30,7 +30,7 @@ public class LogPrintStrategyAddReq extends BaseReq implements Serializable {
 
   /**
    * 策略类型
-   * @see org.cy.micoservice.blog.gateway.facade.enums.LogPrintStrategyTypeEnum
+   * @see org.cy.micoservice.app.gateway.facade.enums.LogPrintStrategyTypeEnum
    */
   @NotBlank(message = "strategyType 不能为空")
   @Size(min = 1, max = 32, message = "strategyType 长度必须在 1 ~ 32 范围")

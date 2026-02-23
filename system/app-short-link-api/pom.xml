@@ -18,6 +18,9 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<app-common.version>1.0.0</app-common.version>
 		<app-framework-parent.version>1.0.0</app-framework-parent.version>
+		<app-entity-parent.version>1.0.0</app-entity-parent.version>
+		
+		<app-short-link-facade.version>1.0.0</app-short-link-facade.version>
 	</properties>
 	
 	<dependencies>
@@ -57,8 +60,26 @@
 		
 		<dependency>
 			<groupId>org.cy.micoservice.app</groupId>
+			<artifactId>app-framework-identify-starter</artifactId>
+			<version>${app-framework-parent.version}</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.cy.micoservice.app</groupId>
 			<artifactId>app-framework-dubbo-starter</artifactId>
 			<version>${app-framework-parent.version}</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.cy.micoservice.app</groupId>
+			<artifactId>app-entity-short-link-model</artifactId>
+			<version>${app-entity-parent.version}</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.cy.micoservice.app</groupId>
+			<artifactId>app-short-link-facade</artifactId>
+			<version>${app-short-link-facade.version}</version>
 		</dependency>
 	</dependencies>
 	

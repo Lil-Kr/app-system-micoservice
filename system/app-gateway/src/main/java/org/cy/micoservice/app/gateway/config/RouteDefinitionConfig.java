@@ -81,7 +81,7 @@ public class RouteDefinitionConfig {
   private void createDubboGenericInvoke(RouteConfig routeConfig) {
     String originUri = routeConfig.getUri();
     originUri = originUri.replaceAll(GatewayInfraConsoleSdkConstants.DUBBO_URL_PREFIX, "");
-    // org.cy.micoservice.blog.user.facade.interfaces.UserFacade#test
+    // org.cy.micoservice.app.user.facade.interfaces.UserFacade#test
     String[] uriArray = originUri.split("#");
     dubboInvokerService.save(uriArray[0]);
   }

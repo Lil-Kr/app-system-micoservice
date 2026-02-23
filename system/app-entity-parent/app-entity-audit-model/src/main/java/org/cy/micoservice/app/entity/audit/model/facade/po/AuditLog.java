@@ -43,7 +43,7 @@ public class AuditLog implements Serializable {
 
   /**
    * 审记渠道
-   * @see org.cy.micoservice.blog.audit.facade.enums.AuditPlatformEnum
+   * @see org.cy.micoservice.app.audit.facade.enums.AuditPlatformEnum
    */
   private String channel;
 
@@ -54,7 +54,7 @@ public class AuditLog implements Serializable {
 
   /**
    * 第三方数据类型
-   * @see org.cy.micoservice.blog.audit.facade.enums.AuditRefTypeEnum
+   * @see org.cy.micoservice.app.audit.facade.enums.AuditRefTypeEnum
    */
   private Integer refType;
 

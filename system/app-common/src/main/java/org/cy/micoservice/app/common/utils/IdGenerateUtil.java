@@ -9,6 +9,8 @@ import java.util.Random;
  */
 public class IdGenerateUtil {
 
+  private IdGenerateUtil() {}
+
   // 生成随机用户ID
   public static Long generateUserId() {
     Random random = new Random();

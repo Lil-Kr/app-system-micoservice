@@ -19,7 +19,7 @@ public class ShardingWarmUpRunner implements ApplicationRunner {
 
   @Override
   public void run(ApplicationArguments args) {
-    // 随便查一条，触发完整初始化
+    // 随便查一条, 触发完整初始化
     userMapper.getUserById(0L);
   }
 }

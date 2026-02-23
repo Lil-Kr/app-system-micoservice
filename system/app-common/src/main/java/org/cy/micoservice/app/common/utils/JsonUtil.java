@@ -235,7 +235,7 @@ public class JsonUtil {
         // 普通 bean → readValue
         return OBJECT_MAPPER.readValue(str, clazz);
       }
-      // 非字符串：对象转换
+      // 非字符串: 对象转换
       return OBJECT_MAPPER.convertValue(obj, clazz);
     } catch (Exception e) {
       log.error("Failed to convert object, obj: {}, clazz: {}", obj, clazz.getName(), e);

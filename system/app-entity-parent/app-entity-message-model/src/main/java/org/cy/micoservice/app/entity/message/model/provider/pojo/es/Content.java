@@ -23,7 +23,7 @@ public class Content implements Serializable {
   private static final long serialVersionUID = -3124149548368964811L;
 
   /**
-   * 对话类型: org.cy.micoservice.blog.message.facade.enums.ChatRelationTypeEnum
+   * 对话类型: org.cy.micoservice.app.message.facade.enums.ChatRelationTypeEnum
    */
   private Integer type;
 

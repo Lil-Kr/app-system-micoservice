@@ -16,6 +16,8 @@ public class DateUtil {
 
   private static DateTimeFormatter formatterForDate = DateTimeFormatter.ofPattern(YYYY_MM_DD);
 
+  private DateUtil() {}
+
   /**
    * 格式化时间转换为时间戳
    * 格式: Long -> yyyy-MM-dd HH:mm:ss

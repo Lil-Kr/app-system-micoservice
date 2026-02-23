@@ -22,6 +22,7 @@
 		<module>app-entity-audit-model</module>
 		<module>app-entity-user-model</module>
 		<module>app-entity-goods-model</module>
+		<module>app-entity-short-link-model</module>
 	</modules>
 	
 	<properties>

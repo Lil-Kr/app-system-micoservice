@@ -77,13 +77,13 @@ public class RouteConfig extends BaseEntity {
 
   /**
    * 认证类型
-   * see org.cy.micoservice.blog.gateway.facade.enums.GatewayRouterAuthTypeEnum
+   * see org.cy.micoservice.app.gateway.facade.enums.GatewayRouterAuthTypeEnum
    */
   private String authType;
 
   /**
    * 生效状态: 0, 1
-   * see org.cy.micoservice.blog.gateway.facade.enums.GatewayRouterStatusEnum
+   * see org.cy.micoservice.app.gateway.facade.enums.GatewayRouterStatusEnum
    */
   @TableField("`status`")
   private Integer status;

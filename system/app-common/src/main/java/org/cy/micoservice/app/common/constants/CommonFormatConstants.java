@@ -9,4 +9,5 @@ public class CommonFormatConstants {
 
   public static String COMMENT_FORMAT_UNDERSCORE_SPLIT = "%s_%s";
   public static String COMMENT_FORMAT_COLON_SPLIT = "%s:%s";
+  public static String COMMENT_FORMAT_SLASH_SPLIT = "%s/%s";
 }

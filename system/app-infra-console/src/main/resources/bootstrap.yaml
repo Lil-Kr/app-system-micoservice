@@ -1,5 +1,6 @@
+## dubbo: 8199
+## http: 8101
 server:
-  ## dubbo: 8199
   port: 8101
 
 spring:

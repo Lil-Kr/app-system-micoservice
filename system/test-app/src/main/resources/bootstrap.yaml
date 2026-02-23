@@ -1,11 +1,5 @@
 # dubbo: 8899
-server:
-  port: 8888
-  tomcat:
-    uri-encoding: UTF-8
-  servlet:
-    context-path: /api
-
+# http: 8888
 spring:
   application:
     name: test-app

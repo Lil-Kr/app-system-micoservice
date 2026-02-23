@@ -44,32 +44,32 @@ public class MessageApplicationProperties {
   /**
    * topic: 消费消息, 用户打开聊天窗口
    */
-  @Value("${im.open.chat.consumer-topic:blog-open-chat-topic}")
+  @Value("${im.open.chat.consumer-topic:app-open-chat-topic}")
   private String openChatTopic;
 
   /**
    * topic: 发送用户进入应用信号, 用于用户的未读消息预加载
    */
-  @Value("${im.user.enter.consumer-topic:blog-user-enter-topic}")
+  @Value("${im.user.enter.consumer-topic:app-user-enter-topic}")
   private String userEnterTopic;
 
   /** ======================== ES index config ======================== **/
   /**
    * es index: chat relation
    */
-  @Value("${es.chat.relation.index:blog.message.chat-relation}")
+  @Value("${es.chat.relation.index:app.message.chat-relation}")
   private String esChatRelationIndex;
 
   /**
    * es index: chat record
    */
-  @Value("${es.chat.record.index:blog.message.chat-record}")
+  @Value("${es.chat.record.index:app.message.chat-record}")
   private String esChatRecordIndex;
 
   /**
    * es index: chat receive box
    */
-  @Value("${es.chat.box.index:blog.message.chat-box}")
+  @Value("${es.chat.box.index:app.message.chat-box}")
   private String esChatBoxIndex;
 
   /** ======================== ES index config ======================== **/

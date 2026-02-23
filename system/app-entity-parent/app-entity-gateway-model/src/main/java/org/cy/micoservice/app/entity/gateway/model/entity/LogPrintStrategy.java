@@ -38,7 +38,7 @@ public class LogPrintStrategy extends BaseEntity {
 
   /**
    * 策略类型
-   * org.cy.micoservice.blog.gateway.facade.enums.LogPrintStrategyTypeEnum
+   * org.cy.micoservice.app.gateway.facade.enums.LogPrintStrategyTypeEnum
    */
   private String strategyType;
 

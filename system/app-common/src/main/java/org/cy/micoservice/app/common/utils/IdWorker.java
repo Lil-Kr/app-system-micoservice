@@ -5,6 +5,7 @@ import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.RandomUtil;
 
 public class IdWorker {
+
   //下面两个每个5位, 加起来就是10位的工作机器id
   private long workerId;    //工作id
   private long datacenterId;   //数据id
@@ -88,11 +89,11 @@ public class IdWorker {
     lastTimestamp = timestamp;
 
     /**
-     * 返回结果：
+     * 返回结果: 
      * (timestamp - twepoch) << timestampLeftShift) 表示将时间戳减去初始时间戳, 再左移相应位数
      * (datacenterId << datacenterIdShift) 表示将数据id左移相应位数
      * (workerId << workerIdShift) 表示将工作id左移相应位数
-     * | 是按位或运算符, 例如：x | y, 只有当x, y都为0的时候结果才为0, 其它情况结果都为1。
+     * | 是按位或运算符, 例如: x | y, 只有当x, y都为0的时候结果才为0, 其它情况结果都为1。
      * 因为个部分只有相应位上的值有意义, 其它位上都是0, 所以将各部分的值进行 | 运算就能得到最终拼接好的id
      */
     return ((timestamp - twepoch) << timestampLeftShift) |

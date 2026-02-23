@@ -12,14 +12,14 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 
 /**
- * 压测工具：用于评估 IdService#getId() 在指定并发与时间下的吞吐表现。
- * 单一职责：仅提供压测方法, 不引入额外依赖, 也不自动触发执行。
+ * 压测工具: 用于评估 IdService#getId() 在指定并发与时间下的吞吐表现。
+ * 单一职责: 仅提供压测方法, 不引入额外依赖, 也不自动触发执行。
  */
 public final class IdServiceBenchmark {
 
 
   /**
-   * 便捷方法：无预热。
+   * 便捷方法: 无预热。
    */
   public static BenchmarkResult benchmarkGetId(IdService idService, int threads, int durationSeconds) {
     return benchmarkGetId(idService, threads, durationSeconds, 0);
@@ -49,7 +49,7 @@ public final class IdServiceBenchmark {
       throw new IllegalArgumentException("warmupSeconds must be >= 0");
     }
 
-    // 预热：触发类加载与JIT, 避免测量阶段受冷启动干扰
+    // 预热: 触发类加载与JIT, 避免测量阶段受冷启动干扰
     if (warmupSeconds > 0) {
       final long warmupEnd = System.nanoTime() + TimeUnit.SECONDS.toNanos(warmupSeconds);
       long spin = 0;

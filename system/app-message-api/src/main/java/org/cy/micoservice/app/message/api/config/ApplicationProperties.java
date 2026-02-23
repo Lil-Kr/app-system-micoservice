@@ -18,12 +18,12 @@ public class ApplicationProperties {
   @Value("${im.secret.key:PIhqklxMNarWuqoNFFGJ5QGgesg==hkl1UBGlqopaKHKq9123h1}")
   private String imSecretKey;
 
-  @Value("${im.server.address:ws://localhost:10883/blog/im/chat}")
+  @Value("${im.server.address:ws://localhost:10883/app/im/chat}")
   private String imServerAddress;
 
   /**
    * topic: 推送消息, 当用户打开聊天窗口
    */
-  @Value("${im.open.chat.producer-topic:blog-open-chat-topic}")
+  @Value("${im.open.chat.producer-topic:app-open-chat-topic}")
   private String openChatTopic;
 }

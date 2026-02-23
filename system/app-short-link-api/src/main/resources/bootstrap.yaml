@@ -1,11 +1,5 @@
-server:
-  # dubbo: 7999
-  port: 7901
-  tomcat:
-    uri-encoding: UTF-8
-  servlet:
-    context-path: /api
-
+# http:  7901
+# dubbo: 7999
 spring:
   application:
     name: app-short-link-api

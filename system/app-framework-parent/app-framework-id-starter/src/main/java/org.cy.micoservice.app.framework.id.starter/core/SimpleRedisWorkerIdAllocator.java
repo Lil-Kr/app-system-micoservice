@@ -9,7 +9,7 @@ import java.util.List;
 
 /**
  * @Author: Lil-K
- * @Description: 基于Redis的最简workerId分配器, 支持原子性循环重置：
+ * @Description: 基于Redis的最简workerId分配器, 支持原子性循环重置: 
  * - 使用Lua脚本执行INCR操作, 并在溢出时将计数器重置为(base+1), 以便从下一个槽位继续分配。
  * - 无需注册机制, 无需租约管理。
  */
@@ -24,7 +24,7 @@ public class SimpleRedisWorkerIdAllocator extends AbstractWorkerIdAllocator  {
     super(namespace, maxWorker);
     Assert.notNull(redisTemplate, "redisTemplate must not be null");
     this.redisTemplate = redisTemplate;
-    this.counterKey = "gn:id:worker:" + getNamespace() + ":counter";
+    this.counterKey = "app:id:worker:" + getNamespace() + ":counter";
     this.script = buildLuaScript();
   }
 

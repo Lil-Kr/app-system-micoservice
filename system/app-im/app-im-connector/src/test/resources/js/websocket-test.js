@@ -32,8 +32,8 @@ function addHeader() {
     const headerItem = document.createElement('div');
     headerItem.className = 'header-item';
     headerItem.innerHTML = `
-        <input type="text" class="header-key" placeholder="头名称（如 X-Token）">
-        <input type="text" class="header-value" placeholder="头值（如 xxx-xxx-xxx）">
+        <input type="text" class="header-key" placeholder="头名称(如 X-Token)">
+        <input type="text" class="header-value" placeholder="头值(如 xxx-xxx-xxx)">
         <button class="btn-remove-header" onclick="removeHeader(this)">删除</button>
     `;
     headerList.appendChild(headerItem);
@@ -49,7 +49,7 @@ function removeHeader(btn) {
     }
 }
 
-// 复用的消息处理函数（统一处理新/旧连接的消息）
+// 复用的消息处理函数(统一处理新/旧连接的消息)
 function handleWsMessage(event) {
     try {
         const msgObj = JSON.parse(event.data);
@@ -60,7 +60,7 @@ function handleWsMessage(event) {
             addLog('in', `收到服务端消息：${event.data}`);
         }
     } catch (e) {
-        addLog('error', `消息解析失败：${e.message}，原始消息：${event.data}`);
+        addLog('error', `消息解析失败：${e.message}, 原始消息：${event.data}`);
         addLog('in', `收到服务端消息：${event.data}`);
     }
 }
@@ -77,12 +77,12 @@ function releaseOldWebSocket(oldWsInstance) {
     oldWsInstance.onclose = null;
     oldWsInstance.onerror = null;
 
-    // 判断连接状态，确保真正关闭
+    // 判断连接状态, 确保真正关闭
     if (oldWsInstance.readyState === WebSocket.OPEN) {
         try {
-            const closeFuture = oldWsInstance.close(1001, "1301信号重连成功，主动关闭旧连接");
+            const closeFuture = oldWsInstance.close(1001, "1301信号重连成功, 主动关闭旧连接");
             closeFuture.then(() => {
-                addLog('info', '旧WebSocket连接已彻底关闭（closeFuture完成）');
+                addLog('info', '旧WebSocket连接已彻底关闭(closeFuture完成)');
             }).catch((e) => {
                 addLog('warn', `旧连接关闭时触发异常：${e.message}`);
             });
@@ -90,9 +90,9 @@ function releaseOldWebSocket(oldWsInstance) {
             addLog('warn', `关闭旧连接失败：${e.message}`);
         }
     } else if (oldWsInstance.readyState === WebSocket.CLOSING) {
-        addLog('info', '旧WebSocket连接正在关闭，等待完成...');
+        addLog('info', '旧WebSocket连接正在关闭, 等待完成...');
     } else {
-        addLog('info', '旧WebSocket连接已关闭，无需重复操作');
+        addLog('info', '旧WebSocket连接已关闭, 无需重复操作');
     }
 
     // 强制解除引用
@@ -111,7 +111,7 @@ function clearHeartbeatTimer() {
     }
 }
 
-// 启动心跳（绑定全局ws）
+// 启动心跳(绑定全局ws)
 function startHeartbeat() {
     clearHeartbeatTimer();
     heartbeatTimer = setInterval(() => {
@@ -134,22 +134,22 @@ function startHeartbeat() {
 // 重连WebSocket核心逻辑
 function reconnectWebSocket() {
     if (reconnecting) {
-        addLog('warn', '已有重连操作正在进行，跳过本次触发');
+        addLog('warn', '已有重连操作正在进行, 跳过本次触发');
         return;
     }
     reconnecting = true;
 
-    addLog('warn', '收到1301 MOVE信号，开始执行重连逻辑（保留旧连接兜底）...');
+    addLog('warn', '收到1301 MOVE信号, 开始执行重连逻辑(保留旧连接兜底)...');
 
     const oldWs = ws;
     const isOldWsAlive = oldWs && oldWs.readyState === WebSocket.OPEN;
     if (isOldWsAlive) {
-        addLog('info', '旧WebSocket连接仍存活，重连期间保留旧连接');
+        addLog('info', '旧WebSocket连接仍存活, 重连期间保留旧连接');
     }
 
     const wsUrl = document.getElementById('wsUrl').value.trim();
     if (!wsUrl) {
-        addLog('error', '重连失败：WebSocket地址为空，无法重连');
+        addLog('error', '重连失败：WebSocket地址为空, 无法重连');
         reconnecting = false;
         return;
     }
@@ -158,13 +158,13 @@ function reconnectWebSocket() {
     let reconnectTimeoutTimer = null;
     try {
         newWs = new WebSocket(wsUrl);
-        // 关键：提前绑定消息监听（避免连接成功后漏收消息）
+        // 关键：提前绑定消息监听(避免连接成功后漏收消息)
         newWs.onmessage = handleWsMessage;
         // 绑定错误监听
         newWs.onerror = function(error) {
             clearTimeout(reconnectTimeoutTimer);
             addLog('error', `新WebSocket连接错误：${error.message || JSON.stringify(error)}`);
-            addLog('warn', '重连失败，继续使用旧WebSocket连接（若仍存活）');
+            addLog('warn', '重连失败, 继续使用旧WebSocket连接(若仍存活)');
             newWs = null;
             reconnecting = false;
         };
@@ -196,13 +196,13 @@ function reconnectWebSocket() {
     newWs.onopen = function() {
         clearTimeout(reconnectTimeoutTimer);
         addLog('info', '新WebSocket连接成功！开始切换连接...');
-        // 【新增】先强制解锁按钮（兜底）
+        // 【新增】先强制解锁按钮(兜底)
         connectBtn.disabled = true;
         disconnectBtn.disabled = false;
         sendBtn.disabled = false;
         // 校验新连接状态
         if (newWs.readyState !== WebSocket.OPEN) {
-            addLog('error', '新连接状态异常，切换失败');
+            addLog('error', '新连接状态异常, 切换失败');
             reconnecting = false;
             return;
         }
@@ -220,7 +220,7 @@ function reconnectWebSocket() {
                 oldWs.send(switchAckMsg);
                 addLog('out', `向旧连接发送切换确认信号：${switchAckMsg}`);
 
-                // 延迟释放旧连接（延长至1秒，确保信号发送完成）
+                // 延迟释放旧连接(延长至1秒, 确保信号发送完成)
                 setTimeout(() => {
                     releaseOldWebSocket(oldWs);
                 }, 1000);
@@ -231,7 +231,7 @@ function reconnectWebSocket() {
 
         // 替换全局ws为新ws
         ws = newWs;
-        // 重启心跳（绑定全局ws）
+        // 重启心跳(绑定全局ws)
         startHeartbeat();
         // 同步UI状态
         connectBtn.disabled = true;
@@ -245,11 +245,11 @@ function reconnectWebSocket() {
     // 新ws关闭回调
     newWs.onclose = function(event) {
         clearTimeout(reconnectTimeoutTimer);
-        addLog('error', `新WebSocket连接关闭：代码${event.code}，原因${event.reason}`);
-        addLog('warn', '重连失败，继续使用旧WebSocket连接（若仍存活）');
-        // 若旧连接已死，更新UI
+        addLog('error', `新WebSocket连接关闭：代码${event.code}, 原因${event.reason}`);
+        addLog('warn', '重连失败, 继续使用旧WebSocket连接(若仍存活)');
+        // 若旧连接已死, 更新UI
         if (!isOldWsAlive) {
-            addLog('error', '旧连接也已关闭，请手动点击"连接"按钮重新建立连接');
+            addLog('error', '旧连接也已关闭, 请手动点击"连接"按钮重新建立连接');
             connectBtn.disabled = false;
             disconnectBtn.disabled = true;
             sendBtn.disabled = true;
@@ -296,7 +296,7 @@ function connectWebSocket() {
         ws.onmessage = handleWsMessage;
 
         ws.onclose = function(event) {
-            addLog('info', `WebSocket 连接关闭，代码：${event.code}，原因：${event.reason}`);
+            addLog('info', `WebSocket 连接关闭, 代码：${event.code}, 原因：${event.reason}`);
             connectBtn.disabled = false;
             disconnectBtn.disabled = true;
             sendBtn.disabled = true;
@@ -375,12 +375,12 @@ function batchSendMessage() {
                 const batchMessage = message.replace(/\{index\}/g, i + 1);
                 try {
                     ws.send(batchMessage);
-                    addLog('out', `批量发送（${i + 1}/${batchCount}）：${batchMessage}`);
+                    addLog('out', `批量发送(${i + 1}/${batchCount})：${batchMessage}`);
                 } catch (e) {
-                    addLog('error', `批量发送失败（${i + 1}/${batchCount}）：${e.message}`);
+                    addLog('error', `批量发送失败(${i + 1}/${batchCount})：${e.message}`);
                 }
             } else {
-                addLog('error', `批量发送中断（${i + 1}/${batchCount}）：连接已断开`);
+                addLog('error', `批量发送中断(${i + 1}/${batchCount})：连接已断开`);
             }
         }, i * 100);
     }

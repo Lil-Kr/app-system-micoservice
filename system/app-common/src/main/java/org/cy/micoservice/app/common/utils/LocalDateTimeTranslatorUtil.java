@@ -15,6 +15,8 @@ public class LocalDateTimeTranslatorUtil {
 
   private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
+  private LocalDateTimeTranslatorUtil() {}
+
   public static String translate(LocalDateTime dateTime) {
     ZoneId eastEightZone = ZoneId.of("Asia/Shanghai");
     LocalDateTime localDateTime = Instant.ofEpochMilli(System.currentTimeMillis())

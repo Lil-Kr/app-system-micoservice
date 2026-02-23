@@ -334,14 +334,14 @@ public class WeightedRandomUtil {
   }
 
   /**
-   * 静态方法：向默认实例添加数据
+   * 静态方法: 向默认实例添加数据
    */
   public static void putToDefault(String key, Object value, int weight) {
     DEFAULT_INSTANCE.put(key, value, weight);
   }
 
   /**
-   * 静态方法：从默认实例随机选择
+   * 静态方法: 从默认实例随机选择
    */
   public static Object selectFromDefault() {
     return DEFAULT_INSTANCE.select();

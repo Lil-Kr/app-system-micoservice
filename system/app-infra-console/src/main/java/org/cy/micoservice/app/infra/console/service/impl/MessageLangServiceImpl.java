@@ -27,7 +27,7 @@ public class MessageLangServiceImpl implements MessageLangService {
 	@Override
 	public String getMessage(String lang, String key) {
 		Locale locale = (lang != null && !lang.isBlank()) ? Locale.forLanguageTag(lang) : Locale.getDefault();
-		// 兜底，避免 500
+		// 兜底, 避免 500
 		return messageSource.getMessage(key,null, key, locale);
 	}
 

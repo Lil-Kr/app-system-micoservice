@@ -1,5 +1,5 @@
+## dubbo: 6199
 server:
-  ## dubbo: 6199
   port: 6101
 
 spring:

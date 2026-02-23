@@ -15,9 +15,9 @@ import org.springframework.context.annotation.Configuration;
 @RefreshScope
 public class UserApplicationProperties {
 
-  @Value("${es.user.follower.index:blog.user.user-follower-relation}")
+  @Value("${es.user.follower.index:app.user.user-follower-relation}")
   private String userFollowerEsIndexName;
 
-  @Value("${es.user.phone.index:blog.user.user-phone-relation}")
+  @Value("${es.user.phone.index:app.user.user-phone-relation}")
   private String userPhoneEsIndexName;
 }

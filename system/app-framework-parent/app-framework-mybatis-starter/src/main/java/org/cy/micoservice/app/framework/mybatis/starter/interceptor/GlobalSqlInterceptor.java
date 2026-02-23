@@ -50,7 +50,7 @@ public class GlobalSqlInterceptor implements Interceptor {
 
     /**
      * 获取执行方法的位置 -> 绝对路径
-     * dao.org.cy.micoservice.blog.SysUserMapper.getUserByToken
+     * dao.org.cy.micoservice.app.SysUserMapper.getUserByToken
      */
     String namespace = mappedStatement.getId();
 

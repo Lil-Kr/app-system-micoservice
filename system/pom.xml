@@ -26,12 +26,12 @@
 		<module>app-infra-console</module>
 		<module>app-infra-console-sdk</module>
 		<module>app-im</module>
-		<module>app-picture-provider</module>
-		<module>app-picture-facade</module>
 		<module>app-picture-api</module>
-		<module>app-user-provider</module>
-		<module>app-user-facade</module>
+		<module>app-picture-facade</module>
+		<module>app-picture-provider</module>
 		<module>app-user-api</module>
+		<module>app-user-facade</module>
+		<module>app-user-provider</module>
 		<module>app-message-api</module>
 		<module>app-message-facade</module>
 		<module>app-message-provider</module>
@@ -40,16 +40,17 @@
 		<module>app-goods-api</module>
 		<module>app-goods-facade</module>
 		<module>app-goods-provider</module>
+		<module>app-short-link-api</module>
 		<module>app-short-link-facade</module>
 		<module>app-short-link-provider</module>
 		<module>test-app</module>
-		<module>app-short-link-api</module>
 	</modules>
 
 	<properties>
 		<java.version>17</java.version>
-		<maven.compiler.source>17</maven.compiler.source>
-		<maven.compiler.target>17</maven.compiler.target>
+		<maven.compiler.source>${java.version}</maven.compiler.source>
+		<maven.compiler.target>${java.version}</maven.compiler.target>
+		<maven.compiler.release>${java.version}</maven.compiler.release>
 		
 		<!--	spring cloud	-->
 		<spring-cloud.version>2022.0.0</spring-cloud.version>
@@ -58,14 +59,18 @@
 		<sentinel-datasource.version>1.8.9</sentinel-datasource.version>
 		
 		<!--mybatis-plus-->
+		<druid.version>1.2.6</druid.version>
 		<mybatis-plus.version>3.5.5</mybatis-plus.version>
-<!--		<druid.version>1.2.6</druid.version>-->
 		
 		<!--mysql-->
 		<mysql.version>8.4.0</mysql.version>
-		
 		<!--sharding jdbc-->
-		<sharding.jdbc.version>5.2.1</sharding.jdbc.version>
+		<shardingsphere.version>5.2.1</shardingsphere.version>
+		
+		<!-- Redis cache jetcache -->
+		<jetcache.version>2.7.8</jetcache.version>
+		<!-- Redis cache redisson -->
+		<redisson.version>3.35.0</redisson.version>
 		
 		<!-- ES -->
 		<elasticsearch.version>8.10.4</elasticsearch.version>
@@ -75,6 +80,7 @@
 		
 		<!-- Rocket MQ -->
 		<rocketmq.client.version>4.8.0</rocketmq.client.version>
+		<!-- Kafka MQ -->
 		<kafka.client.version>3.9.1</kafka.client.version>
 		
 		<!-- tools -->
@@ -146,17 +152,17 @@
 			</dependency>
 
 			<!-- druid 连接池 -->
-			<!--<dependency>
+			<dependency>
 				<groupId>com.alibaba</groupId>
 				<artifactId>druid-spring-boot-starter</artifactId>
 				<version>${druid.version}</version>
-			</dependency>-->
+			</dependency>
 			
-			<!-- sharding jdbc -->
+			<!-- sharding-jdbc -->
 			<dependency>
 				<groupId>org.apache.shardingsphere</groupId>
 				<artifactId>shardingsphere-jdbc-core</artifactId>
-				<version>${sharding.jdbc.version}</version>
+				<version>${shardingsphere.version}</version>
 			</dependency>
 			
 			<!-- ES -->
@@ -171,6 +177,20 @@
 				<groupId>com.google.guava</groupId>
 				<artifactId>guava</artifactId>
 				<version>${google-guava.version}</version>
+			</dependency>
+			
+			<!-- Redis cache -->
+			<dependency>
+				<groupId>com.alicp.jetcache</groupId>
+				<artifactId>jetcache-starter-redis-lettuce</artifactId>
+				<version>${jetcache.version}</version>
+			</dependency>
+			
+			<!-- Redisson (Redis客户端，用于分布式锁等) -->
+			<dependency>
+				<groupId>org.redisson</groupId>
+				<artifactId>redisson-spring-boot-starter</artifactId>
+				<version>${redisson.version}</version>
 			</dependency>
 			
 			<!-- Rocket MQ -->

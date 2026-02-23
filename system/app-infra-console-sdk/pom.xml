@@ -25,7 +25,7 @@
 			<version>12.4</version>
 		</dependency>
 		
-		<!-- JSON 序列化/反序列化（可选，这里用 Jackson） -->
+		<!-- JSON 序列化/反序列化(可选, 这里用 Jackson) -->
 		<dependency>
 			<groupId>io.github.openfeign</groupId>
 			<artifactId>feign-jackson</artifactId>

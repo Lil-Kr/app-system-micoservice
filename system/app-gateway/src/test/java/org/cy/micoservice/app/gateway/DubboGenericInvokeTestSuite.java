@@ -29,7 +29,7 @@ public class DubboGenericInvokeTestSuite {
 
     reference.setGeneric("true");
     reference.setApplication(applicationConfig);
-    reference.setInterface("org.cy.micoservice.blog.user.facade.interfaces.UserFacade");
+    reference.setInterface("org.cy.micoservice.app.user.facade.interfaces.UserFacade");
     reference.setProtocol("dubbo");
     reference.setCheck(false);
     GenericService genericService = reference.get();
@@ -50,7 +50,7 @@ public class DubboGenericInvokeTestSuite {
 
     reference.setGeneric("true");
     reference.setApplication(applicationConfig);
-    reference.setInterface("org.cy.micoservice.blog.user.facade.interfaces.UserFacade");
+    reference.setInterface("org.cy.micoservice.app.user.facade.interfaces.UserFacade");
     reference.setProtocol("dubbo");
     reference.setCheck(false);
     GenericService genericService = reference.get();
@@ -58,7 +58,7 @@ public class DubboGenericInvokeTestSuite {
     JSONObject param = new JSONObject();
     param.put("id", 1l);
     param.put("name", "abc");
-    Object result = genericService.$invoke("test", new String[]{"org.cy.micoservice.blog.user.facade.dto.req.TestReq"}, new Object[]{param});
+    Object result = genericService.$invoke("test", new String[]{"org.cy.micoservice.app.user.facade.dto.req.TestReq"}, new Object[]{param});
     log.info("result -->: {}", result);
   }
 }

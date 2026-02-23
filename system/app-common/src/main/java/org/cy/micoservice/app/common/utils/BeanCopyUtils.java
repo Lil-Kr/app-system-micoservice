@@ -12,6 +12,9 @@ import java.util.List;
  * @Description:
  */
 public class BeanCopyUtils {
+
+  private BeanCopyUtils() {}
+
   /**
    * 将一个对象转成目标对象
    *

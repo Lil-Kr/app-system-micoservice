@@ -453,10 +453,10 @@ public class ElasticsearchUtil {
       // 处理嵌套字段(如"user.name"、"address.city")
       // Elasticsearch中访问嵌套字段使用点符号, 与字段名格式一致
       String sourceField = "ctx._source." + fieldName;
-      // 参数引用格式：params.字段名
+      // 参数引用格式: params.字段名
       String paramReference = "params." + fieldName;
 
-      // 拼接脚本语句：ctx._source.字段名 = params.字段名;
+      // 拼接脚本语句: ctx._source.字段名 = params.字段名;
       scriptBuilder.append(sourceField)
         .append(" = ")
         .append(paramReference)

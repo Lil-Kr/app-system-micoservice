@@ -12,6 +12,7 @@ import java.io.Serializable;
  */
 @Data
 public class BasePageReqDTO implements Serializable {
+
   @Serial
   private static final long serialVersionUID = 9119261192787695755L;
 

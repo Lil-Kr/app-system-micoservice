@@ -27,7 +27,7 @@ public class LogPrintStrategyPageReq extends BasePageReq {
 
   /**
    * 策略类型
-   * @see org.cy.micoservice.blog.gateway.facade.enums.LogPrintStrategyTypeEnum
+   * @see org.cy.micoservice.app.gateway.facade.enums.LogPrintStrategyTypeEnum
    */
   private String strategyType;
 

@@ -9,7 +9,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  * @Description: rocketmq相关配置
  */
 @Data
-@ConfigurationProperties(prefix = "blog.rmq.producer")
+@ConfigurationProperties(prefix = "app.rmq.producer")
 public class RocketMQProducerProperties {
 
   private String nameserver;

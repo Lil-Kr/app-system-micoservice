@@ -16,6 +16,8 @@ import java.util.Objects;
  */
 public class AssertUtil {
 
+  private AssertUtil() {}
+
   /**
    * 判断参数不能为空
    * @param obj
