@@ -1,6 +1,5 @@
 package org.cy.micoservice.app.im.connector.handler.template.impl;
 
-import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONObject;
 import io.netty.channel.ChannelHandlerContext;
 import lombok.extern.slf4j.Slf4j;
@@ -11,11 +10,11 @@ import org.cy.micoservice.app.framework.identiy.starter.uitls.JWTUtil;
 import org.cy.micoservice.app.im.connector.config.ImConnectorProperties;
 import org.cy.micoservice.app.im.connector.config.cache.ImChannelCache;
 import org.cy.micoservice.app.im.connector.config.contstants.ImAttributeKeyConstants;
+import org.cy.micoservice.app.im.connector.handler.template.AbstractImMessageHandlerTemplate;
 import org.cy.micoservice.app.im.connector.service.ImMessageSenderService;
 import org.cy.micoservice.app.im.connector.service.ImPushAsyncService;
 import org.cy.micoservice.app.im.connector.utils.ChannelHandlerContextUtil;
 import org.cy.micoservice.app.im.connector.utils.ContextAttributeUtil;
-import org.cy.micoservice.app.im.connector.handler.template.AbstractImMessageHandlerTemplate;
 import org.cy.micoservice.app.im.facade.dto.connector.ImMessageDTO;
 import org.cy.micoservice.app.im.facade.dto.connector.body.ImLoginBody;
 import org.cy.micoservice.app.im.facade.enums.ImChannelStatusEnum;
@@ -56,7 +55,7 @@ public class ImLoginMessageHandler extends AbstractImMessageHandlerTemplate {
 
   @Override
   public void doMessageHandler(ChannelHandlerContext ctx, ImMessageDTO dto) {
-    ImLoginBody imLoginBody = JSON.parseObject(dto.getBody(), ImLoginBody.class);
+    ImLoginBody imLoginBody = JSONObject.parseObject(dto.getBody(), ImLoginBody.class);
     String token = imLoginBody.getToken();
     boolean isTokenValid = this.validateToken(token);
     // token 不合法, 不能进行登录认证处理
@@ -67,7 +66,7 @@ public class ImLoginMessageHandler extends AbstractImMessageHandlerTemplate {
       return;
     }
 
-    // 根据ctx绑定的uri获取不同的topic, blog-im-login-topic
+    // 根据ctx绑定的uri获取不同的topic, app-im-login-topic
     String topic = this.getCurrentChannelTopic(ctx);
     if (StringUtils.isBlank(topic)) {
       log.error("login not match im msg here.");

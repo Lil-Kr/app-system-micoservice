@@ -11,6 +11,7 @@ public enum RpcReturnCodeEnum implements BaseEnum {
 
   RPC_SUCCESS(200, "RPC call success"),
   RPC_PARAMETER_ERROR(500, "RPC error param"),
+  RPC_RESULT_MSG(500, "RPC error param"),
   RPC_UNKNOW_ERROR_MSG(500, "unknow system param"),
   RPC_REQUEST_ERROR(500, "RPC request fail")
   ;

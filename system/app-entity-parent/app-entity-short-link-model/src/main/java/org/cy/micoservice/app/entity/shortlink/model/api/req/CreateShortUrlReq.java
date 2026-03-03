@@ -26,7 +26,7 @@ public class CreateShortUrlReq implements Serializable {
   @Max(value = 7, message = "过期天数最多为7天")
   private Integer expireDays;
 
-  private String createId;
+  private Long createId;
 
   private String customCode;
 }

@@ -20,10 +20,10 @@ public class UserFacadeImplTest {
   @Before
   public void setUp() {
     application = new ApplicationConfig();
-    application.setName("blog-user-consumer-test");
+    application.setName("app-user-consumer-test");
 
     registry = new RegistryConfig();
-    registry.setAddress("nacos://192.168.9.200:8848?namespace=blog-mico-service-dev&username=nacos&&password=nacos");
+    registry.setAddress("nacos://192.168.9.200:8848?namespace=app-mico-service-dev&username=nacos&&password=nacos");
   }
 
   @Test

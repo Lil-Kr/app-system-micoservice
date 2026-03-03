@@ -1,5 +1,6 @@
 package org.cy.micoservice.app.shortlink.provider.service;
 
+import org.cy.micoservice.app.common.base.provider.RpcResponse;
 import org.cy.micoservice.app.shortlink.facade.dto.req.CreateShortUrlReqDTO;
 import org.cy.micoservice.app.shortlink.facade.dto.resp.CreateShortUrlRespDTO;
 
@@ -18,10 +19,16 @@ public interface ShortUrlService {
   CreateShortUrlRespDTO createShortUrl(CreateShortUrlReqDTO reqDTO);
 
   /**
-   * create short url resp dto
+   * find shor-url by short code
    * @param shortCode
    * @return
    */
-  CreateShortUrlRespDTO getShortUrlInfo(String shortCode);
+  RpcResponse<CreateShortUrlRespDTO> findByShortCode(String shortCode);
 
+  /**
+   * find shor-url by origin url hash
+   * @param originUrlHash
+   * @return
+   */
+  RpcResponse<CreateShortUrlRespDTO> findByOriginUrlHash(String shortCode, String originUrlHash);
 }

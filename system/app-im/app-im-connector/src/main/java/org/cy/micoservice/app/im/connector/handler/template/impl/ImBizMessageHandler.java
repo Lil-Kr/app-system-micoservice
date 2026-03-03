@@ -23,7 +23,7 @@ import java.util.UUID;
 /**
  * @Author: Lil-K
  * @Date: 2025/12/11
- * @Description: im中台获取业务消息之后 的处理器
+ * @Description: im中台获取业务消息之后的处理器
  */
 @Slf4j
 @Component("imBizMessageHandler")

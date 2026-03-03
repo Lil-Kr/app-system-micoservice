@@ -19,7 +19,23 @@
 		select <include refid="Base_Column_List" />
 		from <include refid="Table_Name" />
 		<where>
-			short_code = #{shortCode}
+			<if test="param.shortCode != null and param.shortCode != ''">
+				and short_code = #{param.shortCode}
+			</if>
+		</where>
+		limit 1
+	</select>
+	
+	<select id="findByOriginUrlHash" resultType="org.cy.micoservice.app.entity.shortlink.model.provider.pojo.ShortUrlMapping">
+		select <include refid="Base_Column_List" />
+		from <include refid="Table_Name" />
+		<where>
+			<if test="param.shortCode != null and param.shortCode != ''">
+				and short_code = #{param.shortCode}
+			</if>
+			<if test="param.originUrlHash != null and param.originUrlHash != ''">
+				and origin_url_hash = #{param.originUrlHash}
+			</if>
 		</where>
 		limit 1
 	</select>

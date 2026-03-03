@@ -6,7 +6,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  * @Author: Lil-K
  * @Description: 分布式id自动装载配置
  */
-@ConfigurationProperties(prefix = "blog.id")
+@ConfigurationProperties(prefix = "app.id")
 public class IdProperties {
 
   /** Enable id generator */

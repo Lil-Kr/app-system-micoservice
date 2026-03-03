@@ -1,7 +1,9 @@
 package org.cy.micoservice.app.shortlink.provider.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.apache.ibatis.annotations.Param;
 import org.cy.micoservice.app.entity.shortlink.model.provider.pojo.ShortUrlMapping;
+import org.cy.micoservice.app.shortlink.facade.dto.req.CreateShortUrlReqDTO;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -12,5 +14,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ShortUrlMapper extends BaseMapper<ShortUrlMapping> {
 
-  ShortUrlMapping findByShortCode(String shortCode);
+  ShortUrlMapping findByShortCode(@Param("param") CreateShortUrlReqDTO reqDTO);
+
+  ShortUrlMapping findByOriginUrlHash(@Param("param") CreateShortUrlReqDTO reqDTO);
 }

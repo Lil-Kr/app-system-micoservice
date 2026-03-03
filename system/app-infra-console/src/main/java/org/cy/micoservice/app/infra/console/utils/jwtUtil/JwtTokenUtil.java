@@ -1,4 +1,5 @@
-package org.cy.micoservice.app.infra.console.utils.jwtUtil;//package com.cy.single.blog.utils.jwtUtil;
+package org.cy.micoservice.app.infra.console.utils.jwtUtil;
+//package com.cy.single.blog.utils.jwtUtil;
 //
 //import com.alibaba.fastjson2.JSON;
 //import com.alibaba.fastjson2.JSONObject;
@@ -24,7 +25,7 @@ package org.cy.micoservice.app.infra.console.utils.jwtUtil;//package com.cy.sing
 //  /**
 //   * Issuer
 //   */
-//  private static final String ISSUER = "blog-system";
+//  private static final String ISSUER = "app-system";
 //
 //  /**
 //   * Audience: 接收方的一种标识

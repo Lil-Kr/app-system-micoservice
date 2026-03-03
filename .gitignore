@@ -29,6 +29,8 @@ bin-release/
 *.njsproj
 *.sln
 *.sw?
+.claude
+.claude/*
 
 # Other files and folders
 .settings/
@@ -98,8 +100,10 @@ hs_err_pid*
 *.tsbuildinfo
 
 # prod files
-**/*-prod.yml
 **/*-test.yml
+**/*-test.yaml
+**/*-prod.yaml
+**/*-prod.yml
 **/*.env.test
 **/*.env.production
 

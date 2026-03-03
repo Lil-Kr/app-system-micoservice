@@ -53,7 +53,8 @@ public class ImConnectorMonitorListener implements InitializingBean {
           Set<String> imConnectorAddressSet = ((NamingEvent) event).getInstances().stream()
             // nacos: 过滤掉不健康的实例
             .filter(instance -> instance.isHealthy() && instance.isEnabled())
-            .map(instance -> String.format(CommonFormatConstants.COMMENT_FORMAT_COLON_SPLIT, instance.getIp(), instance.getPort())) // 转为 ip:port 格式
+            // 转为 ip:port 格式
+            .map(instance -> String.format(CommonFormatConstants.COMMENT_FORMAT_COLON_SPLIT, instance.getIp(), instance.getPort()))
             .collect(Collectors.toSet());
 
           // 将最新的配置放入缓存

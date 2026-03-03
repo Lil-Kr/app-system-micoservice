@@ -4,6 +4,11 @@ dataSources:
     dataSourceClassName: com.zaxxer.hikari.HikariDataSource
     driverClassName: com.mysql.cj.jdbc.Driver
     jdbcUrl: jdbc:mysql://localhost:3306/mico_app_short_link_0?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&allowMultiQueries=true&rewriteBatchedStatements=true
+    minimum-idle: 5
+    maximum-pool-size: 40
+    idle-timeout: 60000
+    connection-timeout: 4000
+    max-lifetime: 60000
     username: root
     password: 123456
   # 分库1
@@ -11,6 +16,11 @@ dataSources:
     dataSourceClassName: com.zaxxer.hikari.HikariDataSource
     driverClassName: com.mysql.cj.jdbc.Driver
     jdbcUrl: jdbc:mysql://localhost:3306/mico_app_short_link_1?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&allowMultiQueries=true&rewriteBatchedStatements=true
+    minimum-idle: 5
+    maximum-pool-size: 40
+    idle-timeout: 60000
+    connection-timeout: 4000
+    max-lifetime: 60000
     username: root
     password: 123456
   # 分库2
@@ -18,6 +28,11 @@ dataSources:
     dataSourceClassName: com.zaxxer.hikari.HikariDataSource
     driverClassName: com.mysql.cj.jdbc.Driver
     jdbcUrl: jdbc:mysql://localhost:3306/mico_app_short_link_2?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&allowMultiQueries=true&rewriteBatchedStatements=true
+    minimum-idle: 5
+    maximum-pool-size: 40
+    idle-timeout: 60000
+    connection-timeout: 4000
+    max-lifetime: 60000
     username: root
     password: 123456
   # 分库3
@@ -25,6 +40,11 @@ dataSources:
     dataSourceClassName: com.zaxxer.hikari.HikariDataSource
     driverClassName: com.mysql.cj.jdbc.Driver
     jdbcUrl: jdbc:mysql://localhost:3306/mico_app_short_link_3?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&allowMultiQueries=true&rewriteBatchedStatements=true
+    minimum-idle: 5
+    maximum-pool-size: 40
+    idle-timeout: 60000
+    connection-timeout: 4000
+    max-lifetime: 60000
     username: root
     password: 123456
   # 分库4
@@ -32,6 +52,11 @@ dataSources:
     dataSourceClassName: com.zaxxer.hikari.HikariDataSource
     driverClassName: com.mysql.cj.jdbc.Driver
     jdbcUrl: jdbc:mysql://localhost:3306/mico_app_short_link_4?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&allowMultiQueries=true&rewriteBatchedStatements=true
+    minimum-idle: 5
+    maximum-pool-size: 40
+    idle-timeout: 60000
+    connection-timeout: 4000
+    max-lifetime: 60000
     username: root
     password: 123456
   # 分库5
@@ -39,6 +64,11 @@ dataSources:
     dataSourceClassName: com.zaxxer.hikari.HikariDataSource
     driverClassName: com.mysql.cj.jdbc.Driver
     jdbcUrl: jdbc:mysql://localhost:3306/mico_app_short_link_5?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&allowMultiQueries=true&rewriteBatchedStatements=true
+    minimum-idle: 5
+    maximum-pool-size: 40
+    idle-timeout: 60000
+    connection-timeout: 4000
+    max-lifetime: 60000
     username: root
     password: 123456
   # 分库6
@@ -46,6 +76,11 @@ dataSources:
     dataSourceClassName: com.zaxxer.hikari.HikariDataSource
     driverClassName: com.mysql.cj.jdbc.Driver
     jdbcUrl: jdbc:mysql://localhost:3306/mico_app_short_link_6?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&allowMultiQueries=true&rewriteBatchedStatements=true
+    minimum-idle: 5
+    maximum-pool-size: 40
+    idle-timeout: 60000
+    connection-timeout: 4000
+    max-lifetime: 60000
     username: root
     password: 123456
   # 分库7
@@ -53,6 +88,11 @@ dataSources:
     dataSourceClassName: com.zaxxer.hikari.HikariDataSource
     driverClassName: com.mysql.cj.jdbc.Driver
     jdbcUrl: jdbc:mysql://localhost:3306/mico_app_short_link_7?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&allowMultiQueries=true&rewriteBatchedStatements=true
+    minimum-idle: 5
+    maximum-pool-size: 40
+    idle-timeout: 60000
+    connection-timeout: 4000
+    max-lifetime: 60000
     username: root
     password: 123456
   # 分库8
@@ -60,6 +100,11 @@ dataSources:
     dataSourceClassName: com.zaxxer.hikari.HikariDataSource
     driverClassName: com.mysql.cj.jdbc.Driver
     jdbcUrl: jdbc:mysql://localhost:3306/mico_app_short_link_8?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&allowMultiQueries=true&rewriteBatchedStatements=true
+    minimum-idle: 5
+    maximum-pool-size: 40
+    idle-timeout: 60000
+    connection-timeout: 4000
+    max-lifetime: 60000
     username: root
     password: 123456
   # 分库9
@@ -67,6 +112,11 @@ dataSources:
     dataSourceClassName: com.zaxxer.hikari.HikariDataSource
     driverClassName: com.mysql.cj.jdbc.Driver
     jdbcUrl: jdbc:mysql://localhost:3306/mico_app_short_link_9?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&allowMultiQueries=true&rewriteBatchedStatements=true
+    minimum-idle: 5
+    maximum-pool-size: 40
+    idle-timeout: 60000
+    connection-timeout: 4000
+    max-lifetime: 60000
     username: root
     password: 123456
   # 分库10
@@ -74,6 +124,11 @@ dataSources:
     dataSourceClassName: com.zaxxer.hikari.HikariDataSource
     driverClassName: com.mysql.cj.jdbc.Driver
     jdbcUrl: jdbc:mysql://localhost:3306/mico_app_short_link_10?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&allowMultiQueries=true&rewriteBatchedStatements=true
+    minimum-idle: 5
+    maximum-pool-size: 40
+    idle-timeout: 60000
+    connection-timeout: 4000
+    max-lifetime: 60000
     username: root
     password: 123456
   # 分库11
@@ -81,6 +136,11 @@ dataSources:
     dataSourceClassName: com.zaxxer.hikari.HikariDataSource
     driverClassName: com.mysql.cj.jdbc.Driver
     jdbcUrl: jdbc:mysql://localhost:3306/mico_app_short_link_11?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&allowMultiQueries=true&rewriteBatchedStatements=true
+    minimum-idle: 5
+    maximum-pool-size: 40
+    idle-timeout: 60000
+    connection-timeout: 4000
+    max-lifetime: 60000
     username: root
     password: 123456
   # 分库12
@@ -88,6 +148,11 @@ dataSources:
     dataSourceClassName: com.zaxxer.hikari.HikariDataSource
     driverClassName: com.mysql.cj.jdbc.Driver
     jdbcUrl: jdbc:mysql://localhost:3306/mico_app_short_link_12?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&allowMultiQueries=true&rewriteBatchedStatements=true
+    minimum-idle: 5
+    maximum-pool-size: 40
+    idle-timeout: 60000
+    connection-timeout: 4000
+    max-lifetime: 60000
     username: root
     password: 123456
   # 分库13
@@ -95,6 +160,11 @@ dataSources:
     dataSourceClassName: com.zaxxer.hikari.HikariDataSource
     driverClassName: com.mysql.cj.jdbc.Driver
     jdbcUrl: jdbc:mysql://localhost:3306/mico_app_short_link_13?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&allowMultiQueries=true&rewriteBatchedStatements=true
+    minimum-idle: 5
+    maximum-pool-size: 40
+    idle-timeout: 60000
+    connection-timeout: 4000
+    max-lifetime: 60000
     username: root
     password: 123456
   # 分库14
@@ -102,6 +172,11 @@ dataSources:
     dataSourceClassName: com.zaxxer.hikari.HikariDataSource
     driverClassName: com.mysql.cj.jdbc.Driver
     jdbcUrl: jdbc:mysql://localhost:3306/mico_app_short_link_14?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&allowMultiQueries=true&rewriteBatchedStatements=true
+    minimum-idle: 5
+    maximum-pool-size: 40
+    idle-timeout: 60000
+    connection-timeout: 4000
+    max-lifetime: 60000
     username: root
     password: 123456
   # 分库15
@@ -109,6 +184,11 @@ dataSources:
     dataSourceClassName: com.zaxxer.hikari.HikariDataSource
     driverClassName: com.mysql.cj.jdbc.Driver
     jdbcUrl: jdbc:mysql://localhost:3306/mico_app_short_link_15?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&allowMultiQueries=true&rewriteBatchedStatements=true
+    minimum-idle: 5
+    maximum-pool-size: 40
+    idle-timeout: 60000
+    connection-timeout: 4000
+    max-lifetime: 60000
     username: root
     password: 123456
 
@@ -146,5 +226,7 @@ props:
   check-table-metadata-enabled: false
   # 显示实际使用的SQL和日志
   sql-comment-parse-enabled: false
+  # 禁用元数据刷新
+  metadata-refresh-interval: -1
   # 启用路由信息打印
   show-sql-log: true

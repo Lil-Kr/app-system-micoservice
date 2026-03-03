@@ -10,8 +10,7 @@ import java.io.Serial;
 import java.io.Serializable;
 
 import static org.cy.micoservice.app.common.enums.response.ApiReturnCodeEnum.SYSTEM_ERROR;
-import static org.cy.micoservice.app.common.enums.response.RpcReturnCodeEnum.RPC_PARAMETER_ERROR;
-import static org.cy.micoservice.app.common.enums.response.RpcReturnCodeEnum.RPC_SUCCESS;
+import static org.cy.micoservice.app.common.enums.response.RpcReturnCodeEnum.*;
 
 /**
  * @Author: Lil-K
@@ -57,6 +56,10 @@ public class RpcResponse<T> implements Serializable {
 
   public static <T> RpcResponse<T> success(T data) {
     return create (RPC_SUCCESS.getCode(), RPC_SUCCESS.getMessage(), data);
+  }
+
+  public static <T> RpcResponse<T> emptyResult() {
+    return create (RPC_RESULT_MSG.getCode(), RPC_RESULT_MSG.getMessage(), null);
   }
 
   public boolean isSuccess() {

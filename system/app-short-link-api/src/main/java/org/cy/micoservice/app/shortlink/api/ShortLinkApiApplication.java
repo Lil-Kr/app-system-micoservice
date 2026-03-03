@@ -2,8 +2,10 @@ package org.cy.micoservice.app.shortlink.api;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 /**
  * @Author: Lil-K
@@ -13,6 +15,9 @@ import org.springframework.scheduling.annotation.EnableAsync;
 @SpringBootApplication
 @EnableDiscoveryClient
 @EnableAsync
+@EnableCaching
+@EnableScheduling
+// @EnableTransactionManagement
 public class ShortLinkApiApplication {
 
   public static void main(String[] args) {

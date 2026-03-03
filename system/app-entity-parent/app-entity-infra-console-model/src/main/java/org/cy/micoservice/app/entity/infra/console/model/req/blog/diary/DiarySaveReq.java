@@ -11,8 +11,8 @@ import lombok.ToString;
  * @Date: 2025/5/8
  * @Description:
  */
-@ToString
 @Data
+@ToString
 public class DiarySaveReq {
 
   public interface GroupAdd {}

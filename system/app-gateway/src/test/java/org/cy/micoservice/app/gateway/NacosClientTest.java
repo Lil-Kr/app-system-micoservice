@@ -21,11 +21,11 @@ public class NacosClientTest {
   public void subscribeConfig() throws NacosException, InterruptedException {
     Properties properties = new Properties();
     properties.put("serverAddr", "192.168.9.200:8848");
-    properties.put("namespace", "blog-mico-service-dev");
+    properties.put("namespace", "app-mico-service-dev");
     properties.put("username", "nacos");
     properties.put("password", "nacos");
     ConfigService configService = NacosFactory.createConfigService(properties);
-    String dataId = "blog-gateway-config-update-log.properties";
+    String dataId = "app-gateway-config-update-log.properties";
     String group = "DEFAULT_GROUP";
     String content = configService.getConfig(dataId, group, 5000);
     log.info("content is : {}", content);

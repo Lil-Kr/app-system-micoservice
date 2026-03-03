@@ -7,7 +7,7 @@ package org.cy.micoservice.app.im.connector.config.contstants;
  */
 public class WebSocketServerConstants {
 
-  public static final String WS_SERVER_NAME = "blog-im-server";
+  public static final String WS_SERVER_NAME = "app-im-server";
 
   public static final String IM_BOSS_THREAD_PREFIX = "im-boss-thread-";
 

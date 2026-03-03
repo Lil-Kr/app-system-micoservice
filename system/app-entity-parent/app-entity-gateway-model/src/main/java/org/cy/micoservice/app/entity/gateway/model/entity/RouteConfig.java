@@ -66,7 +66,7 @@ public class RouteConfig extends BaseEntity {
   /**
    * 根据 schema 不同, 格式不一样
    * http: lb://test-app
-   * dubbo: org.cy.blog.user.IUserFacade#getUser
+   * dubbo: org.cy.app.user.IUserFacade#getUser
    */
   private String uri;
 

@@ -28,10 +28,10 @@ public class InfraApplicationProperties {
   @Value("${spring.cloud.nacos.password:}")
   private String password;
 
-  @Value("${blog.gateway.refresh.data-id:}")
+  @Value("${app.gateway.refresh.data-id:}")
   private String refreshDataId;
 
-  @Value("${blog.gateway.refresh.group:}")
+  @Value("${app.gateway.refresh.group:}")
   private String refreshGroup;
 
   @Value("${decrypty.secret-key:}")

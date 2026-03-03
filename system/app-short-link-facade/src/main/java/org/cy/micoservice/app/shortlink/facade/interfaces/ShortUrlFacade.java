@@ -11,5 +11,24 @@ import org.cy.micoservice.app.shortlink.facade.dto.resp.CreateShortUrlRespDTO;
  */
 public interface ShortUrlFacade {
 
+  /**
+   * create short url
+   * @param reqDTO
+   * @return
+   */
   RpcResponse<CreateShortUrlRespDTO> createShortUrl(CreateShortUrlReqDTO reqDTO);
+
+  /**
+   * find shor-url by short code
+   * @param shortCode
+   * @return
+   */
+  RpcResponse<CreateShortUrlRespDTO> findByShortCode(String shortCode);
+
+  /**
+   * find shor-url by origin url hash
+   * @param
+   * @return
+   */
+  RpcResponse<CreateShortUrlRespDTO> findByOriginUrlHash(String shortCode, String originUrlHash);
 }

@@ -19,10 +19,10 @@ public class DubboGenericInvokeTestSuite {
   @Test
   public void doDubboInvoke() {
     RegistryConfig registry = new RegistryConfig();
-    registry.setAddress("nacos://192.168.9.200:8848?namespace=blog-mico-service-dev&username=nacos&password=nacos");
+    registry.setAddress("nacos://192.168.9.200:8848?namespace=app-mico-service-dev&username=nacos&password=nacos");
 
     ApplicationConfig applicationConfig = new ApplicationConfig();
-    applicationConfig.setName("blog-gateway");
+    applicationConfig.setName("app-gateway");
 
     ReferenceConfig<GenericService> reference = new ReferenceConfig<GenericService>();
     reference.setRegistry(registry);
@@ -40,10 +40,10 @@ public class DubboGenericInvokeTestSuite {
   @Test
   public void doDubboInvoke2() {
     RegistryConfig registry = new RegistryConfig();
-    registry.setAddress("nacos://192.168.9.200:8848?namespace=blog-mico-service-dev&username=nacos&password=nacos");
+    registry.setAddress("nacos://192.168.9.200:8848?namespace=app-mico-service-dev&username=nacos&password=nacos");
 
     ApplicationConfig applicationConfig = new ApplicationConfig();
-    applicationConfig.setName("blog-gateway");
+    applicationConfig.setName("app-gateway");
 
     ReferenceConfig<GenericService> reference = new ReferenceConfig<GenericService>();
     reference.setRegistry(registry);

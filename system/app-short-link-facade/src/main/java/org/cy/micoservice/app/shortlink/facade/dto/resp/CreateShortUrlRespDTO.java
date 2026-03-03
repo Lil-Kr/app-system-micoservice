@@ -50,7 +50,15 @@ public class CreateShortUrlRespDTO implements Serializable {
   /**
    * 访问次数
    */
-  private Long accessCount = 0L;
+  private Long accessCount;
+
+  private Integer status;
+
+  private Long createId;
+
+  private Long updateId;
 
   private LocalDateTime createTime;
+
+  private LocalDateTime updateTime;
 }

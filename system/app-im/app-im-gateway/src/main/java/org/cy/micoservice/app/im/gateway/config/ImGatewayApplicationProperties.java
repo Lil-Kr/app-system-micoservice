@@ -28,7 +28,7 @@ public class ImGatewayApplicationProperties {
   @Value("${im.websocket.router.name:websocket-route}")
   private String websocketRouteName;
 
-  @Value("${im.websocket.router.path:/blog/im/**}")
+  @Value("${im.websocket.router.path:/app/im/**}")
   private String websocketRoutePath;
 
   /**
@@ -39,7 +39,7 @@ public class ImGatewayApplicationProperties {
 
   /**
    * 统一管理 im-connector 集群名, 用于 nacos 订阅 im-connector 集群下线事件
-   * blog-im-connector-cluster
+   * app-im-connector-cluster
    */
   @Value("${im.connector.cluster.name:}")
   private String imConnectorClusterName;

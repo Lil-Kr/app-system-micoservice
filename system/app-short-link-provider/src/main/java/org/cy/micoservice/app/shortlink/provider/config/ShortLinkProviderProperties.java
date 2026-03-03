@@ -13,6 +13,9 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class ShortLinkProviderProperties {
 
+  @Value("${server.port:}")
+  private String serverPort;
+
   @Value("${shortlink.cluster.batch-size:50}")
   private int batchSize;
 
@@ -28,7 +31,7 @@ public class ShortLinkProviderProperties {
   @Value("${shortlink.bloom.time-slice.local-keep-count:8}")
   private int localKeepSliceCount;
 
-  @Value("${shortlink.shorturl.domain:http://localhost:8001}")
+  @Value("${shortlink.shorturl.domain:http://localhost:7901}")
   private String domain;
 
   @Value("${shortlink.expansion.dual-write-enabled:false}")

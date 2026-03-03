@@ -21,8 +21,34 @@ public class ShortUrlFacadeImpl implements ShortUrlFacade {
   @Autowired
   private ShortUrlService shortUrlService;
 
+  /**
+   * create short url
+   * @param reqDTO
+   * @return
+   */
   @Override
   public RpcResponse<CreateShortUrlRespDTO> createShortUrl(CreateShortUrlReqDTO reqDTO) {
-    return RpcResponse.success(shortUrlService.createShortUrl(reqDTO));
+    CreateShortUrlRespDTO shortUrlRespDTO = shortUrlService.createShortUrl(reqDTO);
+    return shortUrlRespDTO == null ? RpcResponse.emptyResult() : RpcResponse.success(shortUrlRespDTO);
+  }
+
+  /**
+   * find shor-url by short code
+   * @param shortCode
+   * @return
+   */
+  @Override
+  public RpcResponse<CreateShortUrlRespDTO> findByShortCode(String shortCode) {
+    return shortUrlService.findByShortCode(shortCode);
+  }
+
+  /**
+   * find shor-url by origin url hash
+   * @param originUrlHash
+   * @return
+   */
+  @Override
+  public RpcResponse<CreateShortUrlRespDTO> findByOriginUrlHash(String shortCode, String originUrlHash) {
+    return shortUrlService.findByOriginUrlHash(shortCode, originUrlHash);
   }
 }

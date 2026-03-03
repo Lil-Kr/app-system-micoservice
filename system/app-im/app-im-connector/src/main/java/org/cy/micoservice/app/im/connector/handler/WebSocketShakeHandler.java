@@ -123,8 +123,8 @@ public class WebSocketShakeHandler extends ChannelInboundHandlerAdapter {
       log.info("WebSocket handshake completed successfully for URI: {}", uri);
       /**
        * 这里可以根据url后缀来区分业务场景:
-       * ws://localhost:10880/blog/im/live  --> 直播场景
-       * ws://localhost:10880/blog/im/chat  --> 聊天场景
+       * ws://localhost:10880/app/im/live  --> 直播场景
+       * ws://localhost:10880/app/im/chat  --> 聊天场景
        */
       ContextAttributeUtil.set(ctx, ImAttributeKeyConstants.WS_URI, uri);
       ContextAttributeUtil.set(ctx, ImAttributeKeyConstants.SERVER_HAND_SHAKE_KEY, serverHandshake);
