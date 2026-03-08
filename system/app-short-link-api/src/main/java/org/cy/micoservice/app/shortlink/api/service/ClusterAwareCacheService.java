@@ -10,11 +10,18 @@ import org.cy.micoservice.app.entity.shortlink.model.provider.pojo.ShortUrlMappi
 public interface ClusterAwareCacheService {
 
   /**
+   * URL哈希映射缓存
+   * @param originUrlHash
+   * @param shortCode
+   */
+  void putUrlHashMapping(String originUrlHash, String shortCode);
+
+  /**
    * get URL hash mapping
-   * @param urlHash
+   * @param originUrlHash
    * @return
    */
-  String getShortCodeByUrlHash(String urlHash);
+  String getShortCodeByUrlHash(String originUrlHash);
 
   /**
    * bloom filter check
@@ -28,21 +35,14 @@ public interface ClusterAwareCacheService {
    * @param shortCode
    * @return
    */
-  ShortUrlMapping getFromCache(String shortCode);
+  // ShortUrlMapping getFromCache(String shortCode);
 
   /**
    * 将短链信息放入集群缓存 (支持Hash Tag)
    * @param shortCode
    * @param shortUrlMapping
    */
-  void putToCache(String shortCode, ShortUrlMapping shortUrlMapping);
-
-  /**
-   * URL哈希映射缓存
-   * @param originUrlHash
-   * @param shortCode
-   */
-  void putUrlHashMapping(String originUrlHash, String shortCode);
+  // void putToCache(String shortCode, ShortUrlMapping shortUrlMapping);
 
   /**
    * 添加到布隆过滤器
@@ -51,9 +51,23 @@ public interface ClusterAwareCacheService {
   void addToBloomFilter(String shortCode);
 
   /**
+   * 带Sentinel保护的短链查询 (支持分库分表和Redis集群分片)
+   * @param shortCode
+   * @return
+   */
+  ShortUrlMapping getShortUrlWithSentinel(String shortCode);
+
+  /**
    * 增加访问计数 (集群分片优化)
    * @param shortCode
    * @return
    */
   Long incrementAccessCount(String shortCode);
+
+  /**
+   * 刷新缓存
+   * @param shortUrlMapping
+   * @return
+   */
+  void refreshCache(ShortUrlMapping shortUrlMapping);
 }

@@ -5,7 +5,7 @@ package org.cy.micoservice.app.shortlink.api.service;
  * @Date: 2026/2/28
  * @Description:
  * 短链编码服务
- * 支持多种生成策略：分布式ID、URL哈希、随机生成
+ * 支持多种生成策略: 分布式ID、URL哈希、随机生成
  */
 public interface ShortCodeService {
 
@@ -18,7 +18,7 @@ public interface ShortCodeService {
 
   /**
    * 生成唯一短链编码 (推荐使用 - 基于分布式ID)
-   * 优势：全局唯一、高性能、时间有序
+   * 优势: 全局唯一、高性能、时间有序
    * @return
    */
   String generateUniqueCode();

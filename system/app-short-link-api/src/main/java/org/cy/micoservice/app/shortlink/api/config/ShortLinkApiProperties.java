@@ -19,12 +19,15 @@ public class ShortLinkApiProperties {
   private int batchSize;
   @Value("${shortlink.cluster.enable-hash-tag:true}")
   private boolean enableHashTag;
+  // 布隆过滤器: 每个时间分片的时长: 6h
   @Value("${shortlink.bloom.time-slice.hours:6}")
   private int timeSliceHours;
-  @Value("${shortlink.bloom.time-slice.redis-keep-count:32}")
-  private int redisKeepSliceCount; // Redis保留的时间片数量 (8天)
+  // local 保留的时间片数量 (2天) --> 每天4个分片 * 2 = 8
   @Value("${shortlink.bloom.time-slice.local-keep-count:8}")
   private int localKeepSliceCount;
+  // Redis 保留的时间片数量 (8天) --> 每天4个分片 * 8 = 32
+  @Value("${shortlink.bloom.time-slice.redis-keep-count:32}")
+  private int redisKeepSliceCount;
   @Value("${shortlink.shorturl.domain:http://localhost:7901}")
   private String domain;
   @Value("${shortlink.expansion.dual-write-enabled:false}")
@@ -47,8 +50,13 @@ public class ShortLinkApiProperties {
   @Value("${shortlink.bloom.threadpool.awaitTerminationSeconds:30}")
   private int awaitTerminationSeconds;
 
-  /** ============================= CacheSyncMonitorConfig =============================**/
+  /** ============================= bloomFilter monitor config =============================**/
+  @Value("${shortlink.bloom.alert.false-probability-threshold:0.01}")
+  private double falseProbabilityThreshold;
+  @Value("${shortlink.bloom.alert.memory-usage-threshold:0.8}")
+  private double memoryUsageThreshold;
 
+  /** ============================= cacheSync monitor config =============================**/
   // 动态配置
   @Value("${shortlink.cache.stream.max-length:50000}")
   private long maxStreamLength;

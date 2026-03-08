@@ -7,13 +7,13 @@ package org.cy.micoservice.app.shortlink.api.service;
  */
 public interface LocalCacheStreamService {
 
-  void publishCacheEvict(String shortCode);
+  // void publishCacheEvict(String shortCode);
 
-  void startConsumer();
+  // void startConsumer();
 
-  void publishCachePut(String shortCode);
+  // void publishCachePut(String shortCode);
 
-  void onApplicationReady();
+  // void onApplicationReady();
 
   String getNodeId();
 }

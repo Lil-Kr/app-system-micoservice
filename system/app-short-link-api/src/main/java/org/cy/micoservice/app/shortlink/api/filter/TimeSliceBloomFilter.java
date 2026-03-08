@@ -3,10 +3,11 @@ package org.cy.micoservice.app.shortlink.api.filter;
 import com.google.common.hash.BloomFilter;
 import com.google.common.hash.Funnels;
 import lombok.extern.slf4j.Slf4j;
-
 import java.nio.charset.Charset;
 import java.time.LocalDateTime;
 import java.util.concurrent.atomic.AtomicLong;
+import static org.cy.micoservice.app.shortlink.api.constants.ShortUrlConstant.EXPECTED_INSERTIONS;
+import static org.cy.micoservice.app.shortlink.api.constants.ShortUrlConstant.FALSE_PROBABILITY;
 
 /**
  * @Author: Lil-K
@@ -25,31 +26,35 @@ public class TimeSliceBloomFilter {
   // 元素计数器
   private final AtomicLong elementCount = new AtomicLong(0);
 
-  // 每个时间片预期容量 (6小时 * 1万TPS * 3600秒 = 2.16亿)
-  private static final long EXPECTED_INSERTIONS = 216_000_000L;
-  private static final double FALSE_PROBABILITY = 0.01;
-
   public TimeSliceBloomFilter(String sliceKey) {
     this.sliceKey = sliceKey;
     this.createTime = LocalDateTime.now();
     this.bloomFilter = BloomFilter.create(Funnels.stringFunnel(Charset.defaultCharset()), EXPECTED_INSERTIONS, FALSE_PROBABILITY);
-    log.info("创建时间片布隆过滤器: {}, 预期容量: {}, 误判率: {}", sliceKey, EXPECTED_INSERTIONS, FALSE_PROBABILITY);
+    log.info("创建Local布隆过滤器时间片: {}, 预期容量: {}, 误判率: {}", sliceKey, EXPECTED_INSERTIONS, FALSE_PROBABILITY);
   }
 
   /**
-   *
+   * 判断本地布隆过滤器是否存在当前 short code
    * @param shortCode
    * @return
    */
   public boolean mightContain(String shortCode) {
-    return bloomFilter.mightContain(shortCode);
+    return this.bloomFilter.mightContain(shortCode);
   }
 
+  /**
+   * 添加short code 到本地布隆过滤器
+   * @param shortCode
+   */
   public void add(String shortCode) {
-    bloomFilter.put(shortCode);
-    elementCount.incrementAndGet();
+    this.bloomFilter.put(shortCode);
+    this.elementCount.incrementAndGet();
   }
 
+  /**
+   * 获取布隆过滤器中的元素个数
+   * @return
+   */
   public long getApproximateElementCount() {
     return elementCount.get();
   }

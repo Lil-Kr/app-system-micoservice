@@ -17,7 +17,7 @@ import java.util.concurrent.TimeUnit;
  * @Date: 2026/2/28
  * @Description:
  * 时钟同步监控服务
- * 监控服务器时钟偏移，防止时钟回拨问题
+ * 监控服务器时钟偏移, 防止时钟回拨问题
  */
 @Slf4j
 @Service
@@ -121,7 +121,7 @@ public class ClockSyncMonitorServiceImpl implements ClockSyncMonitorService {
           long serverMillis = timeResponse.getSeconds() * 1000L + (timeResponse.getMicroseconds() / 1000L);
           long rtt = Math.max(0L, tEnd - tStart);
 
-          // 将服务器时间校正到本地时间轴的“响应时刻”，采用NTP的简化近似：serverTime + rtt/2
+          // 将服务器时间校正到本地时间轴的“响应时刻”，采用NTP的简化近似: serverTime + rtt/2
           long adjusted = serverMillis + (rtt / 2L);
           samples[sampleCount++] = adjusted;
         } catch (Exception nodeEx) {

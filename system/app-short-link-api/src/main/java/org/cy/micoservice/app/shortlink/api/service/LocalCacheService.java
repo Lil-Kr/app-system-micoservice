@@ -1,7 +1,5 @@
 package org.cy.micoservice.app.shortlink.api.service;
 
-import org.cy.micoservice.app.entity.shortlink.model.provider.pojo.ShortUrlMapping;
-
 /**
  * @Author: Lil-K
  * @Date: 2026/2/26
@@ -14,7 +12,7 @@ public interface LocalCacheService {
    * @param shortCode
    * @return
    */
-  ShortUrlMapping getFromLocalCache(String shortCode);
+  // ShortUrlMapping getFromLocalCache(String shortCode);
 
   /**
    * 缓存短链信息到本地缓存 - 使用自定义Key生成器
@@ -22,24 +20,24 @@ public interface LocalCacheService {
    * @param shortUrlMapping
    * @return
    */
-  ShortUrlMapping putToLocalCache(String shortCode, ShortUrlMapping shortUrlMapping);
+  // ShortUrlMapping putToLocalCache(String shortCode, ShortUrlMapping shortUrlMapping);
 
   /**
    * 安全的缓存操作 - 带完整异常处理
    * @param shortCode
    * @param shortUrlMapping
    */
-  ShortUrlMapping safePutToLocalCache(String shortCode, ShortUrlMapping shortUrlMapping);
+  // ShortUrlMapping safePutToLocalCache(String shortCode, ShortUrlMapping shortUrlMapping);
 
   /**
    * 安全的缓存移除操作 - 带完整异常处理
    * @param shortCode
    */
-  void safeEvictFromLocalCache(String shortCode);
+  // void safeEvictFromLocalCache(String shortCode);
 
   /**
    * 从本地缓存中移除指定的短链
    * @param shortCode
    */
-  void evictFromLocalCache(String shortCode);
+  // void evictFromLocalCache(String shortCode);
 }

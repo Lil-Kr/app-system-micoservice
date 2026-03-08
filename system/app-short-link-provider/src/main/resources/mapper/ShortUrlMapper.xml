@@ -39,4 +39,12 @@
 		</where>
 		limit 1
 	</select>
+	
+	<update id="updateAccessCount">
+		update <include refid="Table_Name" />
+		set access_count = #{param.accessCount}
+		<where>
+			short_code = #{param.shortCode}
+		</where>
+	</update>
 </mapper>

@@ -31,4 +31,12 @@ public interface ShortUrlFacade {
    * @return
    */
   RpcResponse<CreateShortUrlRespDTO> findByOriginUrlHash(String shortCode, String originUrlHash);
+
+  /**
+   * 更新访问次数
+   * @param shortCode
+   * @param accessCount
+   * @return
+   */
+  RpcResponse<Integer> updateAccessCount(String shortCode, Long accessCount);
 }

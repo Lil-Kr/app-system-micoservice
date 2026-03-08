@@ -7,6 +7,17 @@ package org.cy.micoservice.app.shortlink.api.service;
  */
 public interface LocalBloomFilterService {
 
+  /**
+   *
+   * @param shortCode
+   */
+  void addLocal(String shortCode);
+
+  /**
+   *
+   * @param shortCode
+   * @return
+   */
   boolean mightContain(String shortCode);
 
   /**
@@ -14,10 +25,4 @@ public interface LocalBloomFilterService {
    * @return
    */
   String getLocalStats();
-
-  /**
-   *
-   * @param shortCode
-   */
-  void addLocal(String shortCode);
 }

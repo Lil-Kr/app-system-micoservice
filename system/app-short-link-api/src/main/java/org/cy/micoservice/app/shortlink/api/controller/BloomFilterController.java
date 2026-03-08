@@ -1,6 +1,5 @@
 package org.cy.micoservice.app.shortlink.api.controller;
 
-import lombok.extern.slf4j.Slf4j;
 import org.cy.micoservice.app.shortlink.api.service.BloomFilterStreamService;
 import org.cy.micoservice.app.shortlink.api.service.TieredBloomFilterService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +12,6 @@ import java.util.Map;
  * @Date: 2026/2/27
  * @Description:
  */
-@Slf4j
 @RestController
 @RequestMapping("/bloom")
 public class BloomFilterController {

@@ -20,7 +20,6 @@ import java.util.function.Supplier;
 @Service
 public class DistributedLockServiceImpl implements DistributedLockService {
 
-  private static final String LOCK_PREFIX = "shortlink:lock:";
   private static final long DEFAULT_WAIT_TIME = 3L; // 等待锁的时间
   private static final long DEFAULT_LEASE_TIME = 10L; // 锁的持有时间
 

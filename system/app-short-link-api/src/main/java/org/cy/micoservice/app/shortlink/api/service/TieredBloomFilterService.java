@@ -12,15 +12,15 @@ public interface TieredBloomFilterService {
   /**
    *
    * @param shortCode
-   * @return
    */
-  boolean mightContain(String shortCode);
+  void put(String shortCode);
 
   /**
    *
    * @param shortCode
+   * @return
    */
-  void put(String shortCode);
+  boolean mightContain(String shortCode);
 
   /**
    * @return

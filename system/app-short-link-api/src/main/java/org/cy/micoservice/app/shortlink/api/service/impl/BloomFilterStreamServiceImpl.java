@@ -3,8 +3,9 @@ package org.cy.micoservice.app.shortlink.api.service.impl;
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections4.CollectionUtils;
 import org.cy.micoservice.app.shortlink.api.config.ShortLinkApiProperties;
-import org.cy.micoservice.app.shortlink.api.constants.StreamConstant;
+import org.cy.micoservice.app.shortlink.api.constants.ShortUrlConstant;
 import org.cy.micoservice.app.shortlink.api.service.BloomFilterStreamService;
 import org.cy.micoservice.app.shortlink.api.service.LocalBloomFilterService;
 import org.springframework.beans.BeansException;
@@ -17,13 +18,11 @@ import org.springframework.data.redis.connection.stream.*;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
-
 import java.net.InetAddress;
 import java.time.Duration;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
-
 import static org.cy.micoservice.app.common.constants.CommonFormatConstants.COMMENT_FORMAT_COLON_SPLIT;
 
 /**
@@ -43,27 +42,26 @@ public class BloomFilterStreamServiceImpl implements BloomFilterStreamService, A
   private ApplicationContext applicationContext;
 
   @Autowired
-  private RedisTemplate<String, Object> redisTemplate;
-  @Autowired
   private ShortLinkApiProperties properties;
+  @Autowired
+  private RedisTemplate<String, Object> redisTemplate;
   @Autowired
   private LocalBloomFilterService localBloomFilter;
 
   @PostConstruct
   public void init() {
     try {
-      // // 生成节点ID
-      // nodeId = InetAddress.getLocalHost().getHostAddress() + ":" + properties.getServerPort();
+      // 生成节点ID
       nodeId = String.format(COMMENT_FORMAT_COLON_SPLIT, InetAddress.getLocalHost().getHostAddress(), properties.getServerPort());
-      consumerName = "consumer-" + nodeId;
+      this.consumerName = "consumer-" + nodeId;
 
       // 创建消费者组 (如果不存在)
       try {
-        redisTemplate.opsForStream().createGroup(StreamConstant.STREAM_KEY, StreamConstant.CONSUMER_GROUP);
-        log.info("创建Redis Stream消费者组: {}", StreamConstant.CONSUMER_GROUP);
+        redisTemplate.opsForStream().createGroup(ShortUrlConstant.REMOTE_STREAM_KEY, ShortUrlConstant.REMOTE_CONSUMER_SYNC_GROUP);
+        log.info("创建Redis Stream消费者组: {}", ShortUrlConstant.REMOTE_CONSUMER_SYNC_GROUP);
       } catch (Exception e) {
-        // 组已存在，忽略错误
-        log.info("消费者组已存在: {}", StreamConstant.CONSUMER_GROUP);
+        // 组已存在, 忽略错误
+        log.info("消费者组已存在: {}", ShortUrlConstant.REMOTE_CONSUMER_SYNC_GROUP);
       }
       log.info("BloomFilterStreamService初始化完成");
     } catch (Exception e) {
@@ -71,24 +69,25 @@ public class BloomFilterStreamServiceImpl implements BloomFilterStreamService, A
     }
   }
 
+  /**
+   *
+   */
   @EventListener(ApplicationReadyEvent.class)
   @Override
   public void onApplicationReady() {
-    log.info("应用启动完成，开始启动布隆过滤器Stream消费者");
+    log.info("应用启动完成, 开始启动布隆过滤器Stream消费者");
     // 通过ApplicationContext获取代理
     BloomFilterStreamService proxy = applicationContext.getBean(BloomFilterStreamService.class);
     proxy.startConsumer();
   }
 
   /**
-   *
+   * 消费者线程: 布隆过滤器
    */
   @Async("bloomFilterExecutor")
   @Override
   public void startConsumer() {
-    log.info("消费者线程启动 - 线程名: {}, 线程ID: {}",
-      Thread.currentThread().getName(),
-      Thread.currentThread().getId());
+    log.info("消费者线程启动 - 线程名: {}, 线程ID: {}", Thread.currentThread().getName(), Thread.currentThread().getId());
     running.set(true);
     log.info("启动布隆过滤器Stream消费者: {}", consumerName);
 
@@ -98,13 +97,13 @@ public class BloomFilterStreamServiceImpl implements BloomFilterStreamService, A
         List<MapRecord<String, Object, Object>> records = redisTemplate
           .opsForStream()
           .read(
-            Consumer.from(StreamConstant.CONSUMER_GROUP, consumerName),
-            StreamReadOptions.empty().count(10).block(Duration.ofSeconds(2)),
-            StreamOffset.create(StreamConstant.STREAM_KEY, ReadOffset.lastConsumed()
+              Consumer.from(ShortUrlConstant.REMOTE_CONSUMER_SYNC_GROUP, consumerName),
+              StreamReadOptions.empty().count(10).block(Duration.ofSeconds(2)),
+              StreamOffset.create(ShortUrlConstant.REMOTE_STREAM_KEY, ReadOffset.lastConsumed()
             )
           );
 
-        if (records != null && ! records.isEmpty()) {
+        if (CollectionUtils.isNotEmpty(records)) {
           this.processRecords(records);
         }
       } catch (Exception e) {
@@ -121,7 +120,7 @@ public class BloomFilterStreamServiceImpl implements BloomFilterStreamService, A
   }
 
   /**
-   * 发布新增短链到Stream
+   * 发布新增短链到 stream
    * @param shortCode
    */
   @Override
@@ -134,7 +133,7 @@ public class BloomFilterStreamServiceImpl implements BloomFilterStreamService, A
         "timestamp", String.valueOf(System.currentTimeMillis())
       );
 
-      RecordId recordId = redisTemplate.opsForStream().add(StreamConstant.STREAM_KEY, message);
+      RecordId recordId = redisTemplate.opsForStream().add(ShortUrlConstant.REMOTE_STREAM_KEY, message);
       log.debug("发布短链到Stream: {} (recordId: {})", shortCode, recordId);
     } catch (Exception e) {
       log.error("发布短链到Stream失败: shortCode={}", shortCode, e);
@@ -158,7 +157,7 @@ public class BloomFilterStreamServiceImpl implements BloomFilterStreamService, A
   }
 
   /**
-   *
+   * 同步布隆过滤器缓存
    * @param records
    */
   private void processRecords(List<MapRecord<String, Object, Object>> records) {
@@ -178,7 +177,7 @@ public class BloomFilterStreamServiceImpl implements BloomFilterStreamService, A
         }
 
         // 确认消息处理完成
-        redisTemplate.opsForStream().acknowledge(StreamConstant.STREAM_KEY, StreamConstant.CONSUMER_GROUP, record.getId());
+        redisTemplate.opsForStream().acknowledge(ShortUrlConstant.REMOTE_STREAM_KEY, ShortUrlConstant.REMOTE_CONSUMER_SYNC_GROUP, record.getId());
       } catch (Exception e) {
         log.error("处理Stream记录失败: {}", record, e);
       }

@@ -1,11 +1,14 @@
 package org.cy.micoservice.app.shortlink.api.service.impl;
 
+import com.alibaba.csp.sentinel.annotation.SentinelResource;
+import com.alibaba.csp.sentinel.slots.block.BlockException;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.dubbo.config.annotation.DubboReference;
+import org.cy.micoservice.app.common.base.api.ApiResp;
 import org.cy.micoservice.app.common.base.provider.RpcResponse;
 import org.cy.micoservice.app.common.utils.BeanCopyUtils;
 import org.cy.micoservice.app.common.utils.shortlink.DigestUtils;
@@ -17,21 +20,23 @@ import org.cy.micoservice.app.shortlink.api.config.ShortCodeConfig;
 import org.cy.micoservice.app.shortlink.api.config.ShortLinkApiProperties;
 import org.cy.micoservice.app.shortlink.api.config.ShortLinkCacheKeyBuilder;
 import org.cy.micoservice.app.shortlink.api.service.*;
+import org.cy.micoservice.app.shortlink.api.utils.CalculateIndexUtil;
 import org.cy.micoservice.app.shortlink.facade.dto.req.CreateShortUrlReqDTO;
 import org.cy.micoservice.app.shortlink.facade.dto.resp.CreateShortUrlRespDTO;
 import org.cy.micoservice.app.shortlink.facade.enums.ShortUrlEnum;
 import org.cy.micoservice.app.shortlink.facade.interfaces.ShortUrlFacade;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import static org.cy.micoservice.app.common.constants.CommonFormatConstants.*;
-import static org.cy.micoservice.app.common.constants.ShortLinkConstants.*;
+import static org.cy.micoservice.app.common.constants.CommonFormatConstants.COMMENT_FORMAT_SLASH_SPLIT;
+import static org.cy.micoservice.app.common.constants.CommonFormatConstants.COMMENT_FORMAT_UNDERSCORE_SPLIT;
+import static org.cy.micoservice.app.common.enums.response.ApiReturnCodeEnum.REQUEST_RESOURCE_NOT_EXIST;
 
 /**
  * @Author: Lil-K
@@ -45,6 +50,8 @@ public class ShortUrlServiceImpl implements ShortUrlService {
   @Autowired
   private ShortLinkApiProperties properties;
   @Autowired
+  private ShortCodeConfig shortCodeConfig;
+  @Autowired
   private DistributedLockService distributedLockService;
   // 使用集群感知缓存服务替代原有的CacheService
   @Autowired
@@ -54,9 +61,9 @@ public class ShortUrlServiceImpl implements ShortUrlService {
   @Autowired
   private ShortCodeService shortCodeService;
   @Autowired
-  private ShortCodeConfig shortCodeConfig;
-  @Autowired
   private ShortLinkCacheKeyBuilder cacheKeyBuilder;
+  @Autowired
+  private CalculateIndexUtil calculateIndexUtil;
   @DubboReference(check = false)
   private ShortUrlFacade shortUrlFacade;
 
@@ -72,11 +79,11 @@ public class ShortUrlServiceImpl implements ShortUrlService {
    * @param req
    * @return
    */
-  // @SentinelResource(
-  //   value = "createShortUrl",
-  //   blockHandler = "createShortUrlBlockHandler",
-  //   fallback = "createShortUrlFallback"
-  // )
+  @SentinelResource(
+    value = "createShortUrl",
+    blockHandler = "createShortUrlBlockHandler",
+    fallback = "createShortUrlFallback"
+  )
   @Override
   public CreateShortUrlResp createShortUrl(CreateShortUrlReq req) {
     /**
@@ -98,12 +105,12 @@ public class ShortUrlServiceImpl implements ShortUrlService {
     // 第二层防护: 使用分布式锁保证同一URL的串行处理
     String lockKey = cacheKeyBuilder.buildCacheLockKey(primaryUrlHash);
     return distributedLockService.executeWithLock(lockKey, () -> {
-      // 在锁内只检查单个哈希值的缓存状态 (避免重复的多重哈希检查)
+      // 在锁内只检查单个哈希值的缓存状态 (避免重复的多重哈希检查), from redis
       String cachedShortCode = clusterAwareCacheService.getShortCodeByUrlHash(primaryUrlHash);
 
       if (StringUtils.isNotBlank(cachedShortCode)) {
         // 直接从缓存获取完整信息, 避免额外的getShortUrlInfo调用
-        ShortUrlMapping cachedMapping = clusterAwareCacheService.getFromCache(cachedShortCode);
+        ShortUrlMapping cachedMapping = clusterAwareCacheService.getShortUrlWithSentinel(cachedShortCode);
         if (cachedMapping != null && req.getOriginUrl().equals(cachedMapping.getOriginUrl())) {
           log.info("分布式锁内缓存命中: shortCode={}, originUrl={}", cachedShortCode, req.getOriginUrl());
           return this.buildResponse(cachedMapping);
@@ -119,11 +126,11 @@ public class ShortUrlServiceImpl implements ShortUrlService {
       // int dbIndex = Math.abs(initialShortCode.hashCode()) % NEW_SHARDING_DATABASE_COUNT;
       // int tableIndex = Math.abs(initialShortCode.hashCode()) % NEW_SHARDING_TABLE_COUNT;
 
+      // 从DB查询即将创建锻炼的数据是否存在
       RpcResponse<CreateShortUrlRespDTO> responseDTO = shortUrlFacade.findByOriginUrlHash(initialShortCode, primaryUrlHash);
       if (responseDTO.getData() != null) {
         ShortUrlMapping mapping = BeanCopyUtils.convert(responseDTO.getData(), ShortUrlMapping.class);
         // 缓存查询结果
-        clusterAwareCacheService.putToCache(mapping.getShortCode(), mapping);
         clusterAwareCacheService.putUrlHashMapping(primaryUrlHash, mapping.getShortCode());
         log.info("数据库智能查询命中, 返回已存在短链: shortCode={}, originUrl={}", mapping.getShortCode(), req.getOriginUrl());
         return this.buildResponse(mapping);
@@ -140,18 +147,18 @@ public class ShortUrlServiceImpl implements ShortUrlService {
           ShortUrlMapping existing = BeanCopyUtils.convert(existingByCode.getData(), ShortUrlMapping.class);
           // 如果是相同的原始URL, 直接返回
           if (req.getOriginUrl().equals(existing.getOriginUrl())) {
-            clusterAwareCacheService.putToCache(currentShortCode, existing);
             clusterAwareCacheService.putUrlHashMapping(primaryUrlHash, currentShortCode);
             log.info("发现相同URL的短链: shortCode={}, originUrl={}, 数据库分片: db={}, table={}, Redis分片槽位={}",
               currentShortCode,
               req.getOriginUrl(),
-              this.calculateDatabaseIndex(currentShortCode),
-              this.calculateTableIndex(currentShortCode),
+              calculateIndexUtil.calculateDatabaseIndex(currentShortCode),
+              calculateIndexUtil.calculateTableIndex(currentShortCode),
               shardingStrategyService.calculateSlot(currentShortCode));
             return this.buildResponse(existing);
           } else {
             // 哈希冲突, 则重新生成
             int retryCount = 0;
+            // 最大重试次数
             int maxRetries = shortCodeConfig.getMaxRetries();
             while (existingByCode.getData() != null && retryCount < maxRetries) {
               currentShortCode = shortCodeService.generateByStrategy(req.getOriginUrl());
@@ -183,14 +190,15 @@ public class ShortUrlServiceImpl implements ShortUrlService {
         CreateShortUrlReqDTO reqDTO = BeanCopyUtils.convert(shortUrlMapping, CreateShortUrlReqDTO.class);
         RpcResponse<CreateShortUrlRespDTO> response = shortUrlFacade.createShortUrl(reqDTO);
         shortUrlMapping = BeanCopyUtils.convert(response.getData(), ShortUrlMapping.class);
-
         log.info("短链保存完成: shortCode={}, 实际shortCode={}", currentShortCode, shortUrlMapping.getShortCode());
 
         // 1. 添加到布隆过滤器
         clusterAwareCacheService.addToBloomFilter(shortUrlMapping.getShortCode());
 
+        // 2. 刷新缓存
+        clusterAwareCacheService.refreshCache(shortUrlMapping);
+
         // 2. 缓存短链信息和URL哈希映射到Redis集群
-        clusterAwareCacheService.putToCache(shortUrlMapping.getShortCode(), shortUrlMapping);
         clusterAwareCacheService.putUrlHashMapping(primaryUrlHash, shortUrlMapping.getShortCode());
 
         log.info("创建短链成功: shortCode={}, originUrl={}, Redis分片槽位={}",
@@ -209,25 +217,25 @@ public class ShortUrlServiceImpl implements ShortUrlService {
    * @param shortCode
    * @return
    */
-  // @SentinelResource(
-  //   value = "getShortUrlInfo",
-  //   blockHandler = "getShortUrlInfoBlockHandler",
-  //   fallback = "getShortUrlInfoFallback"
-  // )
+  @SentinelResource(
+    value = "getShortUrlInfo",
+    blockHandler = "getShortUrlInfoBlockHandler",
+    fallback = "getShortUrlInfoFallback"
+  )
   @Override
   public CreateShortUrlResp getShortUrlInfo(String shortCode) {
     if (StringUtils.isBlank(shortCode)) {
       return null;
     }
 
-    // 1. 检查布隆过滤器, 包含 local + redis 集群
+    // 1. 检查布隆过滤器, 过滤不存在的 shortCode 包含 local + redis 集群
     if (! clusterAwareCacheService.existsInBloomFilter(shortCode)) {
       log.debug("布隆过滤器检查失败: shortCode={}", shortCode);
       return null;
     }
 
     // 2. 从缓存中获取短链映射 (会自动路由到正确分片)
-    ShortUrlMapping shortUrlMapping = this.getShortUrlWithSentinel(shortCode);
+    ShortUrlMapping shortUrlMapping = clusterAwareCacheService.getShortUrlWithSentinel(shortCode);
     if (shortUrlMapping == null) {
       log.debug("短链不存在: shortCode={}", shortCode);
       return null;
@@ -252,12 +260,12 @@ public class ShortUrlServiceImpl implements ShortUrlService {
    * @param req
    */
   @Override
-  public void redirect(ShortUrlGetReq req, HttpServletResponse response) throws IOException {
+  public ApiResp<String> redirect(ShortUrlGetReq req, HttpServletResponse response) throws Exception {
     try {
       CreateShortUrlResp createShortUrlResp = this.getShortUrlInfo(req.getShortCode());
       if (Objects.isNull(createShortUrlResp)) {
-        response.sendError(HttpServletResponse.SC_NOT_FOUND, "short url is not exist or expires");
-        return;
+        // response.sendError(HttpServletResponse.SC_NOT_FOUND, "short url is not exist or expires");
+        return ApiResp.failure(REQUEST_RESOURCE_NOT_EXIST);
       }
 
       response.setStatus(HttpServletResponse.SC_FOUND);
@@ -268,6 +276,80 @@ public class ShortUrlServiceImpl implements ShortUrlService {
     } catch (Exception e) {
       response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
     }
+    return ApiResp.success();
+  }
+
+  /**
+   * 数据库访问次数更新 (支持分库分表)
+   */
+  @Transactional(rollbackFor = Exception.class)
+  @Override
+  public void updateAccessCountInDatabase(String shortCode, Long accessCount) {
+    try {
+      RpcResponse<Integer> updatedResp = shortUrlFacade.updateAccessCount(shortCode, accessCount);
+      if (updatedResp.getData() > 0) {
+        log.debug("访问次数更新成功: shortCode={}, accessCount={}, 数据库分片: db={}, table={}",
+          shortCode,
+          accessCount,
+          calculateIndexUtil.calculateDatabaseIndex(shortCode),
+          calculateIndexUtil.calculateTableIndex(shortCode));
+      } else {
+        log.warn("访问次数更新失败，记录不存在: shortCode={}", shortCode);
+      }
+    } catch (Exception e) {
+      log.error("数据库访问次数更新失败: shortCode={}, accessCount={}, error={}",
+        shortCode, accessCount, e.getMessage(), e);
+      throw e;
+    }
+  }
+
+  /**
+   * 异步更新访问次数 (支持分库分表和Redis集群分片)
+   */
+  @SentinelResource(value = "updateAccessCount")
+  @Override
+  public void updateAccessCountAsync(String shortCode) {
+    try {
+      // 先尝试从Redis集群增加计数
+      Long count = clusterAwareCacheService.incrementAccessCount(shortCode);
+
+      // 异步更新数据库 (可以考虑批量更新)
+      if (count != null && count % 100 == 0) {
+        // 每100次访问同步一次数据库 (ShardingSphere会自动路由)
+        this.updateAccessCountInDatabase(shortCode, count);
+      }
+    } catch (Exception e) {
+      // 访问计数失败不影响主流程
+      log.warn("更新访问次数失败: shortCode={}, error={}", shortCode, e.getMessage());
+    }
+  }
+
+  /**
+   * 记录当前url的访问次数
+   * @param shortCode
+   * @return
+   */
+  @SentinelResource(
+    value = "getOriginUrl",
+    blockHandler = "getOriginUrlBlockHandler",
+    fallback = "getOriginUrlFallback"
+  )
+  @Override
+  public String getOriginUrl(String shortCode) {
+    CreateShortUrlResp shortUrlInfo = this.getShortUrlInfo(shortCode);
+    if (Objects.isNull(shortUrlInfo)) {
+      return null;
+    }
+
+    // 异步更新访问次数 (不阻塞主流程) - 使用集群分片
+    this.updateAccessCountAsync(shortCode);
+
+    log.debug("短链重定向: shortCode={}, originUrl={}, 数据库分片: db={}, table={}, Redis分片槽位={}",
+      shortCode, shortUrlInfo.getOriginUrl(),
+      calculateIndexUtil.calculateDatabaseIndex(shortCode), calculateIndexUtil.calculateTableIndex(shortCode),
+      shardingStrategyService.calculateSlot(shortCode));
+
+    return shortUrlInfo.getOriginUrl();
   }
 
   /**
@@ -326,6 +408,7 @@ public class ShortUrlServiceImpl implements ShortUrlService {
     // 备用哈希3: URL长度 + MD5的组合
     String lengthPrefixedUrl = String.format(COMMENT_FORMAT_UNDERSCORE_SPLIT, originUrl.length(), originUrl);
     hashList.add(DigestUtils.md5(lengthPrefixedUrl));
+
     return hashList;
   }
 
@@ -338,7 +421,7 @@ public class ShortUrlServiceImpl implements ShortUrlService {
    */
   private CacheCheckResult smartCacheCheck(String originalUrl, List<String> urlHashList) {
     for (String urlHash : urlHashList) {
-      // get short_code from cache
+      // get short_code from redis
       String shortCode = clusterAwareCacheService.getShortCodeByUrlHash(urlHash);
 
       if (StringUtils.isBlank(shortCode)) {
@@ -360,71 +443,40 @@ public class ShortUrlServiceImpl implements ShortUrlService {
     throw new RuntimeException("创建短链hash值失败, 请稍后重试");
   }
 
-  /**
-   * 带Sentinel保护的短链查询 (支持分库分表和Redis集群分片)
-   * @param shortCode
-   * @return
-   */
-  // @SentinelResource(
-  //   value = "databaseQuery",
-  //   blockHandler = "databaseQueryBlockHandler",
-  //   fallback = "databaseQueryFallback"
-  // )
-  private ShortUrlMapping getShortUrlWithSentinel(String shortCode) {
-    // 从 Local Cache + Redis集群缓存获取
-    ShortUrlMapping shortUrlMapping = clusterAwareCacheService.getFromCache(shortCode);
-    if (shortUrlMapping != null) {
-      return shortUrlMapping;
-    }
+  /** ======================== Sentinel 处理方法 ======================== **/
+  public CreateShortUrlResp createShortUrlBlockHandler(CreateShortUrlReq req, BlockException ex) {
+    log.warn("创建短链被限流: originUrl={}", req != null ? req.getOriginUrl() : "null");
+    CreateShortUrlResp response = new CreateShortUrlResp();
+    response.setShortCode("RATE_LIMITED");
+    response.setShortUrl("系统繁忙，请稍后重试");
+    return response;
+  }
 
-    // 缓存未命中, 查询数据库 (ShardingSphere会自动路由到正确的分片)
-    try {
-      RpcResponse<CreateShortUrlRespDTO> byShortCode = shortUrlFacade.findByShortCode(shortCode);
-      if (byShortCode.getData() != null) {
-        CreateShortUrlRespDTO respDTO = byShortCode.getData();
-        shortUrlMapping = BeanCopyUtils.convert(respDTO, ShortUrlMapping.class);
-        // 缓存查询结果到Redis集群
-        clusterAwareCacheService.putToCache(shortCode, shortUrlMapping);
-        log.debug("数据库查询成功: shortCode={}, 数据库分片: db={}, table={}, Redis分片槽位={}",
-          shortCode,
-          this.calculateDatabaseIndex(shortCode),
-          this.calculateTableIndex(shortCode),
-          shardingStrategyService.calculateSlot(shortCode));
-        return shortUrlMapping;
-      }
-    } catch (Exception e) {
-      log.error("数据库查询失败: shortCode={}, error={}", shortCode, e.getMessage(), e);
-      throw e;
-    }
-    this.recordNotExistLog(shortCode);
+  public CreateShortUrlResp createShortUrlFallback(CreateShortUrlReq request, Throwable ex) {
+    log.error("创建短链降级: originUrl={}, error={}", request != null ? request.getOriginUrl() : "null", ex.getMessage());
+    CreateShortUrlResp response = new CreateShortUrlResp();
+    response.setShortCode("SERVICE_DEGRADED");
+    response.setShortUrl("创建短链失败，请稍后重试");
+    return response;
+  }
+
+  public CreateShortUrlResp getShortUrlInfoBlockHandler(String shortCode, BlockException ex) {
+    log.warn("查询短链信息被限流: shortCode={}", shortCode);
     return null;
   }
 
-  /**
-   * 计算数据库索引 (更新为32个数据库)
-   */
-  private int calculateDatabaseIndex(String shortCode) {
-    if (properties.isDualWriteEnabled()) {
-      return Math.abs(shortCode.hashCode()) % NEW_SHARDING_DATABASE_COUNT;
-    }
-    return Math.abs(shortCode.hashCode()) % SHARDING_DATABASE_COUNT;
+  public CreateShortUrlResp getShortUrlInfoFallback(String shortCode, Throwable ex) {
+    log.error("查询短链信息降级: shortCode={}, error={}", shortCode, ex.getMessage());
+    return null;
   }
 
-  /**
-   * 计算表索引 (更新为256张表)
-   */
-  private int calculateTableIndex(String shortCode) {
-    if (properties.isDualWriteEnabled()) {
-      return Math.abs(shortCode.hashCode()) % NEW_SHARDING_TABLE_COUNT;
-    }
-    return Math.abs(shortCode.hashCode()) % SHARDING_TABLE_COUNT;
+  public String getOriginUrlBlockHandler(String shortCode, BlockException ex) {
+    log.warn("获取原始URL被限流: shortCode={}", shortCode);
+    return null;
   }
 
-  /**
-   * log
-   * @param shortCode
-   */
-  private void recordNotExistLog(String shortCode) {
-    log.debug("short url not exist: shortCode={}", shortCode);
+  public String getOriginUrlFallback(String shortCode, Throwable ex) {
+    log.error("获取原始URL降级: shortCode={}, error={}", shortCode, ex.getMessage());
+    return null;
   }
 }

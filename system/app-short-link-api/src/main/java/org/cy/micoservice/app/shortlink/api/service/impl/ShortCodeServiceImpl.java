@@ -43,7 +43,6 @@ public class ShortCodeServiceImpl implements ShortCodeService {
     if (shortCode.length() > shortCodeConfig.getLength()) {
       shortCode = shortCode.substring(0, shortCodeConfig.getLength());
     }
-
     return shortCode;
   }
 
@@ -74,7 +73,7 @@ public class ShortCodeServiceImpl implements ShortCodeService {
 
     String shortCode = Base62Util.encodeWithMinLength(num, shortCodeConfig.getLength());
 
-    // 双重保险：如果仍然超过8位，截取前8位
+    // 双重保险: 如果仍然超过8位，截取前8位
     if (shortCode.length() > shortCodeConfig.getLength()) {
       shortCode = shortCode.substring(0, shortCodeConfig.getLength());
     }

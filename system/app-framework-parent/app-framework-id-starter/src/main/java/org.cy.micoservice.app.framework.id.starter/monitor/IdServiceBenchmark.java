@@ -17,7 +17,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
  */
 public final class IdServiceBenchmark {
 
-
   /**
    * 便捷方法: 无预热。
    */

@@ -8,12 +8,12 @@ import org.redisson.api.RedissonClient;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.lang.management.ManagementFactory;
 import java.net.InetAddress;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
+import static org.cy.micoservice.app.shortlink.api.constants.ShortUrlConstant.*;
 
 /**
  * @Author: Lil-K
@@ -29,9 +29,10 @@ public class MachineIdServiceImpl implements MachineIdService, InitializingBean 
   @Autowired
   private DistributedLockService lockService;
 
-  private static final String MACHINE_ID_KEY = "shortlink:machine-id-registry";
-  private static final String MACHINE_ID_LOCK = "shortlink:machine-id-lock";
-  private static final long MAX_MACHINE_ID = 1023; // 10位机器ID的最大值
+  // private static final String MACHINE_ID_KEY = "shortlink:machine-id-registry";
+  // private static final String MACHINE_ID_LOCK = "shortlink:machine-id-lock";
+  // 10位机器ID的最大值
+  // private static final long MAX_MACHINE_ID = 1023;
 
   private volatile long machineId = -1;
   private String nodeIdentifier;

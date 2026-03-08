@@ -6,11 +6,10 @@ import java.util.Date;
 
 public class DateUtil {
 
-  private static final String YYYY_MM_DD_HH_MM_SS = "yyyy-MM-dd HH:mm:ss";
-
-  private static final String YYYY_MM_DD = "yyyy-MM-dd";
-
-  private static final String YYYYMMDD = "YYYYMMDDD";
+  public static final String YYYY_MM_DD_HH_MM_SS = "yyyy-MM-dd HH:mm:ss";
+  public static final String YYYY_MM_DD = "yyyy-MM-dd";
+  public static final String YYYYMMDD = "YYYYMMDDD";
+  public static final String yyyyMMdd_HH = "yyyyMMdd_HH";
 
   private static DateTimeFormatter formatterForTime = DateTimeFormatter.ofPattern(YYYY_MM_DD_HH_MM_SS);
 

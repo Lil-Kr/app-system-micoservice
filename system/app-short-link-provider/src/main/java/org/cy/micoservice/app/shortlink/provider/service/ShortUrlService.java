@@ -31,4 +31,12 @@ public interface ShortUrlService {
    * @return
    */
   RpcResponse<CreateShortUrlRespDTO> findByOriginUrlHash(String shortCode, String originUrlHash);
+
+  /**
+   * update access count
+   * @param shortCode
+   * @param accessCount
+   * @return
+   */
+  RpcResponse<Integer> updateAccessCount(String shortCode, Long accessCount);
 }

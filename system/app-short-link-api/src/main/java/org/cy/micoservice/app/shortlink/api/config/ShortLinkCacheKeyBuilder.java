@@ -14,15 +14,11 @@ import static org.cy.micoservice.app.common.constants.CommonFormatConstants.COMM
 public class ShortLinkCacheKeyBuilder extends RedisKeyBuilder {
 
   private static final String CACHE_PREFIX = "shortlink:";
-  private static final String URL_CACHE_KEY = CACHE_PREFIX + "url:";
-  private static final String COUNT_CACHE_KEY = CACHE_PREFIX + "count:";
-  private static final String HASH_MAPPING_KEY = CACHE_PREFIX + "hash:";
-  private static final String LOCK_PREFIX_KEY = CACHE_PREFIX + "lock:";
 
   /**
    * build cache lock key
    * @param urlHash
-   * @return
+   * @return create_url:[urlHash]
    */
   public String buildCacheLockKey(String urlHash) {
     return String.format(COMMENT_FORMAT_COLON_SPLIT, "create_url", urlHash);
@@ -31,9 +27,43 @@ public class ShortLinkCacheKeyBuilder extends RedisKeyBuilder {
   /**
    * build cache lock key
    * @param key
-   * @return
+   * @return shortlink:lock:[key]
    */
   public String buildCacheFullLockKey(String key) {
-    return LOCK_PREFIX_KEY + key;
+    return CACHE_PREFIX + "lock:" + key;
+  }
+
+  /**
+   * build hash mapping key
+   * @return shortlink:hash:[key]
+   */
+  public String buildHashMappingKey() {
+    return CACHE_PREFIX + "hash:";
+  }
+
+  /**
+   * build count cache key
+   * @return shortlink:count:[key]
+   * @return
+   */
+  public String buildCountCacheKey() {
+    return CACHE_PREFIX + "count:";
+  }
+
+  /**
+   * build url cache key
+   * @return shortlink:url:[key]
+   * @return
+   */
+  public String buildUrlCacheKey() {
+    return CACHE_PREFIX + "url:";
+  }
+
+  /**
+   * build hash tag key
+   * @return
+   */
+  public String buildHashTagKey(String prefix, String key) {
+    return prefix + "{" + key + "}";
   }
 }

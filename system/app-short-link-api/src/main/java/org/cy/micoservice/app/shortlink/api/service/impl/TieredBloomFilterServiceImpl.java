@@ -3,7 +3,7 @@ package org.cy.micoservice.app.shortlink.api.service.impl;
 import lombok.extern.slf4j.Slf4j;
 import org.cy.micoservice.app.entity.shortlink.model.api.pojo.NodeInfo;
 import org.cy.micoservice.app.shortlink.api.service.LocalBloomFilterService;
-import org.cy.micoservice.app.shortlink.api.service.RedisTimeBasedBloomFilterService;
+import org.cy.micoservice.app.shortlink.api.service.RedisBloomFilterService;
 import org.cy.micoservice.app.shortlink.api.service.TieredBloomFilterService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,9 +18,31 @@ import org.springframework.stereotype.Service;
 public class TieredBloomFilterServiceImpl implements TieredBloomFilterService {
 
   @Autowired
-  private RedisTimeBasedBloomFilterService redisTimeBasedBloomFilter;
+  private RedisBloomFilterService redisTimeBasedBloomFilter;
   @Autowired
   private LocalBloomFilterService localBloomFilterService;
+
+  /**
+   * 添加到时间分片布隆过滤器
+   */
+  @Override
+  public void put(String shortCode) {
+    if (shortCode == null || shortCode.trim().isEmpty()) {
+      log.warn("shortCode为空或null");
+      return;
+    }
+
+    try {
+      // 向 local 布隆过滤器添加缓存
+      localBloomFilterService.addLocal(shortCode);
+
+      // 统一由 RedisTimeBasedBloomFilterService 处理 (内部包含: 本地分片 + Redis分片 + 发布Stream)
+      redisTimeBasedBloomFilter.add(shortCode);
+      log.debug("时间分片布隆过滤器添加成功: {}", shortCode);
+    } catch (Exception e) {
+      log.error("时间分片布隆过滤器添加失败: shortCode={}", shortCode, e);
+    }
+  }
 
   /**
    * 从布隆过滤器中, 分层查询信息
@@ -36,31 +58,17 @@ public class TieredBloomFilterServiceImpl implements TieredBloomFilterService {
 
     /**
      * 第二层: Redis时间分片, 兜底 (跨节点共享)
-     * 统一委托给 RedisTimeBasedBloomFilterService (内部已包含本地 + Redis两层检查)
+     * 统一委托给 RedisTimeBasedBloomFilterService
      */
-    return redisTimeBasedBloomFilter.mightContain(shortCode);
+    if (redisTimeBasedBloomFilter.mightContain(shortCode)) {
+      localBloomFilterService.addLocal(shortCode);
+      return true;
+    }
+    return false;
   }
 
   /**
-   * 添加到时间分片布隆过滤器
-   */
-  @Override
-  public void put(String shortCode) {
-    if (shortCode == null || shortCode.trim().isEmpty()) {
-      log.warn("shortCode为空或null");
-      return;
-    }
-
-    try {
-      // 统一由 RedisTimeBasedBloomFilterService 处理 (内部包含: 本地分片 + Redis分片 + 发布Stream)
-      redisTimeBasedBloomFilter.add(shortCode);
-      log.debug("时间分片布隆过滤器添加成功: {}", shortCode);
-    } catch (Exception e) {
-      log.error("时间分片布隆过滤器添加失败: shortCode={}", shortCode, e);
-    }
-  }
-
-  /**
+   * 获取节点信息
    * @return
    */
   @Override
@@ -72,7 +80,8 @@ public class TieredBloomFilterServiceImpl implements TieredBloomFilterService {
       // 获取服务状态
       boolean localServiceActive = redisTimeBasedBloomFilter != null;
       boolean redisServiceActive = redisTimeBasedBloomFilter != null;
-      boolean streamServiceActive = true; // 由统一服务内部发布
+      // 由统一服务内部发布
+      boolean streamServiceActive = true;
 
       // 获取统计信息
       String localStats = localServiceActive ? localBloomFilterService.getLocalStats() : "服务未激活";

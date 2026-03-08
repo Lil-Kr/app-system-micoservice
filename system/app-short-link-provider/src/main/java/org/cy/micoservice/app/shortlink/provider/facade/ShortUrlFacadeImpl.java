@@ -51,4 +51,15 @@ public class ShortUrlFacadeImpl implements ShortUrlFacade {
   public RpcResponse<CreateShortUrlRespDTO> findByOriginUrlHash(String shortCode, String originUrlHash) {
     return shortUrlService.findByOriginUrlHash(shortCode, originUrlHash);
   }
+
+  /**
+   *
+   * @param shortCode
+   * @param accessCount
+   * @return
+   */
+  @Override
+  public RpcResponse<Integer> updateAccessCount(String shortCode, Long accessCount) {
+    return shortUrlService.updateAccessCount(shortCode, accessCount);
+  }
 }

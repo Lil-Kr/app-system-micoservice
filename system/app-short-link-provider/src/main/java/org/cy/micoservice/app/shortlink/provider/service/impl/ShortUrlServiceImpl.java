@@ -8,7 +8,6 @@ import org.cy.micoservice.app.entity.shortlink.model.provider.pojo.ShortUrlMappi
 import org.cy.micoservice.app.framework.id.starter.service.IdService;
 import org.cy.micoservice.app.shortlink.facade.dto.req.CreateShortUrlReqDTO;
 import org.cy.micoservice.app.shortlink.facade.dto.resp.CreateShortUrlRespDTO;
-import org.cy.micoservice.app.shortlink.provider.config.ShortLinkProviderProperties;
 import org.cy.micoservice.app.shortlink.provider.dao.ShortUrlMapper;
 import org.cy.micoservice.app.shortlink.provider.service.ShortUrlService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,8 +26,6 @@ import java.util.Objects;
 @Service
 public class ShortUrlServiceImpl implements ShortUrlService {
 
-  @Autowired
-  private ShortLinkProviderProperties properties;
   @Autowired
   private IdService idService;
   @Autowired
@@ -92,6 +89,22 @@ public class ShortUrlServiceImpl implements ShortUrlService {
     }
     CreateShortUrlRespDTO respDTO = BeanCopyUtils.convert(shortUrlMapping, CreateShortUrlRespDTO.class);
     return RpcResponse.success(respDTO);
+  }
+
+  /**
+   * update access count
+   * @param shortCode
+   * @param accessCount
+   * @return
+   */
+  @Override
+  @Transactional(rollbackFor = Exception.class)
+  public RpcResponse<Integer> updateAccessCount(String shortCode, Long accessCount) {
+    CreateShortUrlReqDTO reqDTO = new CreateShortUrlReqDTO();
+    reqDTO.setShortCode(shortCode);
+    reqDTO.setAccessCount(accessCount);
+    Integer update = shortUrlMapper.updateAccessCount(reqDTO);
+    return RpcResponse.success(update);
   }
 
 }

@@ -17,4 +17,6 @@ public interface ShortUrlMapper extends BaseMapper<ShortUrlMapping> {
   ShortUrlMapping findByShortCode(@Param("param") CreateShortUrlReqDTO reqDTO);
 
   ShortUrlMapping findByOriginUrlHash(@Param("param") CreateShortUrlReqDTO reqDTO);
+
+  Integer updateAccessCount(@Param("param") CreateShortUrlReqDTO reqDTO);
 }
