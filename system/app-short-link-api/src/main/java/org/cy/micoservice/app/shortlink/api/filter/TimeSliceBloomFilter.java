@@ -43,7 +43,7 @@ public class TimeSliceBloomFilter {
   }
 
   /**
-   * 添加short code 到本地布隆过滤器
+   * 添加 short code 到本地布隆过滤器
    * @param shortCode
    */
   public void add(String shortCode) {

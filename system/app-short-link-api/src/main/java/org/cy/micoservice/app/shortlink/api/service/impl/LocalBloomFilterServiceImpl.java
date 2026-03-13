@@ -62,7 +62,7 @@ public class LocalBloomFilterServiceImpl implements LocalBloomFilterService {
    * 定时清理local的时间分片
    * 每5分钟执行一次
    */
-  @Scheduled(fixedDelay = 5 * 60 * 1000)
+  @Scheduled(fixedRate = 5 * 60 * 1000)
   public void cleanLocalBloomExpiredSlices() {
     try {
       log.info("开始清理Local布隆过滤器时间分片");

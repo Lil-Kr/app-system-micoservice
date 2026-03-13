@@ -1,14 +1,13 @@
 package org.cy.micoservice.app.shortlink.api.service.impl;
 
 import com.alibaba.fastjson2.JSONArray;
-import org.cy.micoservice.app.common.utils.shortlink.DigestUtils;
+import org.cy.micoservice.app.shortlink.api.utils.DigestUtils;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.cy.micoservice.app.common.constants.CommonFormatConstants.COMMENT_FORMAT_UNDERSCORE_SPLIT;
-import static org.junit.jupiter.api.Assertions.*;
 
 public class ShortUrlServiceImplTest {
 

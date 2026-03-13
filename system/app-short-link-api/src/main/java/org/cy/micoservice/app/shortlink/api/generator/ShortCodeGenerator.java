@@ -1,7 +1,7 @@
 package org.cy.micoservice.app.shortlink.api.generator;
 
 import lombok.extern.slf4j.Slf4j;
-import org.cy.micoservice.app.common.utils.shortlink.Base62Util;
+import org.cy.micoservice.app.shortlink.api.utils.Base62Util;
 import org.cy.micoservice.app.shortlink.api.config.ShortCodeConfig;
 import org.cy.micoservice.app.shortlink.api.service.ClockSyncMonitorService;
 import org.cy.micoservice.app.shortlink.api.service.MachineIdService;
@@ -11,13 +11,14 @@ import org.springframework.stereotype.Component;
 import java.time.Instant;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.locks.ReentrantLock;
+import java.util.stream.IntStream;
 
 /**
  * @Author: Lil-K
  * @Date: 2026/2/28
  * @Description:
  * 分布式短码生成器
- * 基于雪花算法，利用JDK21的虚拟线程优化
+ * 基于雪花算法, 利用JDK21的虚拟线程优化
  * 支持动态配置短链长度
  * 增强的时钟回拨处理
  */
@@ -44,8 +45,10 @@ public class ShortCodeGenerator {
   private static final long START_TIMESTAMP = 1704067200000L;
 
   // 时钟回拨阈值
-  private static final long CLOCK_BACKWARDS_SMALL_THRESHOLD = 5L; // 小幅回拨阈值(ms)
-  private static final long CLOCK_BACKWARDS_MEDIUM_THRESHOLD = 50L; // 中等回拨阈值(ms)
+  // 小幅回拨阈值(ms)
+  private static final long CLOCK_BACKWARDS_SMALL_THRESHOLD = 5L;
+  // 中等回拨阈值(ms)
+  private static final long CLOCK_BACKWARDS_MEDIUM_THRESHOLD = 50L;
 
   @Autowired
   private MachineIdService machineIdService;
@@ -58,7 +61,7 @@ public class ShortCodeGenerator {
   private volatile long lastTimestamp = -1L;
   private final ReentrantLock lock = new ReentrantLock();
 
-  // 缓存最大值，避免重复计算
+  // 缓存最大值, 避免重复计算
   private volatile long cachedMaxValue = -1L;
   private volatile int cachedLength = -1;
 
@@ -81,8 +84,7 @@ public class ShortCodeGenerator {
     // 验证机器ID范围
     long machineId = machineIdService.getMachineId();
     if (machineId < 0 || machineId > MAX_MACHINE_ID) {
-      throw new IllegalArgumentException(
-        String.format("机器ID必须在0-%d之间，当前值: %d", MAX_MACHINE_ID, machineId));
+      throw new IllegalArgumentException(String.format("机器ID必须在0-%d之间，当前值: %d", MAX_MACHINE_ID, machineId));
     }
 
     log.info("短码生成器初始化完成 - 机器ID: {}, 配置长度: {}", machineId, shortCodeConfig.getLength());
@@ -94,23 +96,24 @@ public class ShortCodeGenerator {
   public long generateId() {
     lock.lock();
     try {
-      long timestamp = getCurrentTimestamp();
+      // 获取机器当前的时间戳
+      long timestamp = this.getCurrentTimestamp();
 
       // 增强的时钟回拨检查
       if (timestamp < lastTimestamp) {
         long offset = lastTimestamp - timestamp;
 
         // 记录时钟回拨事件
-        recordClockBackwards(offset);
+        this.recordClockBackwards(offset);
 
+        // 小幅回拨, 等待时间追上
         if (offset <= CLOCK_BACKWARDS_SMALL_THRESHOLD) {
-          // 小幅回拨，等待追上
           try {
             Thread.sleep(offset << 1);
-            timestamp = getCurrentTimestamp();
+            timestamp = this.getCurrentTimestamp();
             if (timestamp < lastTimestamp) {
-              // 仍然回拨，使用上次时间戳
-              log.warn("等待后仍检测到时钟回拨({}ms)，使用上次时间戳", offset);
+              // 仍然回拨, 使用上次时间戳
+              log.warn("等待后仍检测到时钟回拨({}ms), 使用上次时间戳", offset);
               timestamp = lastTimestamp;
             }
           } catch (InterruptedException e) {
@@ -118,13 +121,13 @@ public class ShortCodeGenerator {
             throw new RuntimeException("等待时钟同步被中断", e);
           }
         } else if (offset <= CLOCK_BACKWARDS_MEDIUM_THRESHOLD) {
-          // 中等回拨，使用上次时间戳
-          log.warn("检测到中等时钟回拨({}ms)，使用上次时间戳", offset);
+          // 中等回拨, 使用上次时间戳
+          log.warn("检测到中等时钟回拨({}ms), 使用上次时间戳", offset);
           timestamp = lastTimestamp;
         } else {
-          // 大幅回拨，使用备用时间源
-          log.error("检测到严重时钟回拨({}ms)，启用备用时间源", offset);
-          timestamp = getBackupTimestamp();
+          // 大幅回拨, 使用备用时间源
+          timestamp = this.getBackupTimestamp();
+          log.error("检测到严重时钟回拨({}ms), 启用备用时间源", offset);
         }
       }
 
@@ -132,12 +135,12 @@ public class ShortCodeGenerator {
       if (timestamp == lastTimestamp) {
         long seq = sequence.incrementAndGet() & MAX_SEQUENCE;
         if (seq == 0) {
-          // 序列号用完，等待下一毫秒
-          timestamp = waitNextMillis(timestamp);
+          // 序列号用完, 等待下一毫秒
+          timestamp = this.waitNextMillis(timestamp);
           sequence.set(0L);
         }
       } else {
-        // 新的毫秒，重置序列号
+        // 新的毫秒, 重置序列号
         sequence.set(0L);
       }
 
@@ -149,7 +152,7 @@ public class ShortCodeGenerator {
         | sequence.get();
 
       // 确保ID不超过指定长度Base62编码的最大值
-      long maxValue = getMaxValueForCurrentLength();
+      long maxValue = this.getMaxValueForCurrentLength();
       return Math.abs(id) % maxValue;
     } finally {
       lock.unlock();
@@ -171,16 +174,16 @@ public class ShortCodeGenerator {
       severeBackwardsCount++;
     }
 
-    // 避免日志过多，限制记录频率
-    if (now - lastBackwardsTime > 60000) { // 每分钟最多记录一次详细日志
-      log.warn("时钟回拨统计 - 小幅: {}, 中等: {}, 严重: {}",
-        smallBackwardsCount, mediumBackwardsCount, severeBackwardsCount);
+    // 避免日志过多, 限制记录频率
+    // 每分钟最多记录一次详细日志
+    if (now - lastBackwardsTime > 60000) {
+      log.warn("时钟回拨统计 - 小幅: {}, 中等: {}, 严重: {}", smallBackwardsCount, mediumBackwardsCount, severeBackwardsCount);
       lastBackwardsTime = now;
     }
   }
 
   /**
-   * 获取备用时间戳（使用时钟同步服务）
+   * 获取备用时间戳 (使用时钟同步服务)
    */
   private long getBackupTimestamp() {
     // 使用时钟同步服务获取参考时间
@@ -194,7 +197,7 @@ public class ShortCodeGenerator {
    * 生成短码 - 支持动态长度配置
    */
   public String generateShortCode() {
-    long id = generateId();
+    long id = this.generateId();
     int targetLength = shortCodeConfig.getLength();
 
     // 使用配置的长度生成短码
@@ -221,27 +224,27 @@ public class ShortCodeGenerator {
       log.warn("批量生成数量较大: {}, 建议分批处理", count);
     }
 
-    return java.util.stream.IntStream.range(0, count)
+    return IntStream.range(0, count)
       .parallel()
-      .mapToObj(i -> generateShortCode())
+      .mapToObj(i -> this.generateShortCode())
       .toArray(String[]::new);
   }
 
   /**
-   * 获取当前配置长度对应的最大值（带缓存优化）
+   * 获取当前配置长度对应的最大值 (带缓存优化)
    */
   private long getMaxValueForCurrentLength() {
     int currentLength = shortCodeConfig.getLength();
-
-    // 如果长度变化了，重新计算最大值
-    if (currentLength != cachedLength) {
-      synchronized (this) {
-        if (currentLength != cachedLength) {
-          cachedMaxValue = Base62Util.getMaxValue(currentLength);
-          cachedLength = currentLength;
-          log.debug("更新缓存的最大值: length={}, maxValue={}",
-            currentLength, cachedMaxValue);
-        }
+    if (currentLength == cachedLength) {
+      return cachedMaxValue;
+    }
+    // 如果长度变化了, 重新计算最大值
+    synchronized (this) {
+      if (currentLength != cachedLength) {
+        // 获取当前短码长度规则下,
+        cachedMaxValue = Base62Util.getMaxValue(currentLength);
+        cachedLength = currentLength;
+        log.debug("更新缓存的最大值: length={}, maxValue={}", currentLength, cachedMaxValue);
       }
     }
     return cachedMaxValue;
@@ -258,16 +261,17 @@ public class ShortCodeGenerator {
    * 等待下一毫秒
    */
   private long waitNextMillis(long lastTimestamp) {
-    long timestamp = getCurrentTimestamp();
+    long timestamp = this.getCurrentTimestamp();
     while (timestamp <= lastTimestamp) {
-      Thread.onSpinWait(); // JDK21优化的自旋等待
-      timestamp = getCurrentTimestamp();
+      // JDK21优化的自旋等待
+      Thread.onSpinWait();
+      timestamp = this.getCurrentTimestamp();
     }
     return timestamp;
   }
 
   /**
-   * 获取生成器状态信息（用于监控）
+   * 获取生成器状态信息 (用于监控)
    */
   public GeneratorStatus getStatus() {
     return new GeneratorStatus(

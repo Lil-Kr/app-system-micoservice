@@ -7,13 +7,14 @@ import org.cy.micoservice.app.shortlink.api.factory.JetCacheFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
 import java.time.Duration;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * @Author: Lil-K
  * @Date: 2026/3/5
- * @Description:
+ * @Description: build Cache Manage
  */
 @Configuration
 public class JetCacheConfig {

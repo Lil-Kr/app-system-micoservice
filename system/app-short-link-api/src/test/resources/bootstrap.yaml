@@ -1,0 +1,7 @@
+# http:  7901
+# dubbo: 7999
+spring:
+  application:
+    name: app-short-link-api
+  profiles:
+    active: dev

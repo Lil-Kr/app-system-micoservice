@@ -1,17 +1,13 @@
-package org.cy.micoservice.app.common.utils.shortlink;
+package org.cy.micoservice.app.shortlink.api.utils;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import static org.cy.micoservice.app.common.constants.ShortLinkConstants.SHORT_CODE_LENGTH;
 
-
 /**
  * 摘要算法工具类
  * 提供常用的哈希算法功能, 如MD5、SHA-1、SHA-256等
- *
- * @author susan
- * @since 1.0.0
  */
 public class DigestUtils {
 

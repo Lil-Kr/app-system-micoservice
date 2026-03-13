@@ -49,6 +49,12 @@
 		<dependency>
 			<groupId>com.alicp.jetcache</groupId>
 			<artifactId>jetcache-starter-redis-lettuce</artifactId>
+			<exclusions>
+				<exclusion>
+					<groupId>org.springframework.boot</groupId>
+					<artifactId>spring-boot-starter-logging</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		
 		<dependency>

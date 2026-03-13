@@ -11,7 +11,7 @@ import java.security.NoSuchAlgorithmException;
 /**
  * @Author: Lil-K
  * @Date: 2026/2/26
- * @Description: Redis集群槽位计算、分片路由优化
+ * @Description: Redis集群槽位计算, 分片路由优化
  */
 @Slf4j
 @Service

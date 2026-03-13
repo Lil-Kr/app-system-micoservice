@@ -1,6 +1,7 @@
 package org.cy.micoservice.app.shortlink.api.service.impl;
 
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.cy.micoservice.app.entity.shortlink.model.api.pojo.NodeInfo;
 import org.cy.micoservice.app.shortlink.api.service.LocalBloomFilterService;
 import org.cy.micoservice.app.shortlink.api.service.RedisBloomFilterService;
@@ -27,7 +28,7 @@ public class TieredBloomFilterServiceImpl implements TieredBloomFilterService {
    */
   @Override
   public void put(String shortCode) {
-    if (shortCode == null || shortCode.trim().isEmpty()) {
+    if (StringUtils.isBlank(shortCode)) {
       log.warn("shortCode为空或null");
       return;
     }
@@ -74,7 +75,7 @@ public class TieredBloomFilterServiceImpl implements TieredBloomFilterService {
   @Override
   public NodeInfo getNodeInfo() {
     try {
-      // 获取节点ID（通过RedisTimeBasedBloomFilterService）
+      // 获取节点ID (通过RedisTimeBasedBloomFilterService)
       String nodeId = redisTimeBasedBloomFilter.getNodeId();
 
       // 获取服务状态

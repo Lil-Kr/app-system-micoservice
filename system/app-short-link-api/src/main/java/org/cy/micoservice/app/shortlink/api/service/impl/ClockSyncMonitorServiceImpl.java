@@ -10,6 +10,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
+import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -31,7 +32,7 @@ public class ClockSyncMonitorServiceImpl implements ClockSyncMonitorService {
   private static final String CLOCK_SYNC_KEY = "shortlink:clock-sync";
   private static final String CLOCK_ALERT_KEY = "shortlink:clock-alert";
   // 严重时钟偏移阈值(ms)
-  private static final long SEVERE_DRIFT_THRESHOLD = 100;
+  private static final long SEVERE_DRIFT_THRESHOLD = 100L;
 
   /**
    * 每1分钟检查一次时钟同步状态
@@ -42,11 +43,13 @@ public class ClockSyncMonitorServiceImpl implements ClockSyncMonitorService {
       // 获取Redis服务器时间作为参考
       long redisTime = this.getRedisTime();
       long localTime = System.currentTimeMillis();
-      long drift = localTime - redisTime; // 可能为负值
+      // 可能为负值
+      long drift = localTime - redisTime;
       long absDrift = Math.abs(drift);
 
       // 记录时钟偏移
-      if (absDrift > 10) { // 超过10ms才记录，减少日志量
+      if (absDrift > 10) {
+        // 超过10ms才记录, 减少日志量
         log.info("时钟偏移检测: {}ms, 本地时间: {}, 参考时间: {}",
           drift, this.formatTime(localTime), formatTime(redisTime));
       }
@@ -55,7 +58,6 @@ public class ClockSyncMonitorServiceImpl implements ClockSyncMonitorService {
       if (absDrift > SEVERE_DRIFT_THRESHOLD) {
         this.handleSevereDrift(drift, localTime, redisTime);
       }
-
     } catch (Exception e) {
       log.error("时钟同步检查失败", e);
     }
@@ -68,9 +70,9 @@ public class ClockSyncMonitorServiceImpl implements ClockSyncMonitorService {
   @Override
   public long getReferenceTime() {
     try {
-      return getRedisTime();
+      return this.getRedisTime();
     } catch (Exception e) {
-      log.error("获取参考时间失败，使用系统时间", e);
+      log.error("获取参考时间失败, 使用系统时间", e);
       return System.currentTimeMillis();
     }
   }
@@ -83,9 +85,7 @@ public class ClockSyncMonitorServiceImpl implements ClockSyncMonitorService {
     lockService.executeWithLock(CLOCK_ALERT_KEY, 30, 60, TimeUnit.SECONDS, () -> {
       log.warn("检测到严重时钟偏移: {}ms, 本地时间: {}, 参考时间: {}",
         drift, formatTime(localTime), formatTime(redisTime));
-
-      // 这里可以添加告警逻辑，如发送钉钉通知等
-
+      // todo: 这里可以添加告警逻辑, 如发送钉钉通知等
       return null;
     });
   }
@@ -95,15 +95,16 @@ public class ClockSyncMonitorServiceImpl implements ClockSyncMonitorService {
    */
   private long getRedisTime() {
     try {
-      // 采样多个节点并进行往返时延(RTT)补偿，提升参考时间的准确性
+      // 采样多个节点并进行往返时延(RTT)补偿, 提升参考时间的准确性
       var nodes = redissonClient.getNodesGroup().getNodes();
-      if (nodes == null || !nodes.iterator().hasNext()) {
-        log.warn("Redis节点列表为空，使用系统时间");
+      if (nodes == null || ! nodes.iterator().hasNext()) {
+        log.warn("Redis节点列表为空, 使用系统时间");
         return System.currentTimeMillis();
       }
 
       int sampleCount = 0;
-      long[] samples = new long[3]; // 最多采样3个节点，取中位数
+      // 最多采样3个节点, 取中位数
+      long[] samples = new long[3];
 
       var it = nodes.iterator();
       while (it.hasNext() && sampleCount < samples.length) {
@@ -125,18 +126,18 @@ public class ClockSyncMonitorServiceImpl implements ClockSyncMonitorService {
           long adjusted = serverMillis + (rtt / 2L);
           samples[sampleCount++] = adjusted;
         } catch (Exception nodeEx) {
-          // 单节点失败不影响整体结果，继续其他节点
-          log.debug("采样Redis节点时间失败，忽略该节点", nodeEx);
+          // 单节点失败不影响整体结果, 继续其他节点
+          log.debug("采样Redis节点时间失败, 忽略该节点", nodeEx);
         }
       }
 
       if (sampleCount == 0) {
-        log.warn("所有Redis时间采样失败，使用系统时间");
+        log.warn("所有Redis时间采样失败, 使用系统时间");
         return System.currentTimeMillis();
       }
 
       // 取中位数以抵抗异常值
-      java.util.Arrays.sort(samples, 0, sampleCount);
+      Arrays.sort(samples, 0, sampleCount);
       long median = samples[(sampleCount - 1) / 2];
       return median;
     } catch (Exception e) {

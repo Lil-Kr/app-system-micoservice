@@ -19,6 +19,8 @@ import static org.cy.micoservice.app.shortlink.api.constants.ShortUrlConstant.*;
  * @Author: Lil-K
  * @Date: 2026/2/28
  * @Description:
+ * 机器ID分配服务
+ * 为分布式环境中的每个节点自动分配唯一的机器ID
  */
 @Slf4j
 @Service
@@ -28,11 +30,6 @@ public class MachineIdServiceImpl implements MachineIdService, InitializingBean 
   private RedissonClient redissonClient;
   @Autowired
   private DistributedLockService lockService;
-
-  // private static final String MACHINE_ID_KEY = "shortlink:machine-id-registry";
-  // private static final String MACHINE_ID_LOCK = "shortlink:machine-id-lock";
-  // 10位机器ID的最大值
-  // private static final long MAX_MACHINE_ID = 1023;
 
   private volatile long machineId = -1;
   private String nodeIdentifier;
@@ -45,12 +42,12 @@ public class MachineIdServiceImpl implements MachineIdService, InitializingBean 
   public void afterPropertiesSet() throws Exception {
     try {
       // 获取本机信息作为唯一标识
-      nodeIdentifier = this.getNodeIdentifier();
+      this.nodeIdentifier = this.getNodeIdentifier();
 
       // 尝试分配机器ID
       this.assignMachineId();
 
-      // 启动心跳任务，保持机器ID活跃
+      // 启动心跳任务, 保持机器ID活跃
       this.startHeartbeat();
 
       log.info("机器ID服务初始化完成 - 节点: {}, 机器ID: {}", nodeIdentifier, machineId);
@@ -85,13 +82,13 @@ public class MachineIdServiceImpl implements MachineIdService, InitializingBean 
 
     // 检查是否已有分配的ID
     if (machineIdMap.containsKey(nodeIdentifier)) {
-      machineId = machineIdMap.get(nodeIdentifier);
+      this.machineId = machineIdMap.get(nodeIdentifier);
       log.info("复用已分配的机器ID: {}", machineId);
       return;
     }
 
     // 分配新ID
-    machineId = lockService.executeWithLock(MACHINE_ID_LOCK, 10, 30, TimeUnit.SECONDS, () -> {
+    this.machineId = lockService.executeWithLock(MACHINE_ID_LOCK_KEY, 10, 30, TimeUnit.SECONDS, () -> {
       // 再次检查（双重检查）
       if (machineIdMap.containsKey(nodeIdentifier)) {
         return machineIdMap.get(nodeIdentifier);
@@ -99,8 +96,8 @@ public class MachineIdServiceImpl implements MachineIdService, InitializingBean 
 
       // 找到未使用的最小ID
       Set<Long> usedIds = new HashSet<>(machineIdMap.values());
-      for (long i = 0; i <= MAX_MACHINE_ID; i++) {
-        if (!usedIds.contains(i)) {
+      for (long i = 0; i <= MAX_MACHINE_ID; i ++) {
+        if (! usedIds.contains(i)) {
           machineIdMap.put(nodeIdentifier, i);
           log.info("自动分配机器ID: {}", i);
           return i;
@@ -112,7 +109,7 @@ public class MachineIdServiceImpl implements MachineIdService, InitializingBean 
   }
 
   /**
-   * 启动心跳任务，定期更新机器ID注册表
+   * 启动心跳任务, 定期更新机器ID注册表
    */
   private void startHeartbeat() {
     Thread heartbeatThread = new Thread(() -> {
@@ -131,7 +128,8 @@ public class MachineIdServiceImpl implements MachineIdService, InitializingBean 
         } catch (Exception e) {
           log.error("机器ID心跳更新失败", e);
           try {
-            Thread.sleep(5000); // 失败后短暂等待
+            // 失败后短暂等待
+            Thread.sleep(5000);
           } catch (InterruptedException ie) {
             Thread.currentThread().interrupt();
             break;
@@ -144,18 +142,22 @@ public class MachineIdServiceImpl implements MachineIdService, InitializingBean 
     heartbeatThread.setDaemon(true);
     heartbeatThread.start();
 
-    // 添加关闭钩子，释放机器ID
+    // 添加关闭钩子, 释放机器ID
     Runtime.getRuntime().addShutdownHook(new Thread(() -> {
       try {
         RMap<String, Long> machineIdMap = redissonClient.getMap(MACHINE_ID_KEY);
         machineIdMap.remove(nodeIdentifier);
-        log.info("应用关闭，释放机器ID: {}", machineId);
+        log.info("应用关闭, 释放机器ID: {}", machineId);
       } catch (Exception e) {
         log.error("释放机器ID失败", e);
       }
     }));
   }
 
+  /**
+   * 获取当前节点的机器ID
+   * @return
+   */
   @Override
   public long getMachineId() {
     if (machineId < 0) {

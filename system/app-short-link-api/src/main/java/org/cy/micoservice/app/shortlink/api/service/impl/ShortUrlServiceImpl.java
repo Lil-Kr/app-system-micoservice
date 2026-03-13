@@ -2,6 +2,7 @@ package org.cy.micoservice.app.shortlink.api.service.impl;
 
 import com.alibaba.csp.sentinel.annotation.SentinelResource;
 import com.alibaba.csp.sentinel.slots.block.BlockException;
+import com.alicp.jetcache.Cache;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -11,7 +12,7 @@ import org.apache.dubbo.config.annotation.DubboReference;
 import org.cy.micoservice.app.common.base.api.ApiResp;
 import org.cy.micoservice.app.common.base.provider.RpcResponse;
 import org.cy.micoservice.app.common.utils.BeanCopyUtils;
-import org.cy.micoservice.app.common.utils.shortlink.DigestUtils;
+import org.cy.micoservice.app.shortlink.api.utils.DigestUtils;
 import org.cy.micoservice.app.entity.shortlink.model.api.req.CreateShortUrlReq;
 import org.cy.micoservice.app.entity.shortlink.model.api.req.ShortUrlGetReq;
 import org.cy.micoservice.app.entity.shortlink.model.api.resp.CreateShortUrlResp;
@@ -66,6 +67,8 @@ public class ShortUrlServiceImpl implements ShortUrlService {
   private CalculateIndexUtil calculateIndexUtil;
   @DubboReference(check = false)
   private ShortUrlFacade shortUrlFacade;
+  @Autowired
+  private Cache<String, ShortUrlMapping> shortUrlCache;
 
   @Data
   @AllArgsConstructor
@@ -139,12 +142,14 @@ public class ShortUrlServiceImpl implements ShortUrlService {
       // 第三层防护: 数据库事务由Provider层管理
       try {
         String currentShortCode = initialShortCode;
-
         // 检查生成的短链code是否已存在 (避免哈希冲突)
-        RpcResponse<CreateShortUrlRespDTO> existingByCode = shortUrlFacade.findByShortCode(currentShortCode);
-
-        if (existingByCode.getData() != null) {
-          ShortUrlMapping existing = BeanCopyUtils.convert(existingByCode.getData(), ShortUrlMapping.class);
+        RpcResponse<CreateShortUrlRespDTO> existShortUrlResp = shortUrlFacade.findByShortCode(currentShortCode);
+        if (existShortUrlResp.getData() != null) {
+          ShortUrlMapping existing = BeanCopyUtils.convert(existShortUrlResp.getData(), ShortUrlMapping.class);
+          // 检查是否过期
+          if (this.isExpired(existing)) {
+            return new CreateShortUrlResp();
+          }
           // 如果是相同的原始URL, 直接返回
           if (req.getOriginUrl().equals(existing.getOriginUrl())) {
             clusterAwareCacheService.putUrlHashMapping(primaryUrlHash, currentShortCode);
@@ -160,9 +165,9 @@ public class ShortUrlServiceImpl implements ShortUrlService {
             int retryCount = 0;
             // 最大重试次数
             int maxRetries = shortCodeConfig.getMaxRetries();
-            while (existingByCode.getData() != null && retryCount < maxRetries) {
+            while (existShortUrlResp.getData() != null && retryCount < maxRetries) {
               currentShortCode = shortCodeService.generateByStrategy(req.getOriginUrl());
-              existingByCode = shortUrlFacade.findByShortCode(currentShortCode);
+              existShortUrlResp = shortUrlFacade.findByShortCode(currentShortCode);
               retryCount ++;
             }
             if (retryCount >= maxRetries) {
@@ -432,7 +437,7 @@ public class ShortUrlServiceImpl implements ShortUrlService {
 
       CreateShortUrlResp createShortUrlResp = this.getShortUrlInfo(shortCode);
       if (createShortUrlResp != null && originalUrl.equals(createShortUrlResp.getOriginUrl())) {
-        log.info("智能缓存命中: urlHash={}, shortCode={}, originUrl={}", urlHash, shortCode, originalUrl);
+        log.info("smart cache hit: urlHash={}, shortCode={}, originUrl={}", urlHash, shortCode, originalUrl);
         return new CacheCheckResult(createShortUrlResp, urlHash);
       }
 

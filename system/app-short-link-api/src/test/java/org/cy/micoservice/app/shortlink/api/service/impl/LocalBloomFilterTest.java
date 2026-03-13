@@ -36,9 +36,9 @@ public class LocalBloomFilterTest {
   @Test
   public void test1() {
     String shortCode = "LGMezBQaoK";
-    for (int i = 0; i < 100; i++) {
-      bloomFilter.put(shortCode);
-    }
+    // for (int i = 0; i < 100; i++) {
+    //   bloomFilter.put(shortCode);
+    // }
 
     boolean res = bloomFilter.mightContain(shortCode);
     Assertions.assertEquals(true, res);

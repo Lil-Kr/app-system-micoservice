@@ -35,6 +35,14 @@ public class ShortLinkApiProperties {
   @Value("${shortlink.shorturl.default-expire-days:0}")
   private Integer defaultExpireDays;
 
+  /** ============================= Redisson configure =============================**/
+  @Value("${shortlink.cluster.enable-read-write-split:true}")
+  private boolean enableReadWriteSplit;
+  @Value("${shortlink.cluster.connection-timeout:3000}")
+  private int connectionTimeout;
+  @Value("${shortlink.cluster.socket-timeout:3000}")
+  private int socketTimeout;
+
   /** ============================= BloomFilterAsyncConfig =============================**/
 
   @Value("${shortlink.bloom.threadpool.corePoolSize:4}")

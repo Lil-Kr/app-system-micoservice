@@ -50,7 +50,7 @@ public class ShortUrlConstant {
 
   // MACHINE
   public static final String MACHINE_ID_KEY = "shortlink:machine-id-registry";
-  public static final String MACHINE_ID_LOCK = "shortlink:machine-id-lock";
+  public static final String MACHINE_ID_LOCK_KEY = "shortlink:machine-id-lock";
   // 10位机器ID的最大值
   public static final long MAX_MACHINE_ID = 1023;
 }

@@ -63,7 +63,7 @@ public class RedisBloomFilterServiceImpl implements RedisBloomFilterService {
    * 简化的清理方法: 所有节点都执行, 无需分布式锁
    * 每5分钟检查一次
    */
-  @Scheduled(fixedDelay = 5 * 60 * 1000)
+  @Scheduled(fixedRate = 5 * 60 * 1000)
   public void cleanRedisBloomExpiredSlices() {
     /**
      * 清理过期的Redis时间片 (幂等安全)

@@ -37,7 +37,7 @@ public class JetCacheFactory {
       .expire(remoteExpire)
       .cacheType(cacheType)
       .localLimit(limit)
-      // 穿透保护
+      // 缓存穿透保护
       .penetrationProtect(penetrationProtect)
       // .penetrationProtectTimeout()
       // 缓存 null 值

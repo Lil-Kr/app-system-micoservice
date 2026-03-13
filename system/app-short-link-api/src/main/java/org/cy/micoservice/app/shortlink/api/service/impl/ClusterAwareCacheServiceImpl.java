@@ -3,7 +3,6 @@ package org.cy.micoservice.app.shortlink.api.service.impl;
 import com.alibaba.csp.sentinel.annotation.SentinelResource;
 import com.alibaba.csp.sentinel.slots.block.BlockException;
 import com.alicp.jetcache.Cache;
-import com.alicp.jetcache.CacheManager;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.dubbo.config.annotation.DubboReference;
 import org.cy.micoservice.app.common.base.provider.RpcResponse;
@@ -120,18 +119,13 @@ public class ClusterAwareCacheServiceImpl implements ClusterAwareCacheService {
   @Override
   public ShortUrlMapping getShortUrlWithSentinel(String shortCode) {
     return shortUrlCache.computeIfAbsent(shortCode, key -> {
-      try {
-        RpcResponse<CreateShortUrlRespDTO> response = shortUrlFacade.findByShortCode(key);
-        if (response.getData() == null) {
-          return null;
-        }
-        ShortUrlMapping mapping = BeanCopyUtils.convert(response.getData(), ShortUrlMapping.class);
-        log.debug("DB加载成功 shortCode={}", key);
-        return mapping;
-      } catch (Exception e) {
-        log.error("数据库查询失败 shortCode={}", key, e);
-        throw new RuntimeException(e);
+      RpcResponse<CreateShortUrlRespDTO> response = shortUrlFacade.findByShortCode(shortCode);
+      if (response.getData() == null) {
+        return null;
       }
+      ShortUrlMapping mapping = BeanCopyUtils.convert(response.getData(), ShortUrlMapping.class);
+      log.debug("DB加载成功 shortCode={}", shortCode);
+      return mapping;
     });
   }
 

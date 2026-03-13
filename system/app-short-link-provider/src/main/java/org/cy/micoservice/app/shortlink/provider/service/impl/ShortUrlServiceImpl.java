@@ -39,21 +39,44 @@ public class ShortUrlServiceImpl implements ShortUrlService {
   @Override
   @Transactional(rollbackFor = Exception.class)
   public CreateShortUrlRespDTO createShortUrl(CreateShortUrlReqDTO reqDTO) {
+    ShortUrlMapping shortUrlMapping = shortUrlMapper.findByShortCode(reqDTO);
+    if (shortUrlMapping != null) {
+      shortUrlMapping.setAccessCount(shortUrlMapping.getAccessCount() + 1);
+      shortUrlMapping.setUpdateTime(DateUtil.localDateTimeNow());
+      CreateShortUrlReqDTO update = BeanCopyUtils.convert(shortUrlMapping, CreateShortUrlReqDTO.class);
+      shortUrlMapper.updateAccessCount(update);
+      return BeanCopyUtils.convert(shortUrlMapping, CreateShortUrlRespDTO.class);
+    }
+
+    // build insert entity
     ShortUrlMapping entity = BeanCopyUtils.convert(reqDTO, ShortUrlMapping.class);
-    long id = idService.getId();
-    entity.setId(id);
+    entity.setId(idService.getId());
     entity.setAccessCount(0L);
     entity.setUpdateId(reqDTO.getCreateId());
     LocalDateTime now = DateUtil.localDateTimeNow();
     entity.setCreateTime(now);
     entity.setUpdateTime(now);
 
-    int insert = shortUrlMapper.insert(entity);
-    if (insert < 1) {
-      return new CreateShortUrlRespDTO();
+    try {
+      // insert new short code record
+      shortUrlMapper.insert(entity);
+      return BeanCopyUtils.convert(entity, CreateShortUrlRespDTO.class);
+    } catch (Exception e) {
+      String errorMsg = e.getMessage();
+      log.warn("保存短链异常 - shortCode: {}, error: {}", reqDTO.getShortCode(), errorMsg);
+      if (errorMsg != null && (errorMsg.toLowerCase().contains("duplicate") || errorMsg.contains("origin_url_hash"))) {
+        ShortUrlMapping conflictRecord = shortUrlMapper.findByShortCode(reqDTO);
+        if (conflictRecord != null) {
+          log.info("冲突处理 - 找到已存在记录, 更新访问次数");
+          conflictRecord.setAccessCount(conflictRecord.getAccessCount() + 1);
+          conflictRecord.setUpdateTime(DateUtil.localDateTimeNow());
+          CreateShortUrlReqDTO update = BeanCopyUtils.convert(conflictRecord, CreateShortUrlReqDTO.class);
+          shortUrlMapper.updateAccessCount(update);
+          return BeanCopyUtils.convert(conflictRecord, CreateShortUrlRespDTO.class);
+        }
+      }
+      throw e;
     }
-    CreateShortUrlRespDTO resp = BeanCopyUtils.convert(entity, CreateShortUrlRespDTO.class);
-    return resp;
   }
 
   /**
@@ -83,7 +106,7 @@ public class ShortUrlServiceImpl implements ShortUrlService {
     CreateShortUrlReqDTO reqDTO = new CreateShortUrlReqDTO();
     reqDTO.setShortCode(shortCode);
     reqDTO.setOriginUrlHash(originUrlHash);
-    ShortUrlMapping shortUrlMapping = shortUrlMapper.findByOriginUrlHash(reqDTO);
+    ShortUrlMapping shortUrlMapping = shortUrlMapper.findByShortCode(reqDTO);
     if (Objects.isNull(shortUrlMapping)) {
       return RpcResponse.emptyResult();
     }

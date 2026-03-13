@@ -1,4 +1,4 @@
-package org.cy.micoservice.app.common.utils.shortlink;
+package org.cy.micoservice.app.shortlink.api.utils;
 
 /**
  * Base62编码工具类
@@ -15,8 +15,7 @@ public class Base62Util {
 
   /**
    * 生成指定长度的Base62字符串, 严格控制长度
-   *
-   * @param num         要编码的数字
+   * @param num 要编码的数字
    * @param exactLength 精确长度, 超过则截取, 不足则补0
    * @return 精确长度的Base62字符串
    */
@@ -46,7 +45,6 @@ public class Base62Util {
 
   /**
    * 将长整型数字编码为Base62字符串
-   *
    * @param num 要编码的数字
    * @return Base62编码后的字符串
    */
@@ -54,20 +52,17 @@ public class Base62Util {
     if (num == 0) {
       return "0";
     }
-
     StringBuilder sb = new StringBuilder();
     while (num > 0) {
       sb.append(BASE62_CHARS.charAt((int) (num % BASE)));
       num /= BASE;
     }
-
     // 反转字符串, 因为我们是从低位开始构建的
     return sb.reverse().toString();
   }
 
   /**
    * 将Base62字符串解码为长整型数字
-   *
    * @param str Base62编码的字符串
    * @return 解码后的数字
    * @throws IllegalArgumentException 如果字符串包含非法字符
@@ -97,14 +92,13 @@ public class Base62Util {
   }
 
   /**
-   * 生成指定长度的Base62字符串
-   *
-   * @param num       要编码的数字
+   * 生成指定长度的 Base62 字符串
+   * @param id 要编码的数字
    * @param minLength 最小长度, 不足时前面补0
    * @return 指定长度的Base62字符串
    */
-  public static String encodeWithMinLength(long num, int minLength) {
-    String encoded = encode(num);
+  public static String encodeWithMinLength(long id, int minLength) {
+    String encoded = encode(id);
 
     if (encoded.length() >= minLength) {
       return encoded;
@@ -113,16 +107,14 @@ public class Base62Util {
     // 前面补0到指定长度
     StringBuilder sb = new StringBuilder();
     for (int i = 0; i < minLength - encoded.length(); i++) {
-      sb.append('0');
+      sb.append("0");
     }
     sb.append(encoded);
-
     return sb.toString();
   }
 
   /**
    * 验证字符串是否为有效的Base62编码
-   *
    * @param str 要验证的字符串
    * @return 是否为有效的Base62编码
    */
@@ -142,7 +134,6 @@ public class Base62Util {
 
   /**
    * 获取Base62字符集
-   *
    * @return Base62字符集字符串
    */
   public static String getBase62Chars() {
@@ -151,7 +142,6 @@ public class Base62Util {
 
   /**
    * 获取Base62进制数
-   *
    * @return 62
    */
   public static int getBase() {
@@ -160,7 +150,6 @@ public class Base62Util {
 
   /**
    * 计算指定长度的Base62字符串能表示的最大数值
-   *
    * @param length 字符串长度
    * @return 最大数值
    */
@@ -176,13 +165,11 @@ public class Base62Util {
       max += (BASE - 1) * power;
       power *= BASE;
     }
-
     return max;
   }
 
   /**
    * 生成随机的Base62字符串
-   *
    * @param length 字符串长度
    * @return 随机的Base62字符串
    */

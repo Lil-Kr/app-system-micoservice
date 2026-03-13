@@ -14,6 +14,8 @@ import static org.cy.micoservice.app.shortlink.api.constants.ShortUrlConstant.*;
  * @Author: Lil-K
  * @Date: 2026/3/1
  * @Description:
+ * 时钟同步监控服务
+ * 监控服务器时钟偏移, 防止时钟回拨问题
  */
 @Slf4j
 @Service
@@ -30,7 +32,7 @@ public class CacheSyncMonitorServiceImpl implements CacheSyncMonitorService {
    * 监控Stream状态
    * 每5分钟监控一次
    */
-  @Scheduled(fixedDelay = 5 * 60 * 1000)
+  @Scheduled(fixedRate = 5 * 60 * 1000)
   @Override
   public void monitorStreamStatus() {
     try {
