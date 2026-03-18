@@ -1,5 +1,7 @@
 package org.cy.micoservice.app.shortlink.api.controller;
 
+import lombok.extern.slf4j.Slf4j;
+import org.cy.micoservice.app.framework.web.starter.annotations.NoAuthCheck;
 import org.cy.micoservice.app.shortlink.api.service.BloomFilterStreamService;
 import org.cy.micoservice.app.shortlink.api.service.TieredBloomFilterService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +14,7 @@ import java.util.Map;
  * @Date: 2026/2/27
  * @Description:
  */
+@Slf4j
 @RestController
 @RequestMapping("/bloom")
 public class BloomFilterController {
@@ -24,6 +27,7 @@ public class BloomFilterController {
   /**
    * 获取布隆过滤器统计信息
    */
+  @NoAuthCheck
   @GetMapping("/status")
   public Map<String, Object> getStatus() {
     return Map.of(
@@ -35,6 +39,7 @@ public class BloomFilterController {
   /**
    * 手动测试短链是否存在
    */
+  @NoAuthCheck
   @GetMapping("/check/{shortCode}")
   public Map<String, Object> checkShortCode(@PathVariable("shortCode") String shortCode) {
     boolean exists = tieredBloomFilterService.mightContain(shortCode);
@@ -48,6 +53,7 @@ public class BloomFilterController {
   /**
    * 手动添加短链 (测试用)
    */
+  @NoAuthCheck
   @PostMapping("/add/{shortCode}")
   public Map<String, Object> addShortCode(@PathVariable("shortCode") String shortCode) {
     tieredBloomFilterService.put(shortCode);

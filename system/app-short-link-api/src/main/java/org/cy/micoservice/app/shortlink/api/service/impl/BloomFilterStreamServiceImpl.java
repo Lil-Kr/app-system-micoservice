@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 import static org.cy.micoservice.app.common.constants.CommonFormatConstants.COMMENT_FORMAT_COLON_SPLIT;
+import static org.cy.micoservice.app.shortlink.api.constants.ShortUrlConstant.CONSUMER_NAME;
 
 /**
  * @Author: Lil-K
@@ -53,7 +54,7 @@ public class BloomFilterStreamServiceImpl implements BloomFilterStreamService, A
     try {
       // 生成节点ID
       nodeId = String.format(COMMENT_FORMAT_COLON_SPLIT, InetAddress.getLocalHost().getHostAddress(), properties.getServerPort());
-      this.consumerName = "consumer-" + nodeId;
+      this.consumerName = CONSUMER_NAME + nodeId;
 
       // 创建消费者组 (如果不存在)
       try {

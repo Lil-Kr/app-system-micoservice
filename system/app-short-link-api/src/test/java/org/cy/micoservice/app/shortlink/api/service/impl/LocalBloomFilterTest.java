@@ -11,6 +11,9 @@ import java.nio.charset.Charset;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+import static org.cy.micoservice.app.shortlink.api.constants.ShortUrlConstant.EXPECTED_INSERTIONS;
+import static org.cy.micoservice.app.shortlink.api.constants.ShortUrlConstant.FALSE_PROBABILITY;
+
 /**
  * @Author: Lil-K
  * @Date: 2026/3/6
@@ -19,8 +22,6 @@ import java.time.format.DateTimeFormatter;
 @Slf4j
 public class LocalBloomFilterTest {
 
-  private static final long EXPECTED_INSERTIONS = 216_000_000L;
-  private static final double FALSE_PROBABILITY = 0.01;
   private BloomFilter<String> bloomFilter;
 
   @BeforeEach

@@ -14,19 +14,23 @@ public class ShortUrlConstant {
   // Redis Stream 配置
   public static final String REMOTE_STREAM_KEY = "bloom_remote_stream";
   public static final String REMOTE_CONSUMER_SYNC_GROUP = "remote_sync_group";
+  public static final String CONSUMER_NAME = "consumer-";
 
-  // bloom filter 配置
+  // Redis bloom filter key
+  public static final String REDIS_BLOOM_FILTER_PREFIX_KEY = "redis_bloom_";
+  public static final String REDIS_BLOOM_FILTER_DATA_PREFIX_KEY = "redis_bloom_data_";
+
   /**
    * 误判率与内存使用关系
    *
-   * 1% 误判率：每个元素约需 9.6 bits
-   * 0.1% 误判率：每个元素约需 14.4 bits
-   * 0.01% 误判率：每个元素约需 19.2 bits
+   * 1% 误判率: 每个元素约需 9.6 bits
+   * 0.1% 误判率: 每个元素约需 14.4 bits
+   * 0.01% 误判率: 每个元素约需 19.2 bits
    *
-   * 选择1%误判率的理由：
-   * 1. 内存效率高：2.16亿元素约占用260MB
-   * 2. 性能影响小：1%误判不会显著影响系统性能
-   * 3. 成本效益佳：内存成本与性能收益平衡最优
+   * 选择1%误判率的理由:
+   * 1. 内存效率高: 2.16亿元素约占用260MB
+   * 2. 性能影响小: 1%误判不会显著影响系统性能
+   * 3. 成本效益佳: 内存成本与性能收益平衡最优
    */
   public static final double FALSE_PROBABILITY = 0.01;
 
@@ -38,15 +42,16 @@ public class ShortUrlConstant {
    * 时间分片：6小时
    * 预期TPS：100万/秒
    *
-   * 计算公式：
+   * 计算公式:
    * 单个时间片容量 = TPS × 时间片秒数 × 安全系数
    * = 1,000,000 × (6 × 3600) × 1.5
    * = 1,000,000 × 21,600 × 1.5
    * = 32,400,000,000 ≈ 324亿
    *
-   * 但考虑内存限制，设置为2.16亿（满足99%+场景）
+   * 但考虑内存限制，设置为2.16亿 (满足99%+场景)
    */
   public static final long EXPECTED_INSERTIONS = 216_000_000L;
+  public static final double SAVING_INTERVAL = 0.8;
 
   // MACHINE
   public static final String MACHINE_ID_KEY = "shortlink:machine-id-registry";

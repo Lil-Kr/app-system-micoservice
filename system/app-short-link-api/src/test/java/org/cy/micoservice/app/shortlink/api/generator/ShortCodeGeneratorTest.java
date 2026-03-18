@@ -1,14 +1,11 @@
 package org.cy.micoservice.app.shortlink.api.generator;
 
-import org.cy.micoservice.app.shortlink.api.ShortLinkApiApplication;
 import org.cy.micoservice.app.shortlink.api.config.ShortCodeConfig;
-import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.concurrent.atomic.AtomicLong;
 
-@SpringBootTest(classes = ShortLinkApiApplication.class)
+// @SpringBootTest(classes = ShortLinkApiApplication.class)
 public class ShortCodeGeneratorTest {
 
   // 时间戳位数

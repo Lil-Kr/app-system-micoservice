@@ -38,7 +38,6 @@ public class ShardingStrategyServiceImpl implements ShardingStrategyService {
     if (key == null || key.isEmpty()) {
       return 0;
     }
-
     // 提取Hash Tag (如果存在)
     String hashKey = this.extractHashTag(key);
 
@@ -78,7 +77,6 @@ public class ShardingStrategyServiceImpl implements ShardingStrategyService {
         }
       }
     }
-
     return crc & 0xffff;
   }
 }

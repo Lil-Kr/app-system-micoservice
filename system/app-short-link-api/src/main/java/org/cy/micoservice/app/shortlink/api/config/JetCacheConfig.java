@@ -20,7 +20,7 @@ import java.util.concurrent.ThreadLocalRandom;
 public class JetCacheConfig {
 
   public static final Duration TEST_EXPIRE_TIME = Duration.ofMillis(5000);
-  public static final Duration LOCAL_EXPIRE_TIME = Duration.ofMinutes(45);
+  public static final Duration LOCAL_EXPIRE_TIME = Duration.ofMinutes(30);
   public static final Duration DEFAULT_EXPIRE_TIME = Duration.ofHours(1);
   public static final Duration HOT_DATA_EXPIRE_TIME = Duration.ofHours(24);
   public static final Duration COUNT_EXPIRE_TIME = Duration.ofDays(7);
@@ -37,8 +37,8 @@ public class JetCacheConfig {
   public Cache<String, ShortUrlMapping> shortUrlCache(JetCacheFactory factory) {
     return factory.createJetCache(
       cacheKeyBuilder.buildUrlCacheKey(),
-      LOCAL_EXPIRE_TIME,
-      DEFAULT_EXPIRE_TIME.plusMillis(ThreadLocalRandom.current().nextInt(30)),
+      LOCAL_EXPIRE_TIME.plusMinutes(ThreadLocalRandom.current().nextInt(10)),
+      DEFAULT_EXPIRE_TIME.plusMinutes(ThreadLocalRandom.current().nextInt(30)),
       CacheType.BOTH,
       10000,
       true,

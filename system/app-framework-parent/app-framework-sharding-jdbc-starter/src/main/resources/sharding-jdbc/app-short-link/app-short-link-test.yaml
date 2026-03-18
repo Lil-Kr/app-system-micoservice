@@ -139,10 +139,14 @@ rules:
 props:
   sql-show: true
   # 是否在日志中打印简单风格的 SQL
-  sql-simple: true
+  sql-simple: false
   # 每个查询最大连接数
   max-connections-size-per-query: 5
   # 检查表元数据是否开启
   check-table-metadata-enabled: false
   # 显示实际使用的SQL和日志
   sql-comment-parse-enabled: false
+  # 禁用元数据刷新
+  metadata-refresh-interval: -1
+  # 启用路由信息打印
+  show-sql-log: true

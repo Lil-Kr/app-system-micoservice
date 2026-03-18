@@ -2,6 +2,7 @@ package org.cy.micoservice.app.shortlink.api.controller;
 
 import com.alibaba.csp.sentinel.annotation.SentinelResource;
 import com.alibaba.csp.sentinel.slots.block.BlockException;
+import com.alicp.jetcache.Cache;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
@@ -10,7 +11,9 @@ import org.cy.micoservice.app.common.base.api.ApiResp;
 import org.cy.micoservice.app.entity.shortlink.model.api.req.CreateShortUrlReq;
 import org.cy.micoservice.app.entity.shortlink.model.api.req.ShortUrlGetReq;
 import org.cy.micoservice.app.entity.shortlink.model.api.resp.CreateShortUrlResp;
+import org.cy.micoservice.app.entity.shortlink.model.provider.pojo.ShortUrlMapping;
 import org.cy.micoservice.app.framework.web.starter.annotations.NoAuthCheck;
+import org.cy.micoservice.app.shortlink.api.config.ShortLinkApiProperties;
 import org.cy.micoservice.app.shortlink.api.service.ShortUrlService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -32,6 +35,10 @@ public class ShortUrlController {
 
   @Autowired
   private ShortUrlService shortUrlService;
+  @Autowired
+  private Cache<String, ShortUrlMapping> shortUrlCache;
+  @Autowired
+  private ShortLinkApiProperties properties;
 
   /**
    * create short url
@@ -42,7 +49,7 @@ public class ShortUrlController {
   @PostMapping("/create")
   public ApiResp<CreateShortUrlResp> create(@RequestBody @Valid CreateShortUrlReq req) {
     CreateShortUrlResp resp = shortUrlService.createShortUrl(req);
-    return ApiResp.success(resp);
+    return resp == null ? ApiResp.warning(REQUEST_RESOURCE_NOT_EXIST) : ApiResp.success(resp);
   }
 
   /**

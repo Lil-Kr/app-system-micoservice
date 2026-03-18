@@ -43,5 +43,5 @@ public interface RedisBloomFilterService {
    *
    * @return
    */
-  String getStats();
+  // String getStats();
 }

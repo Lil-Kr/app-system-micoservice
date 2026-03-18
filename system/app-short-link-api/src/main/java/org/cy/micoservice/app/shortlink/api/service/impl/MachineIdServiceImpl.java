@@ -80,21 +80,21 @@ public class MachineIdServiceImpl implements MachineIdService, InitializingBean 
   private void assignMachineId() {
     RMap<String, Long> machineIdMap = redissonClient.getMap(MACHINE_ID_KEY);
 
-    // 检查是否已有分配的ID
+    // 步骤1：检查是否已分配（支持节点重启恢复）
     if (machineIdMap.containsKey(nodeIdentifier)) {
       this.machineId = machineIdMap.get(nodeIdentifier);
       log.info("复用已分配的机器ID: {}", machineId);
       return;
     }
 
-    // 分配新ID
+    // 步骤2: 分布式锁保护下的原子分配
     this.machineId = lockService.executeWithLock(MACHINE_ID_LOCK_KEY, 10, 30, TimeUnit.SECONDS, () -> {
-      // 再次检查（双重检查）
+      // 再次检查 (双重检查)
       if (machineIdMap.containsKey(nodeIdentifier)) {
         return machineIdMap.get(nodeIdentifier);
       }
 
-      // 找到未使用的最小ID
+      // 步骤3：智能扫描可用ID, 找到未使用的最小ID
       Set<Long> usedIds = new HashSet<>(machineIdMap.values());
       for (long i = 0; i <= MAX_MACHINE_ID; i ++) {
         if (! usedIds.contains(i)) {
@@ -103,8 +103,7 @@ public class MachineIdServiceImpl implements MachineIdService, InitializingBean 
           return i;
         }
       }
-
-      throw new RuntimeException("无可用机器ID，已达到最大限制: " + MAX_MACHINE_ID);
+      throw new RuntimeException("无可用机器ID, 已达到最大限制: " + MAX_MACHINE_ID);
     });
   }
 

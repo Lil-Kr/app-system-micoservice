@@ -44,7 +44,6 @@ public class ShortLinkApiProperties {
   private int socketTimeout;
 
   /** ============================= BloomFilterAsyncConfig =============================**/
-
   @Value("${shortlink.bloom.threadpool.corePoolSize:4}")
   private int corePoolSize;
   @Value("${shortlink.bloom.threadpool.maxPoolSize:8}")

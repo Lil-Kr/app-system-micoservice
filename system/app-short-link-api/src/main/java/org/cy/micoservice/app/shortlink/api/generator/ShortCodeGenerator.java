@@ -39,7 +39,7 @@ public class ShortCodeGenerator {
 
   // 位移量
   private static final long MACHINE_ID_SHIFT = SEQUENCE_BITS;
-  private static final long TIMESTAMP_SHIFT = SEQUENCE_BITS + MACHINE_ID_BITS;
+  private static final long TIMESTAMP_SHIFT = MACHINE_ID_BITS + SEQUENCE_BITS;
 
   // 起始时间戳 (2024-01-01 00:00:00 UTC)
   private static final long START_TIMESTAMP = 1704067200000L;
@@ -57,6 +57,7 @@ public class ShortCodeGenerator {
   @Autowired
   private ShortCodeConfig shortCodeConfig;
 
+  // 序列号原子递增，避免锁竞争
   private final AtomicLong sequence = new AtomicLong(0L);
   private volatile long lastTimestamp = -1L;
   private final ReentrantLock lock = new ReentrantLock();
@@ -86,7 +87,6 @@ public class ShortCodeGenerator {
     if (machineId < 0 || machineId > MAX_MACHINE_ID) {
       throw new IllegalArgumentException(String.format("机器ID必须在0-%d之间，当前值: %d", MAX_MACHINE_ID, machineId));
     }
-
     log.info("短码生成器初始化完成 - 机器ID: {}, 配置长度: {}", machineId, shortCodeConfig.getLength());
   }
 
@@ -279,7 +279,7 @@ public class ShortCodeGenerator {
       shortCodeConfig.getLength(),
       lastTimestamp,
       sequence.get(),
-      getMaxValueForCurrentLength(),
+      this.getMaxValueForCurrentLength(),
       smallBackwardsCount,
       mediumBackwardsCount,
       severeBackwardsCount

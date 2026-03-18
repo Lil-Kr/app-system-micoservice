@@ -4,12 +4,12 @@ import com.alibaba.fastjson2.JSONArray;
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.cy.micoservice.app.shortlink.api.config.ShortLinkApiProperties;
-import org.cy.micoservice.app.shortlink.api.service.BloomFilterStreamService;
 import org.cy.micoservice.app.shortlink.api.service.LocalBloomFilterService;
 import org.cy.micoservice.app.shortlink.api.service.RedisBloomFilterService;
 import org.redisson.api.RBloomFilter;
 import org.redisson.api.RedissonClient;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -22,8 +22,7 @@ import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
-import static org.cy.micoservice.app.shortlink.api.constants.ShortUrlConstant.EXPECTED_INSERTIONS;
-import static org.cy.micoservice.app.shortlink.api.constants.ShortUrlConstant.FALSE_PROBABILITY;
+import static org.cy.micoservice.app.shortlink.api.constants.ShortUrlConstant.*;
 
 /**
  * @Author: Lil-K
@@ -36,6 +35,7 @@ public class RedisBloomFilterServiceImpl implements RedisBloomFilterService {
 
   // Redis时间分片布隆过滤器映射
   private final ConcurrentMap<String, RBloomFilter<String>> redisTimeSlices = new ConcurrentHashMap<>();
+
   private volatile String currentTimeSlice;
   // 节点ID缓存
   private volatile String nodeId;
@@ -45,7 +45,7 @@ public class RedisBloomFilterServiceImpl implements RedisBloomFilterService {
   @Autowired
   private RedissonClient redissonClient;
   @Autowired
-  private BloomFilterStreamService streamService;
+  private RedisTemplate<String, Object> redisTemplate;
   @Autowired
   private LocalBloomFilterService localBloomFilterService;
 
@@ -104,19 +104,12 @@ public class RedisBloomFilterServiceImpl implements RedisBloomFilterService {
     // 本地添加通过Stream消费执行, 此处不直接写本地
     // 添加到当前Redis时间片
     RBloomFilter<String> redisSlice = redisTimeSlices.get(currentTimeSlice);
-    if (redisSlice != null) {
+    if (redisSlice.isExists()) {
       try {
         redisSlice.add(shortCode);
       } catch (Exception e) {
-        log.error("添加到Redis时间分片失败: slice={}, shortCode={}", currentTimeSlice, shortCode, e);
+        log.debug("添加到Redis时间分片失败: slice={}, shortCode={}", currentTimeSlice, shortCode, e);
       }
-    }
-
-    // 发布到Stream同步其他节点的本地时间片
-    try {
-      streamService.publishNewShortCode(shortCode);
-    } catch (Exception e) {
-      log.warn("发布Stream事件失败: {}", e.getMessage());
     }
   }
 
@@ -191,10 +184,10 @@ public class RedisBloomFilterServiceImpl implements RedisBloomFilterService {
   /**
    * 兼容旧接口: 返回合并统计
    */
-  @Override
-  public String getStats() {
-    return String.format("时间分片统计 - 本地: [%s], Redis: [%s]", localBloomFilterService.getLocalStats(), getRedisStats());
-  }
+  // @Override
+  // public String getStats() {
+  //   return String.format("时间分片统计 - 本地: [%s], Redis: [%s]", localBloomFilterService.getLocalStats(), getRedisStats());
+  // }
 
   /**
    * 创建 redis 时间片
@@ -223,7 +216,7 @@ public class RedisBloomFilterServiceImpl implements RedisBloomFilterService {
     // 计算需要加载的时间片范围
     for (int i = 0; i < redisKeepSliceCount; i ++) {
       LocalDateTime sliceTime = now.minusHours(i * properties.getTimeSliceHours());
-      String sliceKey = getTimeSliceKey(sliceTime);
+      String sliceKey = this.getTimeSliceKey(sliceTime);
 
       try {
         // 检查Redis中是否存在该时间片
@@ -232,7 +225,7 @@ public class RedisBloomFilterServiceImpl implements RedisBloomFilterService {
           redisTimeSlices.put(sliceKey, slice);
           log.debug("加载已存在的时间分片: {}", sliceKey);
         } else if (sliceKey.equals(currentTimeSlice)) {
-          // 如果是当前时间片但不存在, 则创建它
+          // 如果是当前时间片不存在, 则创建它
           this.createRedisTimeSlice(sliceKey);
         }
       } catch (Exception e) {
@@ -252,7 +245,7 @@ public class RedisBloomFilterServiceImpl implements RedisBloomFilterService {
       .withSecond(0)
       .withNano(0)
       .withHour((dateTime.getHour() / timeSliceHours) * timeSliceHours);
-    return "redis_bloom_" + sliceTime.format(DateTimeFormatter.ofPattern("yyyyMMdd_HH"));
+    return REDIS_BLOOM_FILTER_PREFIX_KEY + sliceTime.format(DateTimeFormatter.ofPattern("yyyyMMdd_HH"));
   }
 
   /**
@@ -312,10 +305,9 @@ public class RedisBloomFilterServiceImpl implements RedisBloomFilterService {
    */
   private boolean isSliceExpired(String sliceKey) {
     try {
-      // 从sliceKey中提取时间片标识符，格式为 "redis_bloom_yyyyMMdd_HH"
-      String timeStr = sliceKey.replace("redis_bloom_", "");
-      LocalDateTime sliceTime = LocalDateTime.parse(timeStr,
-        DateTimeFormatter.ofPattern("yyyyMMdd_HH"));
+      // 从sliceKey中提取时间片标识符，格式替换: "redis_bloom_yyyyMMdd_HH"  --> yyyyMMdd_HH
+      String timeStr = sliceKey.replace(REDIS_BLOOM_FILTER_PREFIX_KEY, "");
+      LocalDateTime sliceTime = LocalDateTime.parse(timeStr, DateTimeFormatter.ofPattern("yyyyMMdd_HH"));
       // 使用Redis专用的保留时间片数量
       LocalDateTime expireTime = sliceTime.plusHours(properties.getTimeSliceHours() * properties.getRedisKeepSliceCount());
       return LocalDateTime.now().isAfter(expireTime);

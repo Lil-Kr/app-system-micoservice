@@ -12,7 +12,6 @@ import org.apache.dubbo.config.annotation.DubboReference;
 import org.cy.micoservice.app.common.base.api.ApiResp;
 import org.cy.micoservice.app.common.base.provider.RpcResponse;
 import org.cy.micoservice.app.common.utils.BeanCopyUtils;
-import org.cy.micoservice.app.shortlink.api.utils.DigestUtils;
 import org.cy.micoservice.app.entity.shortlink.model.api.req.CreateShortUrlReq;
 import org.cy.micoservice.app.entity.shortlink.model.api.req.ShortUrlGetReq;
 import org.cy.micoservice.app.entity.shortlink.model.api.resp.CreateShortUrlResp;
@@ -22,6 +21,7 @@ import org.cy.micoservice.app.shortlink.api.config.ShortLinkApiProperties;
 import org.cy.micoservice.app.shortlink.api.config.ShortLinkCacheKeyBuilder;
 import org.cy.micoservice.app.shortlink.api.service.*;
 import org.cy.micoservice.app.shortlink.api.utils.CalculateIndexUtil;
+import org.cy.micoservice.app.shortlink.api.utils.DigestUtils;
 import org.cy.micoservice.app.shortlink.facade.dto.req.CreateShortUrlReqDTO;
 import org.cy.micoservice.app.shortlink.facade.dto.resp.CreateShortUrlRespDTO;
 import org.cy.micoservice.app.shortlink.facade.enums.ShortUrlEnum;
@@ -65,10 +65,10 @@ public class ShortUrlServiceImpl implements ShortUrlService {
   private ShortLinkCacheKeyBuilder cacheKeyBuilder;
   @Autowired
   private CalculateIndexUtil calculateIndexUtil;
-  @DubboReference(check = false)
-  private ShortUrlFacade shortUrlFacade;
   @Autowired
   private Cache<String, ShortUrlMapping> shortUrlCache;
+  @DubboReference(check = false)
+  private ShortUrlFacade shortUrlFacade;
 
   @Data
   @AllArgsConstructor
@@ -105,7 +105,7 @@ public class ShortUrlServiceImpl implements ShortUrlService {
     // 主哈希值用于主要逻辑
     String primaryUrlHash = cacheCheckResult.getCurrentHash();
 
-    // 第二层防护: 使用分布式锁保证同一URL的串行处理
+    // 第二层防护: 使用分布式锁保证同一URL的串行处理, key -> create_url:urlhash
     String lockKey = cacheKeyBuilder.buildCacheLockKey(primaryUrlHash);
     return distributedLockService.executeWithLock(lockKey, () -> {
       // 在锁内只检查单个哈希值的缓存状态 (避免重复的多重哈希检查), from redis
@@ -129,12 +129,17 @@ public class ShortUrlServiceImpl implements ShortUrlService {
       // int dbIndex = Math.abs(initialShortCode.hashCode()) % NEW_SHARDING_DATABASE_COUNT;
       // int tableIndex = Math.abs(initialShortCode.hashCode()) % NEW_SHARDING_TABLE_COUNT;
 
-      // 从DB查询即将创建锻炼的数据是否存在
+      // 从DB查询即将创建短链的数据是否存在
       RpcResponse<CreateShortUrlRespDTO> responseDTO = shortUrlFacade.findByOriginUrlHash(initialShortCode, primaryUrlHash);
       if (responseDTO.getData() != null) {
+        // 将查询结果放入缓存
         ShortUrlMapping mapping = BeanCopyUtils.convert(responseDTO.getData(), ShortUrlMapping.class);
-        // 缓存查询结果
+        clusterAwareCacheService.refreshCache(mapping);
         clusterAwareCacheService.putUrlHashMapping(primaryUrlHash, mapping.getShortCode());
+        //过期检查
+        if (this.isExpired(mapping)) {
+          return null;
+        }
         log.info("数据库智能查询命中, 返回已存在短链: shortCode={}, originUrl={}", mapping.getShortCode(), req.getOriginUrl());
         return this.buildResponse(mapping);
       }
@@ -203,7 +208,7 @@ public class ShortUrlServiceImpl implements ShortUrlService {
         // 2. 刷新缓存
         clusterAwareCacheService.refreshCache(shortUrlMapping);
 
-        // 2. 缓存短链信息和URL哈希映射到Redis集群
+        // 3. 缓存短链信息和URL哈希映射到Redis集群
         clusterAwareCacheService.putUrlHashMapping(primaryUrlHash, shortUrlMapping.getShortCode());
 
         log.info("创建短链成功: shortCode={}, originUrl={}, Redis分片槽位={}",
@@ -451,10 +456,10 @@ public class ShortUrlServiceImpl implements ShortUrlService {
   /** ======================== Sentinel 处理方法 ======================== **/
   public CreateShortUrlResp createShortUrlBlockHandler(CreateShortUrlReq req, BlockException ex) {
     log.warn("创建短链被限流: originUrl={}", req != null ? req.getOriginUrl() : "null");
-    CreateShortUrlResp response = new CreateShortUrlResp();
-    response.setShortCode("RATE_LIMITED");
-    response.setShortUrl("系统繁忙，请稍后重试");
-    return response;
+    CreateShortUrlResp resp = new CreateShortUrlResp();
+    resp.setShortCode("RATE_LIMITED");
+    resp.setShortUrl("系统繁忙，请稍后重试");
+    return resp;
   }
 
   public CreateShortUrlResp createShortUrlFallback(CreateShortUrlReq request, Throwable ex) {

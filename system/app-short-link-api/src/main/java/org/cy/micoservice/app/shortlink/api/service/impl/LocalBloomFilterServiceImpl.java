@@ -11,6 +11,9 @@ import org.cy.micoservice.app.shortlink.api.service.LocalBloomFilterService;
 import org.redisson.api.RBloomFilter;
 import org.redisson.api.RedissonClient;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Range;
+import org.springframework.data.redis.connection.stream.MapRecord;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +25,9 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import static org.cy.micoservice.app.shortlink.api.constants.ShortUrlConstant.REDIS_BLOOM_FILTER_PREFIX_KEY;
+import static org.cy.micoservice.app.shortlink.api.constants.ShortUrlConstant.REMOTE_STREAM_KEY;
+
 /**
  * @Author: Lil-K
  * @Date: 2026/2/26
@@ -31,8 +37,9 @@ import java.util.concurrent.atomic.AtomicInteger;
 @Service
 public class LocalBloomFilterServiceImpl implements LocalBloomFilterService {
 
+  // local bloom filter time slice
   private final ConcurrentMap<String, TimeSliceBloomFilter> localTimeSlices = new ConcurrentHashMap<>();
-  // 当前时间片
+  // 当前时间片, 格式: 20250315_18
   private volatile String currentLocalTimeSlice;
   // 预热进度控制 (内存计数器与基准头片)
   private volatile String prewarmBaselineHeadKey;
@@ -43,44 +50,36 @@ public class LocalBloomFilterServiceImpl implements LocalBloomFilterService {
   private ShortLinkApiProperties properties;
   @Autowired
   private RedissonClient redissonClient;
+  @Autowired
+  private RedisTemplate<String, Object> redisTemplate;
 
   /**
-   * 本地布隆过滤器初始化
+   * 本地布隆过滤器初始化, 创建最新的时间分片
    */
   @PostConstruct
   public void init() {
     this.currentLocalTimeSlice = this.getCurrentLocalSliceKey();
-    this.createLocalTimeSlice(currentLocalTimeSlice);
-    this.prewarmBaselineHeadKey = currentLocalTimeSlice;
+    this.createLocalTimeSlice(this.currentLocalTimeSlice);
+    this.prewarmBaselineHeadKey = this.currentLocalTimeSlice;
     // 当前片已初始化
     this.prewarmInitializedCount.set(1);
     this.prewarmAllDone = false;
     log.info("本地时间片初始化完成, 当前片: {}", currentLocalTimeSlice);
-  }
-
-  /**
-   * 定时清理local的时间分片
-   * 每5分钟执行一次
-   */
-  @Scheduled(fixedRate = 5 * 60 * 1000)
-  public void cleanLocalBloomExpiredSlices() {
-    try {
-      log.info("开始清理Local布隆过滤器时间分片");
-      this.doCleanupLocalSlices();
-    } catch (Exception e) {
-      log.error("清理Local过期时间片失败: ", e);
-    }
+    this.warmupLocalBloomFilters(currentLocalTimeSlice);
+    log.info("本地最新时间片预热完成, 当前片: {}", currentLocalTimeSlice);
   }
 
   /**
    * 每次仅预热一个缺失的本地时间片 (按 Redis 时间片从新到旧)
    * 当目标范围内全部本地片已初始化, 则本次预热跳过
+   * 执行间隔: 5分钟执行一次
    */
-  @Scheduled(fixedRateString = "${shortlink.bloom.local.prewarm.fixed-rate-ms:300000}")
+  @Scheduled(fixedRateString = "${shortlink.bloom.local.prewarm.fixed-rate-ms}")
   public void initLocalSlicesFromRedis() {
     try {
       // 若时间片头部发生变化 (进入新时间片), 重置预热进度
       String expectedHead = this.getCurrentLocalSliceKey();
+      // 如果当前时间片快于上一次的预热头, 说明本地需要新增最新的时间片了
       if (prewarmBaselineHeadKey == null || ! prewarmBaselineHeadKey.equals(expectedHead)) {
         prewarmBaselineHeadKey = expectedHead;
         prewarmInitializedCount.set(localTimeSlices.containsKey(expectedHead) ? 1 : 0);
@@ -94,7 +93,7 @@ public class LocalBloomFilterServiceImpl implements LocalBloomFilterService {
         return;
       }
 
-      // 获取已经存在的redis时间分片
+      // 获取所有已经存在的redis时间分片, 并由新到旧排序
       List<String> redisKeys = this.listExistingRedisSliceKeysSorted();
       int target = Math.max(properties.getLocalKeepSliceCount(), 1);
       // 组装目标范围 (从新到旧)
@@ -126,7 +125,7 @@ public class LocalBloomFilterServiceImpl implements LocalBloomFilterService {
         return;
       }
 
-      // 每次仅初始化一个缺失片
+      // 每次仅初始化一个缺失片, 格式: 20260313_12
       this.createLocalTimeSlice(firstMissingLocalKey);
       int after = prewarmInitializedCount.incrementAndGet();
       log.info("预热本地时间片: {}, 进度: {}/{}", firstMissingLocalKey, after, target);
@@ -136,6 +135,20 @@ public class LocalBloomFilterServiceImpl implements LocalBloomFilterService {
       }
     } catch (Exception e) {
       log.error("本地时间片预热失败", e);
+    }
+  }
+
+  /**
+   * 定时清理local的时间分片
+   * 每5分钟执行一次
+   */
+  @Scheduled(fixedRate = 5 * 60 * 1000)
+  public void cleanLocalBloomExpiredSlices() {
+    try {
+      log.info("开始清理Local布隆过滤器时间分片");
+      this.doCleanupLocalSlices();
+    } catch (Exception e) {
+      log.error("清理Local过期时间片失败: ", e);
     }
   }
 
@@ -158,21 +171,6 @@ public class LocalBloomFilterServiceImpl implements LocalBloomFilterService {
   }
 
   /**
-   * 获取redis时间片布隆过滤器, 用于本地布隆过滤器预热
-   * @param dateTime
-   * @return
-   */
-  private String getRedisSliceKey(LocalDateTime dateTime) {
-    int timeSliceHours = properties.getTimeSliceHours();
-    LocalDateTime sliceTime = dateTime
-      .withMinute(0)
-      .withSecond(0)
-      .withNano(0)
-      .withHour((dateTime.getHour() / timeSliceHours) * timeSliceHours);
-    return "redis_bloom_" + sliceTime.format(DateTimeFormatter.ofPattern("yyyyMMdd_HH"));
-  }
-
-  /**
    * 检查本地布隆过滤器
    * @param shortCode
    * @return
@@ -188,7 +186,7 @@ public class LocalBloomFilterServiceImpl implements LocalBloomFilterService {
   }
 
   /**
-   * 获取当前时间片中
+   * 获取当前本地时间片
    * @return
    */
   @Override
@@ -201,6 +199,21 @@ public class LocalBloomFilterServiceImpl implements LocalBloomFilterService {
       totalElements, (properties.getTimeSliceHours() * properties.getLocalKeepSliceCount()) / 24);
   }
 
+  @Override
+  public void warmupLocalBloomFilters(String sliceKey) {
+    // 初始化最近的1万个 short_code
+    TimeSliceBloomFilter filter = localTimeSlices.get(currentLocalTimeSlice);
+    List<MapRecord<String, Object, Object>> records =
+      redisTemplate.opsForStream().range(
+        REMOTE_STREAM_KEY,
+        Range.unbounded()
+      );
+    records.parallelStream().forEach(record -> {
+      filter.add((String) record.getValue().get("shortCode"));
+    });
+  }
+
+
   /**
    * 清除过期的时间片
    */
@@ -212,9 +225,8 @@ public class LocalBloomFilterServiceImpl implements LocalBloomFilterService {
       }
     }
 
-    if (CollectionUtils.isEmpty(expired)) {
-      return;
-    }
+    if (CollectionUtils.isEmpty(expired)) return;
+
     log.info("Local布隆过滤器过期时间分片信息: {}", JSONArray.toJSONString(expired));
 
     for (String key : expired) {
@@ -266,6 +278,21 @@ public class LocalBloomFilterServiceImpl implements LocalBloomFilterService {
   }
 
   /**
+   * 获取redis时间片布隆过滤器, 用于本地布隆过滤器预热
+   * @param dateTime
+   * @return
+   */
+  private String getRedisSliceKey(LocalDateTime dateTime) {
+    int timeSliceHours = properties.getTimeSliceHours();
+    LocalDateTime sliceTime = dateTime
+      .withMinute(0)
+      .withSecond(0)
+      .withNano(0)
+      .withHour((dateTime.getHour() / timeSliceHours) * timeSliceHours);
+    return REDIS_BLOOM_FILTER_PREFIX_KEY + sliceTime.format(DateTimeFormatter.ofPattern("yyyyMMdd_HH"));
+  }
+
+  /**
    * 获取存在的redis布隆过滤器时间分片, 并按照时间由近到远排序
    * @return
    */
@@ -276,16 +303,17 @@ public class LocalBloomFilterServiceImpl implements LocalBloomFilterService {
     // 探测更宽窗口, 避免遗漏
     int window = Math.max(properties.getLocalKeepSliceCount(), 1) * 4;
     for (int i = 0; i < window; i ++) {
+      // 时间往前推移, 单位为6个小时
       LocalDateTime t = now.minusHours(i * properties.getTimeSliceHours());
       // 组装当前时间的 redis_bloom_xxx 分片名
-      String sliceKey = this.getRedisSliceKey(t);
+      String redisSliceKey = this.getRedisSliceKey(t);
       try {
-        RBloomFilter<String> slice = redissonClient.getBloomFilter(sliceKey);
-        if (slice.isExists()) {
-          keys.add(sliceKey);
+        RBloomFilter<String> redisSliceBloomFilter = redissonClient.getBloomFilter(redisSliceKey);
+        if (redisSliceBloomFilter.isExists()) {
+          keys.add(redisSliceKey);
         }
       } catch (Exception e) {
-        log.warn("探测Redis时间片失败: {}", sliceKey);
+        log.warn("探测Redis时间片失败: {}", redisSliceKey);
       }
     }
     keys.sort((a, b) -> this.parseRedisSliceTime(b).compareTo(this.parseRedisSliceTime(a)));
@@ -313,6 +341,6 @@ public class LocalBloomFilterServiceImpl implements LocalBloomFilterService {
    * @return
    */
   private String toLocalSliceKey(String redisSliceKey) {
-    return redisSliceKey.replace("redis_bloom_", "");
+    return redisSliceKey.replace(REDIS_BLOOM_FILTER_PREFIX_KEY, "");
   }
 }

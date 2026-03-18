@@ -62,7 +62,6 @@ public class ClusterAwareCacheServiceImpl implements ClusterAwareCacheService {
       String key = this.generateHashTagKey(cacheKeyBuilder.buildHashMappingKey(), originUrlHash);
       RBucket<String> bucket = redissonClient.getBucket(key);
       bucket.set(shortCode, DEFAULT_EXPIRE_TIME);
-
       log.debug("缓存URL哈希映射: hash={}, shortCode={}, 分片槽位: {}", originUrlHash, shortCode, shardingStrategyService.calculateSlot(key));
     } catch (Exception e) {
       log.error("缓存URL哈希映射失败: hash={}, error={}", originUrlHash, e.getMessage());
@@ -182,7 +181,6 @@ public class ClusterAwareCacheServiceImpl implements ClusterAwareCacheService {
   }
 
   /** ======================== Sentinel 处理方法 ======================== **/
-
   public ShortUrlMapping databaseQueryBlockHandler(String shortCode, BlockException ex) {
     log.warn("数据库查询被限流: shortCode={}", shortCode);
     return null;
@@ -192,99 +190,4 @@ public class ClusterAwareCacheServiceImpl implements ClusterAwareCacheService {
     log.error("数据库查询降级: shortCode={}, error={}", shortCode, ex.getMessage());
     return null;
   }
-
-  // /**
-  //  * 缓存到Redis集群
-  //  * @param shortCode
-  //  * @param shortUrlMapping
-  //  */
-  // private void cacheToRedisCluster(String shortCode, ShortUrlMapping shortUrlMapping) {
-  //   try {
-  //     String key = this.generateHashTagKey(cacheKeyBuilder.buildUrlCacheKey(), shortCode);
-  //     String json = JSONObject.toJSONString(shortUrlMapping);
-  //
-  //     RBucket<String> bucket = redissonClient.getBucket(key);
-  //     Duration expireTime = this.isHotData(shortUrlMapping) ? HOT_DATA_EXPIRE_TIME : DEFAULT_EXPIRE_TIME;
-  //     bucket.set(json, expireTime);
-  //
-  //     log.debug("Redis集群缓存成功: {}", shortCode);
-  //   } catch (JSONException e) {
-  //     log.error("Redis集群序列化失败: shortCode={}, error={}", shortCode, e.getMessage());
-  //   } catch (Exception e) {
-  //     log.error("Redis集群缓存失败: shortCode={}, error={}", shortCode, e.getMessage());
-  //   }
-  // }
-
-  // /**
-  //  * 从Redis集群获取数据
-  //  * @param shortCode
-  //  * @return
-  //  */
-  // private ShortUrlMapping getFromRedisCluster(String shortCode) {
-  //   try {
-  //     String key = this.generateHashTagKey(cacheKeyBuilder.buildUrlCacheKey(), shortCode);
-  //     RBucket<String> bucket = redissonClient.getBucket(key);
-  //     String json = bucket.get();
-  //
-  //     if (json != null) {
-  //       return JSONObject.parseObject(json, ShortUrlMapping.class);
-  //     }
-  //   } catch (JSONException e) {
-  //     log.error("Redis集群反序列化失败: shortCode={}, error={}", shortCode, e.getMessage());
-  //   } catch (Exception e) {
-  //     log.error("Redis集群查询失败: shortCode={}, error={}", shortCode, e.getMessage());
-  //   }
-  //   return null;
-  // }
-
-
-  // /**
-  //  * 从集群缓存获取短链信息 (支持Hash Tag)
-  //  * @param shortCode
-  //  * @return
-  //  */
-  // @Override
-  // public ShortUrlMapping getFromCache(String shortCode) {
-  //   if (StringUtils.isBlank(shortCode)) {
-  //     log.warn("shortCode为空，无法获取缓存");
-  //     return null;
-  //   }
-  //
-  //   // 1. 本地缓存获取
-  //   ShortUrlMapping shortUrlMapping = localCacheService.getFromLocalCache(shortCode);
-  //   if (shortUrlMapping != null) {
-  //     log.debug("本地缓存命中: {}", shortCode);
-  //     return shortUrlMapping;
-  //   }
-  //
-  //   // 2. Redis集群获取
-  //   shortUrlMapping = this.getFromRedisCluster(shortCode);
-  //   if (shortUrlMapping != null) {
-  //     log.debug("Redis集群缓存命中: {}, 分片槽位: {}", shortCode, shardingStrategyService.calculateSlot(shortCode));
-  //     // 将Redis数据放入本地缓存
-  //     localCacheService.putToLocalCache(shortCode, shortUrlMapping);
-  //   }
-  //   return shortUrlMapping;
-  // }
-
-  // /**
-  //  * 将短链信息放入集群缓存 (支持Hash Tag)
-  //  * @param shortCode
-  //  * @param shortUrlMapping
-  //  */
-  // @Override
-  // public void putToCache(String shortCode, ShortUrlMapping shortUrlMapping) {
-  //   if (StringUtils.isBlank(shortCode) || shortUrlMapping == null) {
-  //     log.warn("参数为空, 跳过缓存操作: shortCode={}", shortCode);
-  //     return;
-  //   }
-  //
-  //   // 放入本地缓存
-  //   localCacheService.putToLocalCache(shortCode, shortUrlMapping);
-  //
-  //   // 放入Redis集群缓存
-  //   this.cacheToRedisCluster(shortCode, shortUrlMapping);
-  //
-  //   log.debug("缓存短链信息到集群: {}, 分片槽位: {}", shortCode, shardingStrategyService.calculateSlot(shortCode));
-  // }
 }

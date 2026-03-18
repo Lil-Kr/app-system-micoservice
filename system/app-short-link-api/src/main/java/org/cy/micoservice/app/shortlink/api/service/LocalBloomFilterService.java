@@ -25,4 +25,6 @@ public interface LocalBloomFilterService {
    * @return
    */
   String getLocalStats();
+
+  void warmupLocalBloomFilters(String sliceKey);
 }

@@ -11,10 +11,10 @@ import static org.cy.micoservice.app.common.constants.CommonFormatConstants.COMM
 
 public class ShortUrlServiceImplTest {
 
-  private static final String originUrl = "https://learn.lianglianglee.com/%E4%B8%93%E6%A0%8F/%E5%B7%A6%E8%80%B3%E5%90%AC%E9%A3%8E";
+  private static final String originUrl_1 = "https://learn.lianglianglee.com/%E4%B8%93%E6%A0%8F/%E5%B7%A6%E8%80%B3%E5%90%AC%E9%A3%8E";
+  private static final String originUrl_2 = "https://learn.lianglianglee.com/%E4%B8%93%E6%A0%8F/%E5%B7%A6%E8%80%B3%E5%90%AC%E9%A3%8A";
 
-  @Test
-  public void test() {
+  public static List<String> generateMultipleUrlHashes(String originUrl) {
     List<String> hashList = new ArrayList<>();
 
     // 主哈希: MD5
@@ -35,8 +35,15 @@ public class ShortUrlServiceImplTest {
     String lengthPrefixedUrl = String.format(COMMENT_FORMAT_UNDERSCORE_SPLIT, originUrl.length(), originUrl);
     hashList.add(DigestUtils.md5(lengthPrefixedUrl));
 
-    System.out.println(JSONArray.toJSONString(hashList));
+    return hashList;
+  }
 
+  @Test
+  public void test() {
+    List<String> res1 = generateMultipleUrlHashes(originUrl_1);
+    System.out.println(JSONArray.toJSONString(res1));
+    List<String> res2 = generateMultipleUrlHashes(originUrl_2);
+    System.out.println(JSONArray.toJSONString(res2));
   }
 
 }

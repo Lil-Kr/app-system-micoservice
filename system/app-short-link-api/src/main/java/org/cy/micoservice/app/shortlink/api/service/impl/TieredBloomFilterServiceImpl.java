@@ -3,6 +3,7 @@ package org.cy.micoservice.app.shortlink.api.service.impl;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.cy.micoservice.app.entity.shortlink.model.api.pojo.NodeInfo;
+import org.cy.micoservice.app.shortlink.api.service.BloomFilterStreamService;
 import org.cy.micoservice.app.shortlink.api.service.LocalBloomFilterService;
 import org.cy.micoservice.app.shortlink.api.service.RedisBloomFilterService;
 import org.cy.micoservice.app.shortlink.api.service.TieredBloomFilterService;
@@ -22,6 +23,8 @@ public class TieredBloomFilterServiceImpl implements TieredBloomFilterService {
   private RedisBloomFilterService redisTimeBasedBloomFilter;
   @Autowired
   private LocalBloomFilterService localBloomFilterService;
+  @Autowired
+  private BloomFilterStreamService streamService;
 
   /**
    * 添加到时间分片布隆过滤器
@@ -32,7 +35,6 @@ public class TieredBloomFilterServiceImpl implements TieredBloomFilterService {
       log.warn("shortCode为空或null");
       return;
     }
-
     try {
       // 向 local 布隆过滤器添加缓存
       localBloomFilterService.addLocal(shortCode);
@@ -42,6 +44,13 @@ public class TieredBloomFilterServiceImpl implements TieredBloomFilterService {
       log.debug("时间分片布隆过滤器添加成功: {}", shortCode);
     } catch (Exception e) {
       log.error("时间分片布隆过滤器添加失败: shortCode={}", shortCode, e);
+    }
+
+    // 发布到Stream同步其他节点的本地时间片
+    try {
+      streamService.publishNewShortCode(shortCode);
+    } catch (Exception e) {
+      log.warn("发布Stream事件失败: {}", e.getMessage());
     }
   }
 
@@ -79,7 +88,7 @@ public class TieredBloomFilterServiceImpl implements TieredBloomFilterService {
       String nodeId = redisTimeBasedBloomFilter.getNodeId();
 
       // 获取服务状态
-      boolean localServiceActive = redisTimeBasedBloomFilter != null;
+      boolean localServiceActive = localBloomFilterService != null;
       boolean redisServiceActive = redisTimeBasedBloomFilter != null;
       // 由统一服务内部发布
       boolean streamServiceActive = true;

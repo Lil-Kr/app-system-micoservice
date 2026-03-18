@@ -105,7 +105,6 @@
 	<!-- 解决SpringBootAdmin错误日志问题 -->
 	<logger name="org.apache.catalina.connector.CoyoteAdapter" level="OFF"/>
 
-
 	<root level="INFO">
 		<appender-ref ref="CONSOLE"/>
 		<appender-ref ref="ASYNC_FILE"/>

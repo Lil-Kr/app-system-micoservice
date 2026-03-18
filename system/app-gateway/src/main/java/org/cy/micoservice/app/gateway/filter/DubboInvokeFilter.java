@@ -1,13 +1,13 @@
 package org.cy.micoservice.app.gateway.filter;
 
 import com.alibaba.fastjson2.JSON;
+import com.alibaba.fastjson2.JSONObject;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.dubbo.rpc.service.GenericService;
 import org.cy.micoservice.app.common.constants.gateway.GatewayInfraConsoleSdkConstants;
-import org.cy.micoservice.app.common.utils.JsonUtil;
 import org.cy.micoservice.app.entity.gateway.model.entity.RouteConfig;
-import org.cy.micoservice.app.gateway.facade.enums.GatewayRouterSchemaEnum;
 import org.cy.micoservice.app.gateway.facade.constants.GatewayConstants;
+import org.cy.micoservice.app.gateway.facade.enums.GatewayRouterSchemaEnum;
 import org.cy.micoservice.app.gateway.filter.abst.AbstractGatewayFilter;
 import org.cy.micoservice.app.gateway.service.DubboInvokerService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -87,7 +87,7 @@ public class DubboInvokeFilter extends AbstractGatewayFilter implements Ordered 
     Object requestBody = exchange.getAttributes().get(GatewayConstants.GatewayAttrKey.X_REQUEST_BODY);
     if (Objects.nonNull(requestBody)) {
       String requestBodyJson = requestBody.toString();
-      Map<String, Object> paramMap = JsonUtil.objectToMap(requestBodyJson);
+      Map<String, Object> paramMap = JSONObject.parseObject(requestBodyJson, Map.class);
       return new Object[]{paramMap};
     }
     return new Object[]{};

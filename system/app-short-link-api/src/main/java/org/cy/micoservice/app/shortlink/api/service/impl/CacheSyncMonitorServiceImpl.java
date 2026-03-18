@@ -64,9 +64,10 @@ public class CacheSyncMonitorServiceImpl implements CacheSyncMonitorService {
   }
 
   /**
-   * 智能清理过期消息
+   * 智能清理过期stream消息
+   * 5分钟执行一次
    */
-  @Scheduled(fixedRateString = "${shortlink.cache.stream.cleanup-interval:300000}")
+  @Scheduled(fixedRateString = "${shortlink.cache.stream.cleanup-interval}")
   @Override
   public void smartCleanupExpiredMessages() {
     try {
@@ -79,8 +80,8 @@ public class CacheSyncMonitorServiceImpl implements CacheSyncMonitorService {
         return;
       }
 
-      // 计算需要保留的消息数量（基于当前长度的80%，但不少于最小保留数量）
-      long retainCount = Math.max(minRetainLength, (long)(currentLength * 0.8));
+      // 计算需要保留的消息数量 (基于当前长度的80%, 但不少于最小保留数量)
+      long retainCount = Math.max(minRetainLength, (long)(currentLength * SAVING_INTERVAL));
 
       Long trimmed = redisTemplate.opsForStream().trim(REMOTE_STREAM_KEY, retainCount);
       if (trimmed > 0) {
@@ -93,7 +94,7 @@ public class CacheSyncMonitorServiceImpl implements CacheSyncMonitorService {
   }
 
   /**
-   * 紧急清理（当Stream长度超过最大限制时）
+   * 紧急清理 (当Stream长度超过最大限制时)
    */
   private void emergencyCleanup() {
     try {

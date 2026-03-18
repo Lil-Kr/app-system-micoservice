@@ -1,5 +1,6 @@
 package org.cy.micoservice.app.shortlink.api.service.impl;
 
+import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;
 import lombok.extern.slf4j.Slf4j;
 import org.cy.micoservice.app.shortlink.api.config.ShortLinkApiProperties;
@@ -11,7 +12,10 @@ import org.springframework.context.ApplicationContextAware;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
+import java.net.InetAddress;
 import java.util.concurrent.atomic.AtomicBoolean;
+
+import static org.cy.micoservice.app.common.constants.CommonFormatConstants.COMMENT_FORMAT_COLON_SPLIT;
 
 /**
  * @Author: Lil-K
@@ -36,25 +40,25 @@ public class LocalCacheStreamServiceImpl implements LocalCacheStreamService, App
   private String nodeId;
   private String consumerName;
 
-  // @PostConstruct
-  // public void init() {
-  //   try {
-  //     // 生成节点ID
-  //     nodeId = String.format(COMMENT_FORMAT_COLON_SPLIT, InetAddress.getLocalHost().getHostAddress(), properties.getServerPort());
-  //     this.consumerName = "cache-consumer-" + nodeId;
-  //
-  //     // 创建消费者组 (如果不存在)
-  //     try {
-  //       redisTemplate.opsForStream().createGroup(LOCAL_STREAM_KEY, LOCAL_CONSUMER_SYNC_GROUP);
-  //       log.info("创建本地缓存Stream消费者组: {}", LOCAL_CONSUMER_SYNC_GROUP);
-  //     } catch (Exception e) {
-  //       log.info("本地缓存消费者组已存在: {}", LOCAL_CONSUMER_SYNC_GROUP);
-  //     }
-  //     log.info("LocalCacheStreamService初始化完成 - 节点: {}", nodeId);
-  //   } catch (Exception e) {
-  //     log.error("初始化LocalCacheStreamService失败", e);
-  //   }
-  // }
+  @PostConstruct
+  public void init() {
+    try {
+      // 生成节点ID
+      nodeId = String.format(COMMENT_FORMAT_COLON_SPLIT, InetAddress.getLocalHost().getHostAddress(), properties.getServerPort());
+      // this.consumerName = "cache-consumer-" + nodeId;
+      //
+      // // 创建消费者组 (如果不存在)
+      // try {
+      //   redisTemplate.opsForStream().createGroup(LOCAL_STREAM_KEY, LOCAL_CONSUMER_SYNC_GROUP);
+      //   log.info("创建本地缓存Stream消费者组: {}", LOCAL_CONSUMER_SYNC_GROUP);
+      // } catch (Exception e) {
+      //   log.info("本地缓存消费者组已存在: {}", LOCAL_CONSUMER_SYNC_GROUP);
+      // }
+      // log.info("LocalCacheStreamService初始化完成 - 节点: {}", nodeId);
+    } catch (Exception e) {
+      log.error("初始化LocalCacheStreamService失败", e);
+    }
+  }
 
   /**
    *

@@ -13,7 +13,7 @@ import java.time.Duration;
 /**
  * @Author: Lil-K
  * @Date: 2026/3/5
- * @Description:
+ * @Description: CacheManager factory
  */
 @Component
 public class JetCacheFactory {
@@ -34,9 +34,9 @@ public class JetCacheFactory {
                                          ) {
     QuickConfig qc = QuickConfig.newBuilder(name)
       .localExpire(localExpire)
+      .localLimit(limit)
       .expire(remoteExpire)
       .cacheType(cacheType)
-      .localLimit(limit)
       // 缓存穿透保护
       .penetrationProtect(penetrationProtect)
       // .penetrationProtectTimeout()

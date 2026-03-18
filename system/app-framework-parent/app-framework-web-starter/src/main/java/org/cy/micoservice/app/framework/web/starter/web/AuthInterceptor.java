@@ -45,12 +45,12 @@ public class AuthInterceptor implements HandlerInterceptor, InitializingBean {
   @Override
   public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
     if (!(handler instanceof HandlerMethod)) {
-      log.info("invalid request,uri:{}", request.getRequestURI());
+      log.debug("invalid request,uri:{}", request.getRequestURI());
       return true;
     }
     HandlerMethod handlerMethod = (HandlerMethod) handler;
     Method method = handlerMethod.getMethod();
-    log.info("uri: {}", request.getRequestURI());
+    log.debug("request uri: {}", request.getRequestURI());
     NoAuthCheck noAuthCheck = method.getAnnotation(NoAuthCheck.class);
     if (Objects.nonNull(noAuthCheck)) {
       return true;
