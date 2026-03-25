@@ -2,7 +2,7 @@ package org.cy.micoservice.app.framework.id.starter.monitor;
 
 /**
  * @Author: Lil-K
- * @Description: id监视器。
+ * @Description: id监视器
  */
 public interface IdMonitor extends AutoCloseable {
 

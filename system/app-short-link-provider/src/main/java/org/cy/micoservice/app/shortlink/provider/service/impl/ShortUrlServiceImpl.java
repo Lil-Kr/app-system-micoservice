@@ -51,7 +51,8 @@ public class ShortUrlServiceImpl implements ShortUrlService {
     // build insert entity
     ShortUrlMapping entity = BeanCopyUtils.convert(reqDTO, ShortUrlMapping.class);
     entity.setId(idService.getId());
-    entity.setAccessCount(0L);
+    // default
+    entity.setAccessCount(1L);
     entity.setUpdateId(reqDTO.getCreateId());
     LocalDateTime now = DateUtil.localDateTimeNow();
     entity.setCreateTime(now);

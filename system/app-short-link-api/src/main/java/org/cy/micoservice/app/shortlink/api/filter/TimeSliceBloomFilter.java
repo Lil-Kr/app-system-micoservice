@@ -19,7 +19,7 @@ public class TimeSliceBloomFilter {
 
   // 时间片标识
   private final String sliceKey;
-  // Google Guava实现
+  // Google Guava 实现
   private final BloomFilter<String> bloomFilter;
   // 创建时间
   private final LocalDateTime createTime;

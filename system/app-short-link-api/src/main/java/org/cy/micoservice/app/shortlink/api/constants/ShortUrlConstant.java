@@ -51,6 +51,7 @@ public class ShortUrlConstant {
    * 但考虑内存限制，设置为2.16亿 (满足99%+场景)
    */
   public static final long EXPECTED_INSERTIONS = 216_000_000L;
+  // redis stream saving rate
   public static final double SAVING_INTERVAL = 0.8;
 
   // MACHINE

@@ -28,5 +28,6 @@ public class CreateShortUrlReq implements Serializable {
 
   private Long createId;
 
+  @Size(min = 1, max = 50,message = "自定义短码长度必须在 1 ~ 50 个之间")
   private String customCode;
 }

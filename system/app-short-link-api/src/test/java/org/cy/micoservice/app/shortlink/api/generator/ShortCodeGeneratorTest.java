@@ -1,7 +1,7 @@
 package org.cy.micoservice.app.shortlink.api.generator;
 
 import org.cy.micoservice.app.shortlink.api.config.ShortCodeConfig;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.junit.jupiter.api.Test;
 
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -18,15 +18,21 @@ public class ShortCodeGeneratorTest {
   private static final long MAX_SEQUENCE = (1L << SEQUENCE_BITS) - 1;
   private static long id = 647661878328295426L;
 
-  @Autowired
+  // @Autowired
   private ShortCodeConfig shortCodeConfig;
-  @Autowired
+  // @Autowired
   private ShortCodeGenerator generator;
 
-  // @Test
+  @Test
   public void test1() {
-    String shortCode = generator.generateShortCode();
-    System.out.println(shortCode);
+    // int length = 100;
+    // Set<Long> set = new HashSet<>();
+    // // for (int i = 0; i < length; i++) {
+    // //   long l = generator.generateId();
+    // //   set.add(l);
+    // // }
+    // // System.out.println(set.size());
+    // System.out.println(generator.generateId());
+    // Assertions.assertTrue(set.size() == length);
   }
-
 }

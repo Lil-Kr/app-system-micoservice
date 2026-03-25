@@ -27,14 +27,14 @@ public class JetCacheFactory {
                                          Duration localExpire,
                                          Duration remoteExpire,
                                          CacheType cacheType,
-                                         int limit,
+                                         int localLimit,
                                          boolean penetrationProtect,
                                          boolean cacheNullValue,
                                          boolean syncLocal
                                          ) {
     QuickConfig qc = QuickConfig.newBuilder(name)
       .localExpire(localExpire)
-      .localLimit(limit)
+      .localLimit(localLimit)
       .expire(remoteExpire)
       .cacheType(cacheType)
       // 缓存穿透保护

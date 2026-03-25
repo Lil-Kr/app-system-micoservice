@@ -39,6 +39,7 @@ public class ShortCodeGenerator {
 
   // 位移量
   private static final long MACHINE_ID_SHIFT = SEQUENCE_BITS;
+  // 时间戳
   private static final long TIMESTAMP_SHIFT = MACHINE_ID_BITS + SEQUENCE_BITS;
 
   // 起始时间戳 (2024-01-01 00:00:00 UTC)
@@ -101,6 +102,7 @@ public class ShortCodeGenerator {
 
       // 增强的时钟回拨检查
       if (timestamp < lastTimestamp) {
+        // 计算回拨幅度
         long offset = lastTimestamp - timestamp;
 
         // 记录时钟回拨事件
@@ -206,9 +208,8 @@ public class ShortCodeGenerator {
     // 确保不超过配置的长度
     if (shortCode.length() > targetLength) {
       shortCode = shortCode.substring(0, targetLength);
-      log.debug("短码长度超限，已截取到{}位: {}", targetLength, shortCode);
+      log.debug("短码长度超限, 已截取到{}位: {}", targetLength, shortCode);
     }
-
     return shortCode;
   }
 
@@ -241,7 +242,7 @@ public class ShortCodeGenerator {
     // 如果长度变化了, 重新计算最大值
     synchronized (this) {
       if (currentLength != cachedLength) {
-        // 获取当前短码长度规则下,
+        // 获取当前短码长度规则下
         cachedMaxValue = Base62Util.getMaxValue(currentLength);
         cachedLength = currentLength;
         log.debug("更新缓存的最大值: length={}, maxValue={}", currentLength, cachedMaxValue);

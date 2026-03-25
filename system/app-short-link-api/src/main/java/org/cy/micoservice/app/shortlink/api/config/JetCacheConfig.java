@@ -38,7 +38,25 @@ public class JetCacheConfig {
     return factory.createJetCache(
       cacheKeyBuilder.buildUrlCacheKey(),
       LOCAL_EXPIRE_TIME.plusMinutes(ThreadLocalRandom.current().nextInt(10)),
-      DEFAULT_EXPIRE_TIME.plusMinutes(ThreadLocalRandom.current().nextInt(30)),
+      DEFAULT_EXPIRE_TIME.plusMinutes(ThreadLocalRandom.current().nextInt(20)),
+      CacheType.BOTH,
+      10000,
+      true,
+      true,
+      true);
+  }
+
+  /**
+   * short url hot cache
+   * @param factory
+   * @return
+   */
+  @Bean
+  public Cache<String, ShortUrlMapping> shortUrlHotCache(JetCacheFactory factory) {
+    return factory.createJetCache(
+      cacheKeyBuilder.buildHotUrlCacheKey(),
+      LOCAL_EXPIRE_TIME.plusMinutes(ThreadLocalRandom.current().nextInt(30)),
+      HOT_DATA_EXPIRE_TIME,
       CacheType.BOTH,
       10000,
       true,

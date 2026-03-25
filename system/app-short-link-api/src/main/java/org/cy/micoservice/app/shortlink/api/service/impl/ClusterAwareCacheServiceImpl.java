@@ -20,10 +20,14 @@ import org.redisson.api.RAtomicLong;
 import org.redisson.api.RBucket;
 import org.redisson.api.RedissonClient;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import static org.cy.micoservice.app.shortlink.api.config.JetCacheConfig.COUNT_EXPIRE_TIME;
-import static org.cy.micoservice.app.shortlink.api.config.JetCacheConfig.DEFAULT_EXPIRE_TIME;
+import java.util.concurrent.TimeUnit;
+
+import static org.cy.micoservice.app.shortlink.api.config.JetCacheConfig.*;
 
 /**
  * @Author: Lil-K
@@ -42,6 +46,10 @@ public class ClusterAwareCacheServiceImpl implements ClusterAwareCacheService {
   private RedissonClient redissonClient;
   @Autowired
   private Cache<String, ShortUrlMapping> shortUrlCache;
+  @Autowired
+  private Cache<String, ShortUrlMapping> shortUrlHotCache;
+  @Autowired
+  private RedisTemplate<String, String> redisTemplate;
   @Autowired
   private ShardingStrategyService shardingStrategyService;
   @Autowired
@@ -117,6 +125,12 @@ public class ClusterAwareCacheServiceImpl implements ClusterAwareCacheService {
   )
   @Override
   public ShortUrlMapping getShortUrlWithSentinel(String shortCode) {
+    // 先查询 hot key
+    ShortUrlMapping shortUrlMapping = shortUrlHotCache.get(shortCode);
+    if (shortUrlMapping != null) {
+      return shortUrlMapping;
+    }
+
     return shortUrlCache.computeIfAbsent(shortCode, key -> {
       RpcResponse<CreateShortUrlRespDTO> response = shortUrlFacade.findByShortCode(shortCode);
       if (response.getData() == null) {
@@ -129,28 +143,6 @@ public class ClusterAwareCacheServiceImpl implements ClusterAwareCacheService {
   }
 
   /**
-   * 增加访问计数 (集群分片优化)
-   * @param shortCode
-   * @return
-   */
-  @Override
-  public Long incrementAccessCount(String shortCode) {
-    try {
-      String key = this.generateHashTagKey(cacheKeyBuilder.buildCountCacheKey(), shortCode);
-      RAtomicLong atomicLong = redissonClient.getAtomicLong(key);
-
-      long count = atomicLong.incrementAndGet();
-      atomicLong.expire(COUNT_EXPIRE_TIME);
-
-      log.debug("访问计数增加: {}, 当前计数: {}, 分片槽位: {}", shortCode, count, shardingStrategyService.calculateSlot(key));
-      return count;
-    } catch (Exception e) {
-      log.error("增加访问计数失败: shortCode={}, error={}", shortCode, e.getMessage());
-      return null;
-    }
-  }
-
-  /**
    * 刷新缓存
    * @param shortUrlMapping
    * @return
@@ -158,6 +150,63 @@ public class ClusterAwareCacheServiceImpl implements ClusterAwareCacheService {
   @Override
   public void refreshCache(ShortUrlMapping shortUrlMapping) {
     shortUrlCache.put(shortUrlMapping.getShortCode(), shortUrlMapping);
+  }
+
+  /**
+   * 判断是否为热点数据
+   */
+  @Override
+  public boolean isHotData(Long accessCount) {
+    return accessCount >= 1000;
+  }
+
+  @SentinelResource(value = "updateAccessCount")
+  @Async
+  @Override
+  public void updateAccessCountAsync(ShortUrlMapping shortUrlMapping) {
+    String shortCode = shortUrlMapping.getShortCode();
+    try {
+      // 先尝试从Redis集群增加计数
+      Long count = this.incrementAccessCount(shortCode);
+
+      // 热点key做TTL
+      if (this.isHotData(count)) {
+        shortUrlHotCache.put(shortCode, shortUrlMapping, 24, TimeUnit.HOURS);
+      }
+
+      // 异步更新数据库 (可以考虑批量更新)
+      if (count != null && count % 100 == 0) {
+        // 每100次访问同步一次数据库 (ShardingSphere会自动路由)
+        this.updateAccessCountInDatabase(shortCode, count);
+      }
+    } catch (Exception e) {
+      // 访问计数失败不影响主流程
+      log.warn("更新访问次数失败: shortCode={}, error={}", shortCode, e.getMessage());
+    }
+  }
+
+  /**
+   * 数据库访问次数更新 (支持分库分表)
+   */
+  @Transactional(rollbackFor = Exception.class)
+  @Override
+  public void updateAccessCountInDatabase(String shortCode, Long accessCount) {
+    try {
+      RpcResponse<Integer> updatedResp = shortUrlFacade.updateAccessCount(shortCode, accessCount);
+      if (updatedResp.getData() > 0) {
+        log.debug("访问次数更新成功: shortCode={}, accessCount={}, 数据库分片: db={}, table={}",
+          shortCode,
+          accessCount,
+          calculateIndexUtil.calculateDatabaseIndex(shortCode),
+          calculateIndexUtil.calculateTableIndex(shortCode));
+      } else {
+        log.warn("访问次数更新失败，记录不存在: shortCode={}", shortCode);
+      }
+    } catch (Exception e) {
+      log.error("数据库访问次数更新失败: shortCode={}, accessCount={}, error={}",
+        shortCode, accessCount, e.getMessage(), e);
+      throw e;
+    }
   }
 
   /**
@@ -174,10 +223,24 @@ public class ClusterAwareCacheServiceImpl implements ClusterAwareCacheService {
   }
 
   /**
-   * 判断是否为热点数据
+   * 增加访问计数 (集群分片优化)
+   * @param shortCode
+   * @return
    */
-  private boolean isHotData(ShortUrlMapping shortUrlMapping) {
-    return shortUrlMapping.getAccessCount() != null && shortUrlMapping.getAccessCount() > 1000;
+  private Long incrementAccessCount(String shortCode) {
+    try {
+      String key = this.generateHashTagKey(cacheKeyBuilder.buildCountCacheKey(), shortCode);
+      RAtomicLong atomicLong = redissonClient.getAtomicLong(key);
+
+      long count = atomicLong.incrementAndGet();
+      atomicLong.expire(COUNT_EXPIRE_TIME);
+
+      log.debug("访问计数增加: {}, 当前计数: {}, 分片槽位: {}", shortCode, count, shardingStrategyService.calculateSlot(key));
+      return count;
+    } catch (Exception e) {
+      log.error("增加访问计数失败: shortCode={}, error={}", shortCode, e.getMessage());
+      return null;
+    }
   }
 
   /** ======================== Sentinel 处理方法 ======================== **/

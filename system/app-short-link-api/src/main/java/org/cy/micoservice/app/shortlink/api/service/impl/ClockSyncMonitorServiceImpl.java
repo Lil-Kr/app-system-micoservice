@@ -122,9 +122,9 @@ public class ClockSyncMonitorServiceImpl implements ClockSyncMonitorService {
           long serverMillis = timeResponse.getSeconds() * 1000L + (timeResponse.getMicroseconds() / 1000L);
           long rtt = Math.max(0L, tEnd - tStart);
 
-          // 将服务器时间校正到本地时间轴的“响应时刻”，采用NTP的简化近似: serverTime + rtt/2
+          // 将服务器时间校正到本地时间轴的 "响应时刻", 采用NTP的简化近似: serverTime + rtt / 2
           long adjusted = serverMillis + (rtt / 2L);
-          samples[sampleCount++] = adjusted;
+          samples[sampleCount ++] = adjusted;
         } catch (Exception nodeEx) {
           // 单节点失败不影响整体结果, 继续其他节点
           log.debug("采样Redis节点时间失败, 忽略该节点", nodeEx);
@@ -141,7 +141,7 @@ public class ClockSyncMonitorServiceImpl implements ClockSyncMonitorService {
       long median = samples[(sampleCount - 1) / 2];
       return median;
     } catch (Exception e) {
-      log.warn("获取Redis时间失败，使用系统时间", e);
+      log.warn("获取Redis时间失败, 使用系统时间", e);
       return System.currentTimeMillis();
     }
   }

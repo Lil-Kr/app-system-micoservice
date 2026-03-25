@@ -31,20 +31,6 @@ public interface ClusterAwareCacheService {
   boolean existsInBloomFilter(String shortCode);
 
   /**
-   * get short link info from cache
-   * @param shortCode
-   * @return
-   */
-  // ShortUrlMapping getFromCache(String shortCode);
-
-  /**
-   * 将短链信息放入集群缓存 (支持Hash Tag)
-   * @param shortCode
-   * @param shortUrlMapping
-   */
-  // void putToCache(String shortCode, ShortUrlMapping shortUrlMapping);
-
-  /**
    * 添加到布隆过滤器
    * @param shortCode
    */
@@ -58,16 +44,29 @@ public interface ClusterAwareCacheService {
   ShortUrlMapping getShortUrlWithSentinel(String shortCode);
 
   /**
-   * 增加访问计数 (集群分片优化)
-   * @param shortCode
-   * @return
-   */
-  Long incrementAccessCount(String shortCode);
-
-  /**
    * 刷新缓存
    * @param shortUrlMapping
    * @return
    */
   void refreshCache(ShortUrlMapping shortUrlMapping);
+
+  /**
+   * 检查是否为热点数据
+   * @param accessCount
+   * @return
+   */
+  boolean isHotData(Long accessCount);
+
+  /**
+   *
+   * @param shortUrlMapping
+   */
+  void updateAccessCountAsync(ShortUrlMapping shortUrlMapping);
+
+  /**
+   *
+   * @param shortCode
+   * @param accessCount
+   */
+  void updateAccessCountInDatabase(String shortCode, Long accessCount);
 }

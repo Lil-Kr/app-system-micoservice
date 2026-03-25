@@ -49,13 +49,13 @@ public interface ShortUrlService {
    * @param shortCode
    * @param count
    */
-  void updateAccessCountInDatabase(String shortCode, Long count);
+  // void updateAccessCountInDatabase(String shortCode, Long count);
 
   /**
    * 异步更新访问次数 (支持分库分表和Redis集群分片)
    * @param shortCode
    */
-  void updateAccessCountAsync(String shortCode);
+  // void updateAccessCountAsync(String shortCode);
 
   /**
    *

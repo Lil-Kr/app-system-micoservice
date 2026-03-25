@@ -28,7 +28,6 @@ import org.cy.micoservice.app.shortlink.facade.enums.ShortUrlEnum;
 import org.cy.micoservice.app.shortlink.facade.interfaces.ShortUrlFacade;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -66,7 +65,7 @@ public class ShortUrlServiceImpl implements ShortUrlService {
   @Autowired
   private CalculateIndexUtil calculateIndexUtil;
   @Autowired
-  private Cache<String, ShortUrlMapping> shortUrlCache;
+  private Cache<String, ShortUrlMapping> shortUrlHotCache;
   @DubboReference(check = false)
   private ShortUrlFacade shortUrlFacade;
 
@@ -262,6 +261,9 @@ public class ShortUrlServiceImpl implements ShortUrlService {
       log.debug("短链状态异常: shortCode={}, status={}", shortCode, shortUrlMapping.getStatus());
       return null;
     }
+
+    // 6. 异步增加短链访问量
+    clusterAwareCacheService.updateAccessCountAsync(shortUrlMapping);
     return this.buildResponse(shortUrlMapping);
   }
 
@@ -290,51 +292,6 @@ public class ShortUrlServiceImpl implements ShortUrlService {
   }
 
   /**
-   * 数据库访问次数更新 (支持分库分表)
-   */
-  @Transactional(rollbackFor = Exception.class)
-  @Override
-  public void updateAccessCountInDatabase(String shortCode, Long accessCount) {
-    try {
-      RpcResponse<Integer> updatedResp = shortUrlFacade.updateAccessCount(shortCode, accessCount);
-      if (updatedResp.getData() > 0) {
-        log.debug("访问次数更新成功: shortCode={}, accessCount={}, 数据库分片: db={}, table={}",
-          shortCode,
-          accessCount,
-          calculateIndexUtil.calculateDatabaseIndex(shortCode),
-          calculateIndexUtil.calculateTableIndex(shortCode));
-      } else {
-        log.warn("访问次数更新失败，记录不存在: shortCode={}", shortCode);
-      }
-    } catch (Exception e) {
-      log.error("数据库访问次数更新失败: shortCode={}, accessCount={}, error={}",
-        shortCode, accessCount, e.getMessage(), e);
-      throw e;
-    }
-  }
-
-  /**
-   * 异步更新访问次数 (支持分库分表和Redis集群分片)
-   */
-  @SentinelResource(value = "updateAccessCount")
-  @Override
-  public void updateAccessCountAsync(String shortCode) {
-    try {
-      // 先尝试从Redis集群增加计数
-      Long count = clusterAwareCacheService.incrementAccessCount(shortCode);
-
-      // 异步更新数据库 (可以考虑批量更新)
-      if (count != null && count % 100 == 0) {
-        // 每100次访问同步一次数据库 (ShardingSphere会自动路由)
-        this.updateAccessCountInDatabase(shortCode, count);
-      }
-    } catch (Exception e) {
-      // 访问计数失败不影响主流程
-      log.warn("更新访问次数失败: shortCode={}, error={}", shortCode, e.getMessage());
-    }
-  }
-
-  /**
    * 记录当前url的访问次数
    * @param shortCode
    * @return
@@ -352,7 +309,8 @@ public class ShortUrlServiceImpl implements ShortUrlService {
     }
 
     // 异步更新访问次数 (不阻塞主流程) - 使用集群分片
-    this.updateAccessCountAsync(shortCode);
+    ShortUrlMapping mapping = BeanCopyUtils.convert(shortUrlInfo, ShortUrlMapping.class);
+    clusterAwareCacheService.updateAccessCountAsync(mapping);
 
     log.debug("短链重定向: shortCode={}, originUrl={}, 数据库分片: db={}, table={}, Redis分片槽位={}",
       shortCode, shortUrlInfo.getOriginUrl(),

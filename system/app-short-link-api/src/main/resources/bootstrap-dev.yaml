@@ -55,3 +55,21 @@ server:
     uri-encoding: UTF-8
   servlet:
     context-path: /api
+
+# 7999, 7989, 7979
+# dubbo
+dubbo:
+  application:
+    name: ${spring.application.name}
+    qos-enable: false
+  registry:
+    address: nacos://192.168.9.200:8848?namespace=app-mico-service-dev&username=nacos&password=nacos
+  protocol:
+    name: dubbo
+    port: 7999
+    threadpool: fixed
+    dispatcher: execution
+    threads: 500
+    accepts: 500
+  provider:
+    filter: globalDubboExceptionFilter

@@ -80,7 +80,7 @@ public class MachineIdServiceImpl implements MachineIdService, InitializingBean 
   private void assignMachineId() {
     RMap<String, Long> machineIdMap = redissonClient.getMap(MACHINE_ID_KEY);
 
-    // 步骤1：检查是否已分配（支持节点重启恢复）
+    // 步骤1：检查是否已分配 (支持节点重启恢复)
     if (machineIdMap.containsKey(nodeIdentifier)) {
       this.machineId = machineIdMap.get(nodeIdentifier);
       log.info("复用已分配的机器ID: {}", machineId);

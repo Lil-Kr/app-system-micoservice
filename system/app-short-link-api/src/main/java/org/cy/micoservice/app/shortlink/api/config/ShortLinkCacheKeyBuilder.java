@@ -59,6 +59,11 @@ public class ShortLinkCacheKeyBuilder extends RedisKeyBuilder {
     return CACHE_PREFIX + "url:";
   }
 
+
+  public String buildHotUrlCacheKey() {
+    return CACHE_PREFIX + "url:hot:";
+  }
+
   /**
    * build hash tag key
    * @return

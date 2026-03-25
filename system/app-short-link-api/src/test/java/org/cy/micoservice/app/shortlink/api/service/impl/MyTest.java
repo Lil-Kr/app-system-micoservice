@@ -42,4 +42,9 @@ public class MyTest {
     String redisSliceKey = getRedisSliceKey(t);
     System.out.println(redisSliceKey);
   }
+
+  @Test
+  public void test3() {
+    System.out.println(1 << 10);
+  }
 }
