@@ -58,7 +58,7 @@ public class JetCacheConfig {
       LOCAL_EXPIRE_TIME.plusMinutes(ThreadLocalRandom.current().nextInt(30)),
       HOT_DATA_EXPIRE_TIME,
       CacheType.BOTH,
-      10000,
+      5000,
       true,
       true,
       true);

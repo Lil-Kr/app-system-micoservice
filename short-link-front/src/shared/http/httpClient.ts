@@ -21,9 +21,10 @@ const toHttpError = (error: unknown) => {
   }
 
   if (axios.isAxiosError(error)) {
-    const axiosError = error as AxiosError<{ message?: string }>;
+    const axiosError = error as AxiosError<{ message?: string; msg?: string }>;
     const statusCode = axiosError.response?.status ?? 0;
     const message =
+      axiosError.response?.data?.msg ??
       axiosError.response?.data?.message ??
       axiosError.message ??
       "Network request failed";
@@ -57,8 +58,9 @@ export class HttpClient {
     );
   }
 
-  request<TResponse = unknown, TData = unknown>(config: HttpRequestConfig<TData>) {
-    return this.instance.request<TResponse, TResponse, TData>(config);
+  async request<TResponse = unknown, TData = unknown>(config: HttpRequestConfig<TData>): Promise<TResponse> {
+    const response = await this.instance.request<TResponse, { data: TResponse }, TData>(config);
+    return response.data;
   }
 
   get<TResponse = unknown>(url: string, config?: HttpRequestConfig) {

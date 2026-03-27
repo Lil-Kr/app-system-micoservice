@@ -15,6 +15,8 @@ public class ShortLinkApiProperties {
 
   @Value("${server.port:}")
   private String serverPort;
+  @Value("${server.servlet.context-path:}")
+  private String contextPath;
   @Value("${shortlink.cluster.batch-size:50}")
   private int batchSize;
   @Value("${shortlink.cluster.enable-hash-tag:true}")
@@ -30,12 +32,15 @@ public class ShortLinkApiProperties {
   private int redisKeepSliceCount;
   @Value("${shortlink.shorturl.domain:http://localhost:7901}")
   private String domain;
+  @Value("${shortlink.shorturl.redirect-path:/shortUrl/redirect?shortCode=}")
+  private String redirectPath;
   @Value("${shortlink.expansion.dual-write-enabled:false}")
   private boolean dualWriteEnabled;
   @Value("${shortlink.shorturl.default-expire-days:0}")
   private Integer defaultExpireDays;
 
   /** ============================= Redisson configure =============================**/
+  // read / write separate
   @Value("${shortlink.cluster.enable-read-write-split:true}")
   private boolean enableReadWriteSplit;
   @Value("${shortlink.cluster.connection-timeout:3000}")

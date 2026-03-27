@@ -34,7 +34,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import static org.cy.micoservice.app.common.constants.CommonFormatConstants.COMMENT_FORMAT_SLASH_SPLIT;
 import static org.cy.micoservice.app.common.constants.CommonFormatConstants.COMMENT_FORMAT_UNDERSCORE_SPLIT;
 import static org.cy.micoservice.app.common.enums.response.ApiReturnCodeEnum.REQUEST_RESOURCE_NOT_EXIST;
 
@@ -325,7 +324,7 @@ public class ShortUrlServiceImpl implements ShortUrlService {
    */
   private CreateShortUrlResp buildResponse(ShortUrlMapping shortUrlMapping) {
     CreateShortUrlResp response = BeanCopyUtils.convert(shortUrlMapping, CreateShortUrlResp.class);
-    response.setShortUrl(String.format(COMMENT_FORMAT_SLASH_SPLIT, properties.getDomain(), shortUrlMapping.getShortCode()));
+    response.setShortUrl(properties.getDomain() + properties.getContextPath() + properties.getRedirectPath() + shortUrlMapping.getShortCode());
     return response;
   }
 

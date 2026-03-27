@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
 import java.util.List;
 
 @Data
@@ -31,7 +30,6 @@ public class RedissonConfig {
   @Autowired
   private ShortLinkApiProperties properties;
 
-  // todo: redis集群需要配置此项
   @Bean
   public RedissonClient redissonClient() {
     Config config = new Config();
@@ -40,6 +38,49 @@ public class RedissonConfig {
       .map(node -> "redis://" + node)
       .toArray(String[]::new);
 
+    if (nodes.length == 1) {
+      redisSingleServers(config, nodes);
+    } else {
+      redisClusterServers(config, nodes);
+    }
+    return Redisson.create(config);
+  }
+
+  /**
+   * redis single config
+   * @param config
+   * @param nodes
+   */
+  private void redisSingleServers(Config config, String[] nodes) {
+    config.useSingleServer()
+      // 地址
+      .setAddress(nodes[0])
+      .setPassword(password)
+
+      // 连接池（对应 cluster 的 master pool）
+      .setConnectionMinimumIdleSize(20)
+      .setConnectionPoolSize(100)
+
+      // 超时配置（完全保留）
+      .setIdleConnectionTimeout(10000)
+      .setConnectTimeout(properties.getConnectionTimeout())
+      .setTimeout(properties.getSocketTimeout())
+
+      // 重试机制（完全保留）
+      .setRetryAttempts(3)
+      .setRetryInterval(1500)
+
+      // 保活机制（保留）
+      .setPingConnectionInterval(30000)
+      .setKeepAlive(true);
+  }
+
+  /**
+   * redis cluster config
+   * @param config
+   * @param nodes
+   */
+  private void redisClusterServers(Config config, String[] nodes) {
     config.useClusterServers()
       .addNodeAddress(nodes)
       .setPassword(password)
@@ -70,7 +111,5 @@ public class RedissonConfig {
       // 集群分片优化
       .setPingConnectionInterval(30000)
       .setKeepAlive(true);
-
-    return Redisson.create(config);
   }
 }

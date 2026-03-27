@@ -4,4 +4,4 @@ spring:
   application:
     name: app-short-link-api
   profiles:
-    active: dev
+    active: prod
