@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.cy.micoservice.app.shortlink.provider.dao.ShortUrlMapper">
+
+	<sql id="Table_Name">
+		t_short_url_mapping
+	</sql>
+
+	<!-- 通用查询结果列 -->
+	<sql id="Base_Column_List">
+		id, short_code, origin_url, origin_url_hash, expire_days, access_count, status, create_id, update_id, create_time, update_time
+	</sql>
+
+	<sql id="Base_Join_Column_List">
+		a.id, a.short_code, a.origin_url, a.origin_url_hash, a.expire_days, a.access_count, a.status, a.create_id, a.update_id, a.create_time, a.update_time
+	</sql>
+	
+	<select id="findByShortCode" resultType="org.cy.micoservice.app.entity.shortlink.model.provider.pojo.ShortUrlMapping">
+		select <include refid="Base_Column_List" />
+		from <include refid="Table_Name" />
+		<where>
+			<if test="param.shortCode != null and param.shortCode != ''">
+				and short_code = #{param.shortCode}
+			</if>
+			<if test="param.originUrlHash != null and param.originUrlHash != ''">
+				and origin_url_hash = #{param.originUrlHash}
+			</if>
+		</where>
+		limit 1
+	</select>
+	
+	<update id="updateAccessCount">
+		update <include refid="Table_Name" />
+		set access_count = #{param.accessCount}
+		<where>
+			short_code = #{param.shortCode}
+		</where>
+	</update>
+</mapper>

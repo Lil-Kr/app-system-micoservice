@@ -1,0 +1,15 @@
+services:
+  app-short-link-api-docker-1:
+    image: app-short-link-api:v1.0.0
+    container_name: app-short-link-api-docker-1
+    restart: always
+    ports:
+      - "7901:7901"
+    environment:
+      - TZ=Asia/Shanghai
+      - DUBBO_PORT_TO_BIND=8299
+      - DUBBO_PORT_TO_REGISTRY=7999
+      - DUBBO_IP_TO_REGISTRY=192.168.9.220
+      - JAVA_OPTS=-XX:MetaspaceSize=128m -XX:MaxMetaspaceSize=256m -Xms512m -Xmx512m -Xmn512m -Xss256k
+    networks:
+      - app-network
