@@ -1,6 +1,7 @@
 export default {
   compressionRatio: "Compression",
   copy: "Copy",
+  copyFailed: "Copy failed, please copy manually",
   copied: "Copied!",
   coreFeatures: "Core Features",
   customCodeLabel: "Custom Code (Optional)",

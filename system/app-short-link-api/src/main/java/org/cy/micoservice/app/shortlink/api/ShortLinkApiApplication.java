@@ -21,7 +21,6 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @EnableScheduling
 @EnableAspectJAutoProxy(exposeProxy = true)
 @EnableMethodCache(basePackages = "org.cy.micoservice.app.shortlink.api.service.impl")
-// @EnableTransactionManagement
 public class ShortLinkApiApplication {
 
   public static void main(String[] args) {

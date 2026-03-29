@@ -7,9 +7,8 @@ export const createProdConfig = (env: Record<string, string>): UserConfig =>
       port: Number(env.VITE_DEV_PORT || 5173),
       proxy: {
         '/api': {
-          target: env.VITE_API_BASE_URL || 'http://backend:8089',
-          changeOrigin: true,
-          rewrite: path => path.replace(/^\/api/, '')
+          target: env.VITE_PROXY_TARGET || 'http://backend:8089',
+          changeOrigin: true
         }
       }
     }

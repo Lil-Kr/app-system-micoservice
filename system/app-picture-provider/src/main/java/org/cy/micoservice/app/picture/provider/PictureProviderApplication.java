@@ -1,6 +1,7 @@
 package org.cy.micoservice.app.picture.provider;
 
 import org.apache.dubbo.config.spring.context.annotation.EnableDubbo;
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -16,6 +17,7 @@ import java.util.concurrent.CountDownLatch;
 @SpringBootApplication
 @EnableDiscoveryClient
 @EnableDubbo
+@MapperScan(basePackages = {"org.cy.micoservice.app.picture.provider.dao"})
 public class PictureProviderApplication {
   
   public static void main(String[] args) throws InterruptedException {

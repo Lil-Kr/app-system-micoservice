@@ -3,4 +3,4 @@ spring:
   application:
     name: app-short-link-provider
   profiles:
-    active: prod
+    active: test

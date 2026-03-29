@@ -55,14 +55,30 @@ function App() {
   const handleCopy = async () => {
     if (!shortLink) return;
     try {
-      await navigator.clipboard.writeText(shortLink);
+      if (navigator?.clipboard?.writeText) {
+        await navigator.clipboard.writeText(shortLink);
+      } else {
+        const textArea = document.createElement('textarea');
+        textArea.value = shortLink;
+        textArea.style.position = 'fixed';
+        textArea.style.opacity = '0';
+        textArea.style.pointerEvents = 'none';
+        document.body.appendChild(textArea);
+        textArea.focus();
+        textArea.select();
+        const copiedByExecCommand = document.execCommand('copy');
+        document.body.removeChild(textArea);
+        if (!copiedByExecCommand) {
+          throw new Error(t('copyFailed'));
+        }
+      }
       setCopied(true);
       setTimeout(() => setCopied(false), 1800);
     } catch (err) {
       if (err instanceof Error) {
         alert(err.message);
       } else {
-        alert(t('failedToGenerate'));
+        alert(t('copyFailed'));
       }
     }
   };

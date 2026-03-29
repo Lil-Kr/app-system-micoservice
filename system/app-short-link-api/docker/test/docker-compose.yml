@@ -1,34 +1,37 @@
-name: app-system
+name: short-link-system
 
 networks:
   app-network:
     external: true
 
 services:
-  app-short-link-api-docker-1:
+  # ================= API 层 =================
+  app-short-link-api:
+    build: ./api
     image: app-short-link-api:v1.0.0
-    container_name: app-short-link-api-docker-1
     restart: always
     ports:
+      # 仅当跨主机需要
       - "7901:7901"
     environment:
       - TZ=Asia/Shanghai
-      - DUBBO_PORT_TO_BIND=8299
-      - DUBBO_PORT_TO_REGISTRY=7999
-      - DUBBO_IP_TO_REGISTRY=192.168.9.220
-      - JAVA_OPTS=-XX:MetaspaceSize=128m -XX:MaxMetaspaceSize=256m -Xms512m -Xmx512m -Xmn512m -Xss256k
+      - JAVA_OPTS=-XX:MetaspaceSize=128m -XX:MaxMetaspaceSize=128m -Xms512m -Xmx3072m -Xmn128m -Xss256k
+    depends_on:
+      - app-short-link-provider
     networks:
       - app-network
-
-  app-short-link-provider-docker-1:
-    image: app-infra-console:v1.0.0
-    container_name: app-short-link-provider-docker-1
+  # ================= Provider 层 =================
+  app-short-link-provider:
+    build: ./provider
+    image: app-short-link-provider:v1.0.0
     restart: always
+    ports:
+      # 仅当跨主机需要
+      - "8299:8299"
     environment:
       - TZ=Asia/Shanghai
       - DUBBO_PORT_TO_BIND=8299
       - DUBBO_PORT_TO_REGISTRY=8299
-      - DUBBO_IP_TO_REGISTRY=192.168.9.220
-      - JAVA_OPTS=XX:MetaspaceSize=128m -XX:MaxMetaspaceSize=256m -Xms512m -Xmx512m -Xmn512m -Xss256k
+      - JAVA_OPTS=-XX:MetaspaceSize=128m -XX:MaxMetaspaceSize=128m -Xms512m -Xmx512m -Xmn128m -Xss256k
     networks:
       - app-network

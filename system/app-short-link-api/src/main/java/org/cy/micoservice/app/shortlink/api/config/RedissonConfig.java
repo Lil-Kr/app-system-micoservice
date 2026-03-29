@@ -24,7 +24,7 @@ public class RedissonConfig {
   @Data
   public static class Cluster {
     private List<String> nodes;
-    private int maxRedirects = 3;
+    private int maxRedirects = 5;
   }
 
   @Autowired

@@ -49,8 +49,8 @@ DROP PROCEDURE IF EXISTS drop_all_short_link_tables;
 
 
 -- ====================================================================
--- 扩展版本: 删除64个库, 每个库256张表
--- 说明: 删除64个库(mico_app_short_link_0 ~ mico_app_short_link_63)中的所有表
+-- 扩展版本: 删除32个库, 每个库256张表
+-- 说明: 删除32个库(mico_app_short_link_0 ~ mico_app_short_link_31)中的所有表
 -- 每个库包含256张表(t_short_url_mapping_0 ~ t_short_url_mapping_255)
 -- ====================================================================
 
@@ -65,8 +65,8 @@ BEGIN
   DECLARE db_name VARCHAR(64);
   DECLARE table_name VARCHAR(64);
 
-  -- 循环删除64个库中的所有表
-  WHILE db_index < 64 DO
+  -- 循环删除32个库中的所有表
+  WHILE db_index < 32 DO
     SET db_name = CONCAT('mico_app_short_link_', db_index);
 
     -- 循环删除256张表
@@ -86,7 +86,7 @@ BEGIN
     SET db_index = db_index + 1;
   END WHILE;
 
-  SELECT CONCAT('成功删除64个库中的所有表，共计 ', 64 * 256, ' 张表') AS result;
+  SELECT CONCAT('成功删除64个库中的所有表，共计 ', 32 * 256, ' 张表') AS result;
 END //
 
 DELIMITER ;

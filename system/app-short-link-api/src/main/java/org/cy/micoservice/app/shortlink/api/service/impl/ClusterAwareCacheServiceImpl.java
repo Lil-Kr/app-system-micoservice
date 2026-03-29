@@ -23,11 +23,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.concurrent.TimeUnit;
 
-import static org.cy.micoservice.app.shortlink.api.config.JetCacheConfig.*;
+import static org.cy.micoservice.app.shortlink.api.config.JetCacheConfig.COUNT_EXPIRE_TIME;
+import static org.cy.micoservice.app.shortlink.api.config.JetCacheConfig.DEFAULT_EXPIRE_TIME;
 
 /**
  * @Author: Lil-K
@@ -138,6 +138,7 @@ public class ClusterAwareCacheServiceImpl implements ClusterAwareCacheService {
       }
       ShortUrlMapping mapping = BeanCopyUtils.convert(response.getData(), ShortUrlMapping.class);
       log.debug("DB加载成功 shortCode={}", shortCode);
+
       return mapping;
     });
   }
@@ -160,6 +161,10 @@ public class ClusterAwareCacheServiceImpl implements ClusterAwareCacheService {
     return accessCount >= 1000;
   }
 
+  /**
+   * async update visit count
+   * @param shortUrlMapping
+   */
   @SentinelResource(value = "updateAccessCount")
   @Async
   @Override
@@ -188,7 +193,6 @@ public class ClusterAwareCacheServiceImpl implements ClusterAwareCacheService {
   /**
    * 数据库访问次数更新 (支持分库分表)
    */
-  @Transactional(rollbackFor = Exception.class)
   @Override
   public void updateAccessCountInDatabase(String shortCode, Long accessCount) {
     try {

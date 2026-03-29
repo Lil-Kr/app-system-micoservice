@@ -25,7 +25,7 @@ BEGIN
     EXECUTE stmt;
     DEALLOCATE PREPARE stmt;
 
-    -- 循环创建64张表
+    -- 循环创建32张表
     SET table_index = 0;
     WHILE table_index < 64 DO
       SET table_name = CONCAT('t_short_url_mapping_', table_index);
@@ -81,8 +81,8 @@ DROP PROCEDURE IF EXISTS create_all_short_link_tables;
 
 
 -- ====================================================================
--- 扩展版本: 创建64个库, 每个库256张表
--- 说明: 为64个库(mico_app_short_link_0 ~ mico_app_short_link_63)创建所有表
+-- 扩展版本: 创建32个库, 每个库256张表
+-- 说明: 为32个库(mico_app_short_link_0 ~ mico_app_short_link_31)创建所有表
 -- 每个库包含256张表(t_short_url_mapping_0 ~ t_short_url_mapping_255)
 -- ====================================================================
 
@@ -98,7 +98,7 @@ BEGIN
   DECLARE table_name VARCHAR(64);
 
   -- 循环创建64个库
-  WHILE db_index < 64 DO
+  WHILE db_index < 32 DO
     SET db_name = CONCAT('mico_app_short_link_', db_index);
 
     -- 创建数据库(如果不存在)
@@ -150,7 +150,7 @@ BEGIN
     SET db_index = db_index + 1;
   END WHILE;
 
-  SELECT CONCAT('成功创建64个库，每个库256张表，共计 ', 64 * 256, ' 张表') AS result;
+  SELECT CONCAT('成功创建64个库，每个库256张表，共计 ', 32 * 256, ' 张表') AS result;
 END //
 
 DELIMITER ;

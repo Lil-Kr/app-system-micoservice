@@ -6,35 +6,19 @@ networks:
 
 services:
   # ================= API 层 =================
-  app-short-link-api:
-    build: ./api
-    image: app-short-link-api:v1.0.0
-    container_name: app-short-link-api
-    restart: always
-    ports:
-      # 仅当跨主机需要
-      - "7901:7901"
-    environment:
-      - TZ=Asia/Shanghai
-      - JAVA_OPTS=-XX:MetaspaceSize=128m -XX:MaxMetaspaceSize=128m -Xms512m -Xmx512m -Xmn128m -Xss256k
-    depends_on:
-      - app-short-link-provider
-    networks:
-      - app-network
+
   # ================= Provider 层 =================
-  app-short-link-provider:
+  app-picture-provider:
     build: ./provider
-    image: app-short-link-provider:v1.0.0
-    container_name: app-short-link-provider
-    restart: always
+    image: app-picture-provider:v1.0.0
     ports:
       # 仅当跨主机需要
-      - "8299:8299"
+      - "5399:5399"
     environment:
       - TZ=Asia/Shanghai
-      - DUBBO_IP_TO_REGISTRY=192.168.9.220
-      - DUBBO_PORT_TO_BIND=8299
-      - DUBBO_PORT_TO_REGISTRY=8299
+      - DUBBO_PORT_TO_BIND=5399
+      - DUBBO_PORT_TO_REGISTRY=5399
       - JAVA_OPTS=-XX:MetaspaceSize=128m -XX:MaxMetaspaceSize=128m -Xms512m -Xmx512m -Xmn128m -Xss256k
+    restart: always
     networks:
       - app-network

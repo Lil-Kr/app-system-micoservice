@@ -1,6 +1,7 @@
 export default {
   compressionRatio: "压缩比",
   copy: "复制",
+  copyFailed: "复制失败，请手动复制",
   copied: "已复制！",
   coreFeatures: "核心特性",
   customCodeLabel: "自定义短码（可选）",
