@@ -97,7 +97,7 @@ public class ShortUrlController {
                                    HttpServletResponse response,
                                    BlockException ex) throws IOException {
     response.setStatus(HttpStatus.TOO_MANY_REQUESTS.value());
-    response.getWriter().write("访问过于频繁, 请稍后重试");
+    response.getWriter().write("Too many requests. Please try again later.");
   }
 
   // Sentinel 降级处理
@@ -106,6 +106,6 @@ public class ShortUrlController {
                                HttpServletResponse response,
                                Throwable ex) throws IOException {
     response.setStatus(HttpStatus.SERVICE_UNAVAILABLE.value());
-    response.getWriter().write("服务暂时不可用, 请稍后重试");
+    response.getWriter().write("Service is temporarily unavailable. Please try again later.");
   }
 }

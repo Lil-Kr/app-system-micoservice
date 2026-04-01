@@ -27,6 +27,7 @@ import org.cy.micoservice.app.shortlink.facade.dto.resp.CreateShortUrlRespDTO;
 import org.cy.micoservice.app.shortlink.facade.enums.ShortUrlEnum;
 import org.cy.micoservice.app.shortlink.facade.interfaces.ShortUrlFacade;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -271,6 +272,7 @@ public class ShortUrlServiceImpl implements ShortUrlService {
    * @param req
    */
   @Override
+  @Async
   public ApiResp<String> redirect(ShortUrlGetReq req, HttpServletResponse response) throws Exception {
     try {
       CreateShortUrlResp createShortUrlResp = this.getShortUrlInfo(req.getShortCode());

@@ -3,7 +3,7 @@ dataSources:
   ds_0:
     dataSourceClassName: com.zaxxer.hikari.HikariDataSource
     driverClassName: com.mysql.cj.jdbc.Driver
-    jdbcUrl: jdbc:mysql://192.168.9.220:8806/mico_app_short_link_0?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&allowMultiQueries=true&rewriteBatchedStatements=true
+    jdbcUrl: jdbc:mysql://localhost:3306/mico_app_short_link_0?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&allowMultiQueries=true&rewriteBatchedStatements=true
     minimum-idle: 5
     maximum-pool-size: 40
     idle-timeout: 60000
@@ -15,7 +15,7 @@ dataSources:
   ds_1:
     dataSourceClassName: com.zaxxer.hikari.HikariDataSource
     driverClassName: com.mysql.cj.jdbc.Driver
-    jdbcUrl: jdbc:mysql://192.168.9.220:8806/mico_app_short_link_1?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&allowMultiQueries=true&rewriteBatchedStatements=true
+    jdbcUrl: jdbc:mysql://localhost:3306/mico_app_short_link_1?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&allowMultiQueries=true&rewriteBatchedStatements=true
     minimum-idle: 5
     maximum-pool-size: 40
     idle-timeout: 60000
@@ -27,7 +27,7 @@ dataSources:
   ds_2:
     dataSourceClassName: com.zaxxer.hikari.HikariDataSource
     driverClassName: com.mysql.cj.jdbc.Driver
-    jdbcUrl: jdbc:mysql://192.168.9.220:8806/mico_app_short_link_2?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&allowMultiQueries=true&rewriteBatchedStatements=true
+    jdbcUrl: jdbc:mysql://localhost:3306/mico_app_short_link_2?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&allowMultiQueries=true&rewriteBatchedStatements=true
     minimum-idle: 5
     maximum-pool-size: 40
     idle-timeout: 60000
@@ -39,7 +39,7 @@ dataSources:
   ds_3:
     dataSourceClassName: com.zaxxer.hikari.HikariDataSource
     driverClassName: com.mysql.cj.jdbc.Driver
-    jdbcUrl: jdbc:mysql://192.168.9.220:8806/mico_app_short_link_3?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&allowMultiQueries=true&rewriteBatchedStatements=true
+    jdbcUrl: jdbc:mysql://localhost:3306/mico_app_short_link_3?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&allowMultiQueries=true&rewriteBatchedStatements=true
     minimum-idle: 5
     maximum-pool-size: 40
     idle-timeout: 60000
@@ -51,7 +51,7 @@ dataSources:
   ds_4:
     dataSourceClassName: com.zaxxer.hikari.HikariDataSource
     driverClassName: com.mysql.cj.jdbc.Driver
-    jdbcUrl: jdbc:mysql://192.168.9.220:8806/mico_app_short_link_4?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&allowMultiQueries=true&rewriteBatchedStatements=true
+    jdbcUrl: jdbc:mysql://localhost:3306/mico_app_short_link_4?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&allowMultiQueries=true&rewriteBatchedStatements=true
     minimum-idle: 5
     maximum-pool-size: 40
     idle-timeout: 60000
@@ -63,7 +63,7 @@ dataSources:
   ds_5:
     dataSourceClassName: com.zaxxer.hikari.HikariDataSource
     driverClassName: com.mysql.cj.jdbc.Driver
-    jdbcUrl: jdbc:mysql://192.168.9.220:8806/mico_app_short_link_5?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&allowMultiQueries=true&rewriteBatchedStatements=true
+    jdbcUrl: jdbc:mysql://localhost:3306/mico_app_short_link_5?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&allowMultiQueries=true&rewriteBatchedStatements=true
     minimum-idle: 5
     maximum-pool-size: 40
     idle-timeout: 60000
@@ -75,7 +75,7 @@ dataSources:
   ds_6:
     dataSourceClassName: com.zaxxer.hikari.HikariDataSource
     driverClassName: com.mysql.cj.jdbc.Driver
-    jdbcUrl: jdbc:mysql://192.168.9.220:8806/mico_app_short_link_6?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&allowMultiQueries=true&rewriteBatchedStatements=true
+    jdbcUrl: jdbc:mysql://localhost:3306/mico_app_short_link_6?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&allowMultiQueries=true&rewriteBatchedStatements=true
     minimum-idle: 5
     maximum-pool-size: 40
     idle-timeout: 60000
@@ -87,7 +87,7 @@ dataSources:
   ds_7:
     dataSourceClassName: com.zaxxer.hikari.HikariDataSource
     driverClassName: com.mysql.cj.jdbc.Driver
-    jdbcUrl: jdbc:mysql://192.168.9.220:8806/mico_app_short_link_7?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&allowMultiQueries=true&rewriteBatchedStatements=true
+    jdbcUrl: jdbc:mysql://localhost:3306/mico_app_short_link_7?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&allowMultiQueries=true&rewriteBatchedStatements=true
     minimum-idle: 5
     maximum-pool-size: 40
     idle-timeout: 60000
@@ -99,7 +99,7 @@ dataSources:
   ds_8:
     dataSourceClassName: com.zaxxer.hikari.HikariDataSource
     driverClassName: com.mysql.cj.jdbc.Driver
-    jdbcUrl: jdbc:mysql://192.168.9.220:8806/mico_app_short_link_8?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&allowMultiQueries=true&rewriteBatchedStatements=true
+    jdbcUrl: jdbc:mysql://localhost:3306/mico_app_short_link_8?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&allowMultiQueries=true&rewriteBatchedStatements=true
     minimum-idle: 5
     maximum-pool-size: 40
     idle-timeout: 60000
@@ -111,7 +111,7 @@ dataSources:
   ds_9:
     dataSourceClassName: com.zaxxer.hikari.HikariDataSource
     driverClassName: com.mysql.cj.jdbc.Driver
-    jdbcUrl: jdbc:mysql://192.168.9.220:8806/mico_app_short_link_9?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&allowMultiQueries=true&rewriteBatchedStatements=true
+    jdbcUrl: jdbc:mysql://localhost:3306/mico_app_short_link_9?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&allowMultiQueries=true&rewriteBatchedStatements=true
     minimum-idle: 5
     maximum-pool-size: 40
     idle-timeout: 60000
@@ -123,7 +123,7 @@ dataSources:
   ds_10:
     dataSourceClassName: com.zaxxer.hikari.HikariDataSource
     driverClassName: com.mysql.cj.jdbc.Driver
-    jdbcUrl: jdbc:mysql://192.168.9.220:8806/mico_app_short_link_10?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&allowMultiQueries=true&rewriteBatchedStatements=true
+    jdbcUrl: jdbc:mysql://localhost:3306/mico_app_short_link_10?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&allowMultiQueries=true&rewriteBatchedStatements=true
     minimum-idle: 5
     maximum-pool-size: 40
     idle-timeout: 60000
@@ -135,7 +135,7 @@ dataSources:
   ds_11:
     dataSourceClassName: com.zaxxer.hikari.HikariDataSource
     driverClassName: com.mysql.cj.jdbc.Driver
-    jdbcUrl: jdbc:mysql://192.168.9.220:8806/mico_app_short_link_11?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&allowMultiQueries=true&rewriteBatchedStatements=true
+    jdbcUrl: jdbc:mysql://localhost:3306/mico_app_short_link_11?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&allowMultiQueries=true&rewriteBatchedStatements=true
     minimum-idle: 5
     maximum-pool-size: 40
     idle-timeout: 60000
@@ -147,7 +147,7 @@ dataSources:
   ds_12:
     dataSourceClassName: com.zaxxer.hikari.HikariDataSource
     driverClassName: com.mysql.cj.jdbc.Driver
-    jdbcUrl: jdbc:mysql://192.168.9.220:8806/mico_app_short_link_12?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&allowMultiQueries=true&rewriteBatchedStatements=true
+    jdbcUrl: jdbc:mysql://localhost:3306/mico_app_short_link_12?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&allowMultiQueries=true&rewriteBatchedStatements=true
     minimum-idle: 5
     maximum-pool-size: 40
     idle-timeout: 60000
@@ -159,7 +159,7 @@ dataSources:
   ds_13:
     dataSourceClassName: com.zaxxer.hikari.HikariDataSource
     driverClassName: com.mysql.cj.jdbc.Driver
-    jdbcUrl: jdbc:mysql://192.168.9.220:8806/mico_app_short_link_13?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&allowMultiQueries=true&rewriteBatchedStatements=true
+    jdbcUrl: jdbc:mysql://localhost:3306/mico_app_short_link_13?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&allowMultiQueries=true&rewriteBatchedStatements=true
     minimum-idle: 5
     maximum-pool-size: 40
     idle-timeout: 60000
@@ -171,7 +171,7 @@ dataSources:
   ds_14:
     dataSourceClassName: com.zaxxer.hikari.HikariDataSource
     driverClassName: com.mysql.cj.jdbc.Driver
-    jdbcUrl: jdbc:mysql://192.168.9.220:8806/mico_app_short_link_14?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&allowMultiQueries=true&rewriteBatchedStatements=true
+    jdbcUrl: jdbc:mysql://localhost:3306/mico_app_short_link_14?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&allowMultiQueries=true&rewriteBatchedStatements=true
     minimum-idle: 5
     maximum-pool-size: 40
     idle-timeout: 60000
@@ -183,7 +183,7 @@ dataSources:
   ds_15:
     dataSourceClassName: com.zaxxer.hikari.HikariDataSource
     driverClassName: com.mysql.cj.jdbc.Driver
-    jdbcUrl: jdbc:mysql://192.168.9.220:8806/mico_app_short_link_15?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&allowMultiQueries=true&rewriteBatchedStatements=true
+    jdbcUrl: jdbc:mysql://localhost:3306/mico_app_short_link_15?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&allowMultiQueries=true&rewriteBatchedStatements=true
     minimum-idle: 5
     maximum-pool-size: 40
     idle-timeout: 60000

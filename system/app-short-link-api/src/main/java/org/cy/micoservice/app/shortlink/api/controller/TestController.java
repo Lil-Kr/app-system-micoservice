@@ -1,6 +1,5 @@
 package org.cy.micoservice.app.shortlink.api.controller;
 
-import com.alibaba.fastjson2.JSONArray;
 import lombok.extern.slf4j.Slf4j;
 import org.cy.micoservice.app.framework.web.starter.annotations.NoAuthCheck;
 import org.cy.micoservice.app.shortlink.api.generator.ShortCodeGenerator;
@@ -27,12 +26,14 @@ public class TestController {
 
   @NoAuthCheck
   @GetMapping("/getId")
-  public void getId() {
+  public String getId() {
     Set<Long> set = new TreeSet<>();
     for (int i = 0; i < 100; i ++) {
       set.add(shortCodeGenerator.generateId());
     }
-    System.out.println(JSONArray.toJSONString(set));
-    System.out.println(set.size());
+    // System.out.println(JSONArray.toJSONString(set));
+    // System.out.println(set.size());
+    System.out.println("test");
+    return "test";
   }
 }

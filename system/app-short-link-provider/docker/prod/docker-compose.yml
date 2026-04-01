@@ -15,7 +15,7 @@ services:
       - "7901:7901"
     environment:
       - TZ=Asia/Shanghai
-      - JAVA_OPTS=-XX:MetaspaceSize=128m -XX:MaxMetaspaceSize=128m -Xms512m -Xmx3072m -Xmn128m -Xss256k
+      - JAVA_OPTS=-XX:MetaspaceSize=128m -XX:MaxMetaspaceSize=256m -Xms512m -Xmx3072m -Xmn128m -Xss256k
     depends_on:
       - app-short-link-provider
     networks:
@@ -32,6 +32,6 @@ services:
       - TZ=Asia/Shanghai
       - DUBBO_PORT_TO_BIND=8299
       - DUBBO_PORT_TO_REGISTRY=8299
-      - JAVA_OPTS=-XX:MetaspaceSize=128m -XX:MaxMetaspaceSize=128m -Xms512m -Xmx512m -Xmn128m -Xss256k
+      - JAVA_OPTS=-XX:MetaspaceSize=128m -XX:MaxMetaspaceSize=256m -Xms512m -Xmx512m -Xmn128m -Xss256k
     networks:
       - app-network

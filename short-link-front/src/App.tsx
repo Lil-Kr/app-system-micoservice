@@ -5,6 +5,8 @@ import {Copy, Check} from "@gravity-ui/icons";
 import { useTranslation } from 'react-i18next'
 import { HttpError } from './api/http.ts'
 
+const HTTP_URL_REGEX = /^https?:\/\/[^\s/$.?#].[^\s]*$/i;
+
 function App() {
   const { t, i18n } = useTranslation()
   const [url, setUrl] = useState("");
@@ -12,8 +14,10 @@ function App() {
   const [customCode, setCustomCode] = useState("");
   const [shortLink, setShortLink] = useState("");
   const [copied, setCopied] = useState(false);
+  const [showFailedPage, setShowFailedPage] = useState(false);
   const [loading, setLoading] = useState(false);
   const [urlInvalid, setUrlInvalid] = useState(false);
+  const [urlFormatInvalid, setUrlFormatInvalid] = useState(false);
   const [expireDaysInvalid, setExpireDaysInvalid] = useState(false);
   const isEnglish = i18n.language.startsWith('en')
 
@@ -21,6 +25,12 @@ function App() {
     const normalizedUrl = url.trim();
     if (!normalizedUrl) {
       setUrlInvalid(true);
+      setUrlFormatInvalid(false);
+      return;
+    }
+    if (!HTTP_URL_REGEX.test(normalizedUrl)) {
+      setUrlInvalid(false);
+      setUrlFormatInvalid(true);
       return;
     }
     const normalizedExpireDays = Number(expireDays);
@@ -30,6 +40,7 @@ function App() {
     }
 
     setUrlInvalid(false);
+    setUrlFormatInvalid(false);
     setExpireDaysInvalid(false);
     setLoading(true);
 
@@ -38,12 +49,17 @@ function App() {
         originUrl: normalizedUrl,
         expireDays: normalizedExpireDays,
       });
+      setShowFailedPage(false);
       setShortLink(data.shortLink);
       setCopied(false);
     } catch (err) {
       console.error(err);
       if (err instanceof HttpError) {
-        alert(err.message);
+        if (err.statusCode !== 200 && err.statusCode > 0) {
+          setShowFailedPage(true);
+        } else {
+          alert(err.message);
+        }
       } else {
         alert(t('failedToGenerate'));
       }
@@ -83,6 +99,30 @@ function App() {
     }
   };
 
+  if (showFailedPage) {
+    return (
+      <div className="min-h-screen w-full bg-[linear-gradient(135deg,#667eea_0%,#764ba2_100%)] px-4 py-8">
+        <div className="mx-auto flex w-full max-w-[700px] pt-[50px]">
+          <Card className="w-full">
+            <Card.Header className="items-center text-center">
+              <Card.Title className="text-2xl text-danger">{t('failedPageTitle')}</Card.Title>
+              <Card.Description>{t('failedPageDescription')}</Card.Description>
+            </Card.Header>
+            <Card.Footer>
+              <Button
+                fullWidth
+                onClick={() => setShowFailedPage(false)}
+                className="h-12 rounded-lg border-none bg-[linear-gradient(135deg,#667eea_0%,#764ba2_100%)] text-base font-semibold text-white"
+              >
+                {t('backToHome')}
+              </Button>
+            </Card.Footer>
+          </Card>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen w-full bg-[linear-gradient(135deg,#667eea_0%,#764ba2_100%)] px-4 py-5">
       <div className="mx-auto flex w-full max-w-[700px] flex-col items-center gap-5 pt-[50px]">
@@ -108,7 +148,7 @@ function App() {
           </Card.Header>
 
           <Card.Content className="flex flex-col gap-5">
-              <TextField variant="primary" isInvalid={urlInvalid}>
+              <TextField variant="primary" isInvalid={urlInvalid || urlFormatInvalid}>
                 <Label className="flex items-center gap-1">
                   <span className="text-danger">*</span>
                   <span>{t('originLabel')}</span>
@@ -122,13 +162,21 @@ function App() {
                     onChange={(e) => {
                       const nextValue = e.target.value;
                       setUrl(nextValue);
-                      if (urlInvalid && nextValue.trim()) {
+                      const nextValueTrimmed = nextValue.trim();
+                      if (!nextValueTrimmed) {
+                        setUrlFormatInvalid(false);
+                        return;
+                      }
+                      if (urlInvalid && nextValueTrimmed) {
                         setUrlInvalid(false);
+                      }
+                      if (urlFormatInvalid && HTTP_URL_REGEX.test(nextValueTrimmed)) {
+                        setUrlFormatInvalid(false);
                       }
                     }}
                   />
                 </InputGroup>
-                <FieldError>{t('requiredOriginUrl')}</FieldError>
+                <FieldError>{urlFormatInvalid ? t('invalidOriginUrl') : t('requiredOriginUrl')}</FieldError>
               </TextField>
 
 

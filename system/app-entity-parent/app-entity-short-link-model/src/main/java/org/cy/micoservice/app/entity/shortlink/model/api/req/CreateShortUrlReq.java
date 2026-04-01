@@ -17,17 +17,21 @@ public class CreateShortUrlReq implements Serializable {
   @Serial
   private static final long serialVersionUID = -3671236016730217070L;
 
-  @NotBlank(message = "原始URL不能为空")
-  @Size(max = 2048, message = "URL长度不能超过2048个字符")
+  @NotBlank(message = "origin URL is not be null")
+  @Size(max = 2048, message = "the URL length must not exceed 2048 characters.")
+  @Pattern(
+    regexp = "^(https?://)[\\w.-]+(:\\d+)?(/.*)?$",
+    message = "URL is invalid, just support http/https"
+  )
   private String originUrl;
 
-  @NotNull(message = "过期时间不能为空")
-  @Min(value = 1, message = "过期天数最少为1天")
-  @Max(value = 7, message = "过期天数最多为7天")
+  @NotNull(message = "The expiration time is required.")
+  @Min(value = 1, message = "The expiration period must be at least 1 day.")
+  @Max(value = 7, message = "The expiration period must not exceed 7 days.")
   private Integer expireDays;
 
   private Long createId;
 
-  @Size(min = 1, max = 50,message = "自定义短码长度必须在 1 ~ 50 个之间")
+  @Size(min = 1, max = 50,message = "The custom short code length must be between 1 and 50 characters.")
   private String customCode;
 }
