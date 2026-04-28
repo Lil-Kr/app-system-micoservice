@@ -399,9 +399,11 @@ public class ShortUrlServiceImpl implements ShortUrlService {
         return new CacheCheckResult(null, urlHash);
       }
 
-      CreateShortUrlResp createShortUrlResp = this.getShortUrlInfo(shortCode);
-      if (createShortUrlResp != null && originalUrl.equals(createShortUrlResp.getOriginUrl())) {
+      ShortUrlMapping shortUrlMapping = clusterAwareCacheService.getShortUrlWithSentinel(shortCode);
+      CreateShortUrlResp createShortUrlResp = null;
+      if (shortUrlMapping != null && originalUrl.equals(shortUrlMapping.getOriginUrl())) {
         log.info("smart cache hit: urlHash={}, shortCode={}, originUrl={}", urlHash, shortCode, originalUrl);
+        createShortUrlResp = BeanCopyUtils.convert(shortUrlMapping, CreateShortUrlResp.class);
         return new CacheCheckResult(createShortUrlResp, urlHash);
       }
 

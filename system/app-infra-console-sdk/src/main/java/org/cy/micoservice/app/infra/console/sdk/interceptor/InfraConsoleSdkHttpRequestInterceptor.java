@@ -9,6 +9,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.cy.micoservice.app.common.constants.gateway.GatewayInfraConsoleSdkConstants;
 import org.cy.micoservice.app.infra.console.sdk.config.NacosServiceDiscovery;
 
+import static org.cy.micoservice.app.common.constants.CommonFormatConstants.COMMENT_FORMAT_COLON_SPLIT;
+
 /**
  * @Author: Lil-K
  * @Date: 2025/11/27
@@ -34,7 +36,7 @@ public class InfraConsoleSdkHttpRequestInterceptor implements RequestInterceptor
     String httpUrl = null;
     try {
       Instance instance = nacosServiceDiscovery.getRandomHealthyInstance(serviceName, serviceGroup);
-      httpUrl = GatewayInfraConsoleSdkConstants.HTTP_URL_PREFIX + instance.getIp() + ":" + instance.getPort();
+      httpUrl = GatewayInfraConsoleSdkConstants.HTTP_URL_PREFIX + String.format(COMMENT_FORMAT_COLON_SPLIT, instance.getIp(), instance.getPort());
 
     } catch (NacosException e) {
       log.error("getRandomHealthyInstance error", e);

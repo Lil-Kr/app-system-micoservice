@@ -7,7 +7,8 @@
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
 	  <version>3.0.4</version>
-		<relativePath/> <!-- lookup parent from repository -->
+	  <!-- lookup parent from repository -->
+		<relativePath/>
   </parent>
 
 	<groupId>org.cy.micoservice.app</groupId>
@@ -16,6 +17,7 @@
 	<packaging>pom</packaging>
 
 	<modules>
+		<module>test-app</module>
 		<module>app-entity-parent</module>
 		<module>app-framework-parent</module>
 		<module>app-common</module>
@@ -37,13 +39,32 @@
 		<module>app-message-provider</module>
 		<module>app-audit-facade</module>
 		<module>app-audit-provider</module>
-		<module>app-goods-api</module>
-		<module>app-goods-facade</module>
-		<module>app-goods-provider</module>
 		<module>app-short-link-api</module>
 		<module>app-short-link-facade</module>
 		<module>app-short-link-provider</module>
-		<module>test-app</module>
+		
+		<!-- app mall part -->
+		<module>app-mall-goods-api</module>
+		<module>app-mall-goods-facade</module>
+		<module>app-mall-goods-provider</module>
+		<module>app-mall-order-api</module>
+		<module>app-mall-order-provider</module>
+		<module>app-mall-order-facade</module>
+		<module>app-mall-stock-api</module>
+		<module>app-mall-stock-provider</module>
+		<module>app-mall-stock-facade</module>
+		<module>app-mall-search-api</module>
+		<module>app-mall-search-facade</module>
+		<module>app-mall-search-provider</module>
+		<module>app-mall-cart-api</module>
+		<module>app-mall-cart-facade</module>
+		<module>app-mall-cart-provider</module>
+		<module>app-mall-pay-api</module>
+		<module>app-mall-pay-facade</module>
+		<module>app-mall-pay-provider</module>
+		<module>app-mall-marketing-api</module>
+		<module>app-mall-marketing-facade</module>
+		<module>app-mall-marketing-provider</module>
 	</modules>
 
 	<properties>
@@ -55,6 +76,7 @@
 		<!--	spring cloud	-->
 		<spring-cloud.version>2022.0.0</spring-cloud.version>
 		<spring-cloud-alibaba.version>2022.0.0.2</spring-cloud-alibaba.version>
+		<seata.version>2.2.0</seata.version>
 		<dubbo.version>3.2.0</dubbo.version>
 		<sentinel-datasource.version>1.8.8</sentinel-datasource.version>
 		
@@ -143,7 +165,13 @@
 				<artifactId>mybatis-plus-spring-boot3-starter</artifactId>
 				<version>${mybatis-plus.version}</version>
 			</dependency>
-
+			<!-- seata -->
+			<dependency>
+				<groupId>org.apache.seata</groupId>
+				<artifactId>seata-spring-boot-starter</artifactId>
+				<version>${seata.version}</version>
+			</dependency>
+			
 			<!--MySQL-->
 			<dependency>
 				<groupId>com.mysql</groupId>

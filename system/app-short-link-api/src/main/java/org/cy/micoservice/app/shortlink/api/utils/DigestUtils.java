@@ -3,7 +3,7 @@ package org.cy.micoservice.app.shortlink.api.utils;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import static org.cy.micoservice.app.common.constants.ShortLinkConstants.SHORT_CODE_LENGTH;
+import static org.cy.micoservice.app.common.constants.shortlink.ShortLinkConstants.SHORT_CODE_LENGTH;
 
 /**
  * 摘要算法工具类

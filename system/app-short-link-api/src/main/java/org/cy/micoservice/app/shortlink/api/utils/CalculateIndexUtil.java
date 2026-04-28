@@ -5,8 +5,8 @@ import org.cy.micoservice.app.shortlink.api.config.ShortLinkApiProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import static org.cy.micoservice.app.common.constants.ShortLinkConstants.*;
-import static org.cy.micoservice.app.common.constants.ShortLinkConstants.SHARDING_TABLE_COUNT;
+import static org.cy.micoservice.app.common.constants.shortlink.ShortLinkConstants.*;
+import static org.cy.micoservice.app.common.constants.shortlink.ShortLinkConstants.SHARDING_TABLE_COUNT;
 
 /**
  * @Author: Lil-K
