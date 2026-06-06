@@ -5,7 +5,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.dubbo.config.ApplicationConfig;
 import org.apache.dubbo.config.ReferenceConfig;
 import org.apache.dubbo.config.RegistryConfig;
-import org.cy.micoservice.app.user.facade.dto.resp.SysUserDTO;
+import org.cy.micoservice.app.common.base.provider.RpcResponse;
+import org.cy.micoservice.app.entity.user.model.provider.pojo.UserShard;
 import org.cy.micoservice.app.user.facade.interfaces.UserFacade;
 import org.junit.Before;
 import org.junit.Test;
@@ -16,7 +17,7 @@ import org.junit.Test;
  * @Description:
  */
 @Slf4j
-public class UserProviderTestSuite {
+public class UserProviderTest {
 
   // 应用配置
   private ApplicationConfig application;
@@ -46,8 +47,8 @@ public class UserProviderTestSuite {
     // 获取远程服务代理
     UserFacade userFacade = reference.get();
     try {
-      SysUserDTO userDTO = userFacade.getUserBySurrogateId(null);
-      log.info("userDTO: {}", JSONArray.toJSONString(userDTO));
+      RpcResponse<UserShard> userRpcResponse = userFacade.queryByUserId(null);
+      log.info("userDTO: {}", JSONArray.toJSONString(userRpcResponse.getData()));
     } catch (Exception e) {
       e.printStackTrace();
     }

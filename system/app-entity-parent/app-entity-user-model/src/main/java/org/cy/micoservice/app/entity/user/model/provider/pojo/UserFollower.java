@@ -1,23 +1,28 @@
 package org.cy.micoservice.app.entity.user.model.provider.pojo;
 
+import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
+import org.cy.micoservice.app.entity.base.model.api.BaseEntity;
 
 import java.io.Serial;
-import java.io.Serializable;
 
 /**
  * @Author: Lil-K
  * @Date: 2026/1/19
  * @Description:
  */
+@EqualsAndHashCode(callSuper = true)
 @Data
-@Builder
+@SuperBuilder
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserFollower implements Serializable {
+@TableName("t_user_follower")
+public class UserFollower extends BaseEntity {
+
   @Serial
   private static final long serialVersionUID = -1962103341799935748L;
 
@@ -30,10 +35,4 @@ public class UserFollower implements Serializable {
    * 粉丝id
    */
   private Long followerId;
-
-  private Long createTime;
-
-  private Long updateTime;
-
-  private Long deleted;
 }

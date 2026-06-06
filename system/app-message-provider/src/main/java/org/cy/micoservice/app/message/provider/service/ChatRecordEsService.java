@@ -1,6 +1,6 @@
 package org.cy.micoservice.app.message.provider.service;
 
-import org.cy.micoservice.app.common.base.provider.PageResponseDTO;
+import org.cy.micoservice.app.common.base.provider.RpcPageResponse;
 import org.cy.micoservice.app.message.facade.dto.req.ChatRecordPageReqDTO;
 import org.cy.micoservice.app.message.facade.dto.req.im.ImChatReqDTO;
 import org.cy.micoservice.app.message.facade.dto.resp.ChatRecordRespDTO;
@@ -31,7 +31,7 @@ public interface ChatRecordEsService {
    * @param chatRecordPageReqDTO
    * @return
    */
-  PageResponseDTO<ChatRecordRespDTO> queryRecordInPage(ChatRecordPageReqDTO chatRecordPageReqDTO);
+  RpcPageResponse<ChatRecordRespDTO> queryRecordInPage(ChatRecordPageReqDTO chatRecordPageReqDTO);
 
   /**
    * 查询未读消息内容

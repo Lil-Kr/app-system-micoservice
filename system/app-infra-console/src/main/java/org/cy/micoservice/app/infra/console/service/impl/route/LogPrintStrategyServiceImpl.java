@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.cy.micoservice.app.common.base.api.ApiResp;
-import org.cy.micoservice.app.common.base.api.PageResult;
+import org.cy.micoservice.app.common.base.api.ApiPageResult;
 import org.cy.micoservice.app.common.enums.biz.DeleteStatusEnum;
 import org.cy.micoservice.app.common.enums.biz.ValidStatusEnum;
 import org.cy.micoservice.app.common.enums.response.ApiReturnCodeEnum;
@@ -38,14 +38,14 @@ public class LogPrintStrategyServiceImpl implements LogPrintStrategyService {
   private LogPrintStrategyMapper logPrintStrategyMapper;
 
   @Override
-  public PageResult<LogPrintStrategy> pagePrintStrategyList(LogPrintStrategyPageReq req) {
+  public ApiPageResult<LogPrintStrategy> pagePrintStrategyList(LogPrintStrategyPageReq req) {
     req.setDeleted(DeleteStatusEnum.ACTIVE.getCode());
     List<LogPrintStrategy> result = logPrintStrategyMapper.pagePrintStrategyList(req);
     if (CollectionUtils.isEmpty(result)) {
-      return new PageResult<>(result, 0);
+      return new ApiPageResult<>(result, 0);
     }
     Integer count = logPrintStrategyMapper.pagePrintStrategyCount(req);
-    return new PageResult<>(result, count);
+    return new ApiPageResult<>(result, count);
   }
 
   @Override

@@ -1,4 +1,4 @@
-package org.cy.micoservice.app.user.facade.provider.req;
+package org.cy.micoservice.app.user.facade.dto.req;
 
 import lombok.Data;
 

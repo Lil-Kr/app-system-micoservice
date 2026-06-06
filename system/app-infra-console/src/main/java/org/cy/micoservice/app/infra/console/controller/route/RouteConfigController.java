@@ -2,7 +2,7 @@ package org.cy.micoservice.app.infra.console.controller.route;
 
 import jakarta.validation.Valid;
 import org.cy.micoservice.app.common.base.api.ApiResp;
-import org.cy.micoservice.app.common.base.api.PageResult;
+import org.cy.micoservice.app.common.base.api.ApiPageResult;
 import org.cy.micoservice.app.entity.base.model.api.BasePageReq;
 import org.cy.micoservice.app.entity.gateway.model.entity.RouteChangeLog;
 import org.cy.micoservice.app.entity.gateway.model.entity.RouteConfig;
@@ -29,9 +29,9 @@ public class RouteConfigController {
   private RouteConfigService routeConfigService;
 
   @PostMapping("/pageList")
-  public ApiResp<PageResult<RouteConfig>> pageList(@RequestBody @Validated({BasePageReq.GroupPageQuery.class}) RouteConfigQueryPageReq req) {
-    PageResult<RouteConfig> routeConfigPageResult = routeConfigService.pageRouteConfigList(req);
-    return ApiResp.success(routeConfigPageResult);
+  public ApiResp<ApiPageResult<RouteConfig>> pageList(@RequestBody @Validated({BasePageReq.GroupPageQuery.class}) RouteConfigQueryPageReq req) {
+    ApiPageResult<RouteConfig> routeConfigApiPageResult = routeConfigService.pageRouteConfigList(req);
+    return ApiResp.success(routeConfigApiPageResult);
   }
 
   @PostMapping("/list")

@@ -21,7 +21,7 @@ import org.cy.micoservice.app.message.provider.service.ChatBoxEsService;
 import org.cy.micoservice.app.message.provider.service.ChatRecordEsService;
 import org.cy.micoservice.app.message.provider.service.ChatRelationEsService;
 import org.cy.micoservice.app.message.provider.config.async.ChatMessageAsyncTaskSubmitter;
-import org.cy.micoservice.app.user.facade.provider.req.UserEnterInitReqDTO;
+import org.cy.micoservice.app.user.facade.dto.req.UserEnterInitReqDTO;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.DefaultTypedTuple;

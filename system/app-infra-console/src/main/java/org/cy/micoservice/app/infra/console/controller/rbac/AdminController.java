@@ -3,7 +3,7 @@ package org.cy.micoservice.app.infra.console.controller.rbac;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.cy.micoservice.app.common.base.api.ApiResp;
-import org.cy.micoservice.app.common.base.api.PageResult;
+import org.cy.micoservice.app.common.base.api.ApiPageResult;
 import org.cy.micoservice.app.entity.base.model.api.BasePageReq;
 import org.cy.micoservice.app.entity.infra.console.model.entity.sys.SysAdmin;
 import org.cy.micoservice.app.entity.infra.console.model.req.sys.admin.*;
@@ -78,8 +78,8 @@ public class AdminController {
    * @return
    */
   @PostMapping("/pageList")
-  public ApiResp<PageResult<SysAdminResp>> pageList(@RequestBody @Validated({BasePageReq.GroupPageQuery.class}) AdminListPageReq req) {
-    PageResult<SysAdminResp> result = adminService.pageList(req);
+  public ApiResp<ApiPageResult<SysAdminResp>> pageList(@RequestBody @Validated({BasePageReq.GroupPageQuery.class}) AdminListPageReq req) {
+    ApiPageResult<SysAdminResp> result = adminService.pageList(req);
     return ApiResp.success(result);
   }
 

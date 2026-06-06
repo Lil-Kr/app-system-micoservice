@@ -1,7 +1,7 @@
 package org.cy.micoservice.app.message.api.service;
 
 
-import org.cy.micoservice.app.common.base.provider.PageResponseDTO;
+import org.cy.micoservice.app.common.base.provider.RpcPageResponse;
 import org.cy.micoservice.app.entity.message.model.provider.req.ChatRelationPageReq;
 import org.cy.micoservice.app.entity.message.model.provider.req.ChatRelationReq;
 import org.cy.micoservice.app.entity.message.model.provider.resp.ChatRelationResp;
@@ -24,7 +24,7 @@ public interface ChatRelationService {
    * @param chatRelationPageReq
    * @return
    */
-  PageResponseDTO<ChatRelationResp> pageChatRelationList(ChatRelationPageReq chatRelationPageReq);
+  RpcPageResponse<ChatRelationResp> pageChatRelationList(ChatRelationPageReq chatRelationPageReq);
 
   /**
    * 更新对话关系信息

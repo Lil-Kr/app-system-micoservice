@@ -6,7 +6,7 @@ import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONObject;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
-import org.cy.micoservice.app.common.base.provider.PageResponseDTO;
+import org.cy.micoservice.app.common.base.provider.RpcPageResponse;
 import org.cy.micoservice.app.common.enums.biz.DeleteStatusEnum;
 import org.cy.micoservice.app.common.enums.exception.BizErrorEnum;
 import org.cy.micoservice.app.common.utils.AssertUtil;
@@ -128,7 +128,7 @@ public class ChatRecordEsServiceImpl implements ChatRecordEsService {
    * @return
    */
   @Override
-  public PageResponseDTO<ChatRecordRespDTO> queryRecordInPage(ChatRecordPageReqDTO chatRecordPageReqDTO) {
+  public RpcPageResponse<ChatRecordRespDTO> queryRecordInPage(ChatRecordPageReqDTO chatRecordPageReqDTO) {
     AssertUtil.isNotNull(chatRecordPageReqDTO, BizErrorEnum.PARAM_ERROR);
     AssertUtil.isNotNull(chatRecordPageReqDTO.getRelationId(), BizErrorEnum.PARAM_ERROR);
     try {
@@ -142,16 +142,16 @@ public class ChatRecordEsServiceImpl implements ChatRecordEsService {
         searchOffset = hit.sort().get(0).longValue();
       }
 
-      PageResponseDTO<ChatRecordRespDTO> pageResponseDTO = new PageResponseDTO<>();
-      pageResponseDTO.setDataList(chatRecordRespDTOList);
-      pageResponseDTO.setSize(chatRecordPageReqDTO.getPageSize());
+      RpcPageResponse<ChatRecordRespDTO> rpcPageResponse = new RpcPageResponse<>();
+      rpcPageResponse.setDataList(chatRecordRespDTOList);
+      rpcPageResponse.setSize(chatRecordPageReqDTO.getPageSize());
       if (CollectionUtils.isEmpty(chatRecordRespDTOList)) {
-        pageResponseDTO.setHasNext(false);
-        return pageResponseDTO;
+        rpcPageResponse.setHasNext(false);
+        return rpcPageResponse;
       }
-      pageResponseDTO.setHasNext(true);
-      pageResponseDTO.setSearchOffset(searchOffset);
-      return pageResponseDTO;
+      rpcPageResponse.setHasNext(true);
+      rpcPageResponse.setSearchOffset(searchOffset);
+      return rpcPageResponse;
     } catch (Exception e) {
       log.error("chat record es search after error", e);
       throw new RuntimeException(e);

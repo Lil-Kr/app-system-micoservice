@@ -2,7 +2,7 @@ package org.cy.micoservice.app.infra.console.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import org.cy.micoservice.app.common.base.api.ApiResp;
-import org.cy.micoservice.app.common.base.api.PageResult;
+import org.cy.micoservice.app.common.base.api.ApiPageResult;
 import org.cy.micoservice.app.entity.infra.console.model.entity.sys.SysDict;
 import org.cy.micoservice.app.entity.infra.console.model.req.sys.dict.DictDetailReq;
 import org.cy.micoservice.app.entity.infra.console.model.req.sys.dict.DictListPageReq;
@@ -24,13 +24,13 @@ public interface SysDictService extends IService<SysDict> {
 
 	ApiResp<String> edit(DictSaveReq req);
 
-	PageResult<SysDictResp> listAll();
+	ApiPageResult<SysDictResp> listAll();
 
 	ApiResp<SysDictResp> dictDetailList(DictDetailReq req);
 
 	SysDictResp getDict(Long surrogateId);
 
-	PageResult<SysDictResp> pageList(DictListPageReq req);
+	ApiPageResult<SysDictResp> pageList(DictListPageReq req);
 
 	ApiResp<String> delete(Long surrogateId);
 

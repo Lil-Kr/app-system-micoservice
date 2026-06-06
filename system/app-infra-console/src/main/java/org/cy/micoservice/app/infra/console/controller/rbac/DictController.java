@@ -3,7 +3,7 @@ package org.cy.micoservice.app.infra.console.controller.rbac;
 import jakarta.validation.constraints.NotNull;
 import lombok.extern.slf4j.Slf4j;
 import org.cy.micoservice.app.common.base.api.ApiResp;
-import org.cy.micoservice.app.common.base.api.PageResult;
+import org.cy.micoservice.app.common.base.api.ApiPageResult;
 import org.cy.micoservice.app.entity.infra.console.model.req.sys.dict.*;
 import org.cy.micoservice.app.entity.infra.console.model.resp.sys.dic.SysDictDetailResp;
 import org.cy.micoservice.app.entity.infra.console.model.resp.sys.dic.SysDictResp;
@@ -54,8 +54,8 @@ public class DictController {
    * @throws Exception
    */
   @PostMapping("/pageList")
-  public ApiResp<PageResult<SysDictResp>> pageList(@RequestBody @Validated({BasePageReq.GroupPageQuery.class}) DictListPageReq req) {
-    PageResult<SysDictResp> res = dictService.pageList(req);
+  public ApiResp<ApiPageResult<SysDictResp>> pageList(@RequestBody @Validated({BasePageReq.GroupPageQuery.class}) DictListPageReq req) {
+    ApiPageResult<SysDictResp> res = dictService.pageList(req);
     return ApiResp.success(res);
   }
 
@@ -75,8 +75,8 @@ public class DictController {
    * @throws Exception
    */
   @PostMapping("/pageDictDetailList")
-  public ApiResp<PageResult<SysDictDetailResp>> pageDictDetailList (@RequestBody @Validated({BasePageReq.GroupPageQuery.class}) DictDetailPageListReq req) {
-    PageResult<SysDictDetailResp> res = dictDetailService.pageDictDetailList(req);
+  public ApiResp<ApiPageResult<SysDictDetailResp>> pageDictDetailList (@RequestBody @Validated({BasePageReq.GroupPageQuery.class}) DictDetailPageListReq req) {
+    ApiPageResult<SysDictDetailResp> res = dictDetailService.pageDictDetailList(req);
     return ApiResp.success(res);
   }
 

@@ -1,7 +1,7 @@
 package org.cy.micoservice.app.message.provider.facade;
 
 import org.apache.dubbo.config.annotation.DubboService;
-import org.cy.micoservice.app.common.base.provider.PageResponseDTO;
+import org.cy.micoservice.app.common.base.provider.RpcPageResponse;
 import org.cy.micoservice.app.common.base.provider.RpcResponse;
 import org.cy.micoservice.app.message.facade.dto.req.ChatRelationPageReqDTO;
 import org.cy.micoservice.app.message.facade.dto.req.ChatRelationReqDTO;
@@ -42,7 +42,7 @@ public class ChatRelationFacadeImpl implements ChatRelationFacade {
    * @return
    */
   @Override
-  public RpcResponse<PageResponseDTO<ChatRelationRespDTO>> queryInPage(ChatRelationPageReqDTO chatRelationPageReqDTO) {
+  public RpcResponse<RpcPageResponse<ChatRelationRespDTO>> queryInPage(ChatRelationPageReqDTO chatRelationPageReqDTO) {
     return RpcResponse.success(chatRelationEsService.listChatRelationFromPage(chatRelationPageReqDTO));
   }
 

@@ -1,7 +1,7 @@
 package org.cy.micoservice.app.message.provider.facade;
 
 import org.apache.dubbo.config.annotation.DubboService;
-import org.cy.micoservice.app.common.base.provider.PageResponseDTO;
+import org.cy.micoservice.app.common.base.provider.RpcPageResponse;
 import org.cy.micoservice.app.common.base.provider.RpcResponse;
 import org.cy.micoservice.app.message.facade.dto.req.ChatRecordPageReqDTO;
 import org.cy.micoservice.app.message.facade.dto.resp.ChatRecordRespDTO;
@@ -28,7 +28,7 @@ public class ChatRecordFacadeImpl implements ChatRecordFacade {
    * @return
    */
   @Override
-  public RpcResponse<PageResponseDTO<ChatRecordRespDTO>> queryRecordInPage(ChatRecordPageReqDTO chatRecordPageReqDTO) {
+  public RpcResponse<RpcPageResponse<ChatRecordRespDTO>> queryRecordInPage(ChatRecordPageReqDTO chatRecordPageReqDTO) {
     return RpcResponse.success(chatRecordEsService.queryRecordInPage(chatRecordPageReqDTO));
   }
 }

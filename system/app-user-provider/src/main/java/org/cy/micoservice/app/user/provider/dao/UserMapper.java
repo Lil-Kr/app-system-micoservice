@@ -2,8 +2,9 @@ package org.cy.micoservice.app.user.provider.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.cy.micoservice.app.entity.user.model.provider.pojo.User;
-import org.cy.micoservice.app.entity.user.model.provider.resp.UserResp;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 /**
  * @Author: Lil-K
@@ -15,5 +16,7 @@ public interface UserMapper extends BaseMapper<User> {
 
   User getUserById(Long userId);
 
-  UserResp getUserBySurrogateId(Long surrogateId);
+  User getUserBySurrogateId(Long surrogateId);
+
+  List<User> queryByOffset(Long offset, Long limit);
 }

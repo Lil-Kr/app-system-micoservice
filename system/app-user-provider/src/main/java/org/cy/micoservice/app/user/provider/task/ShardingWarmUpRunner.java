@@ -1,7 +1,8 @@
-package org.cy.micoservice.app.user.provider.config;
+package org.cy.micoservice.app.user.provider.task;
 
 import lombok.RequiredArgsConstructor;
-import org.cy.micoservice.app.user.provider.dao.UserMapper;
+import lombok.extern.slf4j.Slf4j;
+import org.cy.micoservice.app.user.provider.dao.UserShardMapper;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
@@ -11,15 +12,16 @@ import org.springframework.stereotype.Component;
  * @Date: 2026/1/10
  * @Description:
  */
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class ShardingWarmUpRunner implements ApplicationRunner {
 
-  private final UserMapper userMapper;
+  private final UserShardMapper userShardMapper;
 
   @Override
   public void run(ApplicationArguments args) {
-    // 随便查一条, 触发完整初始化
-    userMapper.getUserById(null);
+    log.info("ShardingWarmUpRunner start");
+    userShardMapper.getUserByShardId(1l);
   }
 }

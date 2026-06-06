@@ -15,6 +15,7 @@
 	
 	<modules>
 		<module>app-flink-cdc</module>
+		<module>app-mall-flink-cdc</module>
 	</modules>
 	
 	<properties>

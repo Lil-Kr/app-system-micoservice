@@ -7,7 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.MapUtils;
 import org.cy.micoservice.app.common.base.api.ApiResp;
-import org.cy.micoservice.app.common.base.api.PageResult;
+import org.cy.micoservice.app.common.base.api.ApiPageResult;
 import org.cy.micoservice.app.common.enums.biz.DeleteStatusEnum;
 import org.cy.micoservice.app.common.exception.BizException;
 import org.cy.micoservice.app.common.utils.DateUtil;
@@ -144,7 +144,7 @@ public class SysDictServiceImpl extends ServiceImpl<SysDictMapper, SysDict> impl
 	 * @throws Exception
 	 */
 	@Override
-	public PageResult<SysDictResp> listAll() {
+	public ApiPageResult<SysDictResp> listAll() {
 		return null;
 	}
 
@@ -181,13 +181,13 @@ public class SysDictServiceImpl extends ServiceImpl<SysDictMapper, SysDict> impl
 	 * @return
 	 */
 	@Override
-	public PageResult<SysDictResp> pageList(DictListPageReq req) {
+	public ApiPageResult<SysDictResp> pageList(DictListPageReq req) {
 		List<SysDictResp> pageList = dictMapper.pageDictList(req);
 		Integer count = dictMapper.countPageDict(req);
 		if (CollectionUtils.isNotEmpty(pageList)) {
-			return new PageResult<>(pageList, count);
+			return new ApiPageResult<>(pageList, count);
 		}else {
-			return new PageResult<>(new ArrayList<>(0), 0);
+			return new ApiPageResult<>(new ArrayList<>(0), 0);
 		}
 	}
 

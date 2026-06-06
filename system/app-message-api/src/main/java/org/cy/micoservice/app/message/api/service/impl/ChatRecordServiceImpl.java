@@ -4,7 +4,7 @@ import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.dubbo.config.annotation.DubboReference;
-import org.cy.micoservice.app.common.base.provider.PageResponseDTO;
+import org.cy.micoservice.app.common.base.provider.RpcPageResponse;
 import org.cy.micoservice.app.common.base.provider.RpcResponse;
 import org.cy.micoservice.app.common.utils.AssertUtil;
 import org.cy.micoservice.app.common.utils.BeanCopyUtils;
@@ -71,18 +71,18 @@ public class ChatRecordServiceImpl implements ChatRecordService {
    * @return
    */
   @Override
-  public PageResponseDTO<ChatRecordResp> pageList(ChatRecordPageReq req) {
+  public RpcPageResponse<ChatRecordResp> pageList(ChatRecordPageReq req) {
     AssertUtil.isNotNull(req.getRelationId(), PARAM_ERROR);
     Long currentUserId = req.getUserId();
 
     ChatRecordPageReqDTO reqDTO = BeanCopyUtils.convert(req, ChatRecordPageReqDTO.class);
     reqDTO.setRelationId(req.getRelationId());
     reqDTO.setSearchOffset(req.getSearchOffset());
-    RpcResponse<PageResponseDTO<ChatRecordRespDTO>> resp = chatRecordFacade.queryRecordInPage(reqDTO);
+    RpcResponse<RpcPageResponse<ChatRecordRespDTO>> resp = chatRecordFacade.queryRecordInPage(reqDTO);
     AssertUtil.isTrue(resp.isSuccess(), SYSTEM_ERROR);
-    PageResponseDTO<ChatRecordRespDTO> pageResponseDTO = resp.getData();
-    List<ChatRecordRespDTO> recordList = pageResponseDTO.getDataList();
-    if (CollectionUtils.isEmpty(recordList)) return PageResponseDTO.emptyPage();
+    RpcPageResponse<ChatRecordRespDTO> rpcPageResponse = resp.getData();
+    List<ChatRecordRespDTO> recordList = rpcPageResponse.getDataList();
+    if (CollectionUtils.isEmpty(recordList)) return RpcPageResponse.emptyPage();
 
     List<Long> userIdList = recordList.stream().map(ChatRecordRespDTO::getUserId).toList();
     List<Long> receiverIdList = recordList.stream().map(ChatRecordRespDTO::getReceiverId).toList();
@@ -91,7 +91,7 @@ public class ChatRecordServiceImpl implements ChatRecordService {
     mergeIdList.addAll(receiverIdList);
     RpcResponse<List<UserRespDTO>> userRpcResp = userFacade.queryInUserIds(mergeIdList);
     AssertUtil.isTrue(userRpcResp.isSuccess(), SYSTEM_ERROR);
-    if (CollectionUtils.isEmpty(userRpcResp.getData())) return PageResponseDTO.emptyPage();
+    if (CollectionUtils.isEmpty(userRpcResp.getData())) return RpcPageResponse.emptyPage();
 
     Map<Long, UserRespDTO> userMap = userRpcResp.getData().stream().collect(Collectors.toMap(UserRespDTO::getUserId, item -> item));
     List<ChatRecordResp> chatRecordRespList = Lists.newArrayListWithExpectedSize(recordList.size());
@@ -111,7 +111,7 @@ public class ChatRecordServiceImpl implements ChatRecordService {
       chatRecordResp.setContent(chatRecord.getContent());
       chatRecordRespList.add(chatRecordResp);
     }
-    PageResponseDTO<ChatRecordResp> pageResponse = BeanCopyUtils.convert(pageResponseDTO, PageResponseDTO.class);
+    RpcPageResponse<ChatRecordResp> pageResponse = BeanCopyUtils.convert(rpcPageResponse, RpcPageResponse.class);
     pageResponse.setDataList(chatRecordRespList);
     return pageResponse;
   }

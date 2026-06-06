@@ -2,7 +2,7 @@ package org.cy.micoservice.app.message.api.controller;
 
 import jakarta.validation.Valid;
 import org.cy.micoservice.app.common.base.api.ApiResp;
-import org.cy.micoservice.app.common.base.provider.PageResponseDTO;
+import org.cy.micoservice.app.common.base.provider.RpcPageResponse;
 import org.cy.micoservice.app.entity.base.model.api.BasePageReq;
 import org.cy.micoservice.app.entity.message.model.provider.req.*;
 import org.cy.micoservice.app.entity.message.model.provider.resp.ChatRecordResp;
@@ -56,7 +56,7 @@ public class ChatController {
    */
   @NoAuthCheck
   @PostMapping("/relation/pageList")
-  public ApiResp<PageResponseDTO<ChatRelationResp>> pageList(@RequestBody @Validated({BasePageReq.GroupPageQuery.class, ChatRelationPageReq.GroupPageQuery.class}) ChatRelationPageReq req) {
+  public ApiResp<RpcPageResponse<ChatRelationResp>> pageList(@RequestBody @Validated({BasePageReq.GroupPageQuery.class, ChatRelationPageReq.GroupPageQuery.class}) ChatRelationPageReq req) {
     req.setUserId(req.getUserId());
     return ApiResp.success(chatRelationService.pageChatRelationList(req));
   }
@@ -80,7 +80,7 @@ public class ChatController {
    */
   @NoAuthCheck
   @PostMapping("/record/pageList")
-  public ApiResp<PageResponseDTO<ChatRecordResp>> pageList(@RequestBody @Validated({BasePageReq.GroupPageQuery.class}) ChatRecordPageReq req) {
+  public ApiResp<RpcPageResponse<ChatRecordResp>> pageList(@RequestBody @Validated({BasePageReq.GroupPageQuery.class}) ChatRecordPageReq req) {
     req.setUserId(RequestContext.getUserId());
     return ApiResp.success(chatRecordService.pageList(req));
   }

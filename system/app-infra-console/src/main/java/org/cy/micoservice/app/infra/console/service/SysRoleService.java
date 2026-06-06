@@ -1,7 +1,7 @@
 package org.cy.micoservice.app.infra.console.service;
 
 import org.cy.micoservice.app.common.base.api.ApiResp;
-import org.cy.micoservice.app.common.base.api.PageResult;
+import org.cy.micoservice.app.common.base.api.ApiPageResult;
 import org.cy.micoservice.app.entity.infra.console.model.req.sys.role.RoleListPageReq;
 import org.cy.micoservice.app.entity.infra.console.model.req.sys.role.RoleSaveReq;
 import org.cy.micoservice.app.entity.infra.console.model.resp.sys.role.SysRoleResp;
@@ -21,7 +21,7 @@ public interface SysRoleService {
 
 	ApiResp<String> delete(Long surrogateId);
 
-	PageResult<SysRoleResp> pageList(RoleListPageReq param);
+	ApiPageResult<SysRoleResp> pageList(RoleListPageReq param);
 
 	boolean checkSupperAdminExist();
 }

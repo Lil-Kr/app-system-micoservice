@@ -3,7 +3,7 @@ package org.cy.micoservice.app.infra.console.controller.rbac;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.cy.micoservice.app.common.base.api.ApiResp;
-import org.cy.micoservice.app.common.base.api.PageResult;
+import org.cy.micoservice.app.common.base.api.ApiPageResult;
 import org.cy.micoservice.app.entity.base.model.api.BasePageReq;
 import org.cy.micoservice.app.entity.infra.console.model.req.sys.acl.AclDeleteReq;
 import org.cy.micoservice.app.entity.infra.console.model.req.sys.acl.AclPageReq;
@@ -34,8 +34,8 @@ public class AclController {
    * @throws Exception
    */
   @PostMapping("/pageList")
-  public ApiResp<PageResult<SysAclResp>> pageList(@RequestBody @Validated({BasePageReq.GroupPageQuery.class}) AclPageReq req) {
-    PageResult<SysAclResp> res = aclService.pageList(req);
+  public ApiResp<ApiPageResult<SysAclResp>> pageList(@RequestBody @Validated({BasePageReq.GroupPageQuery.class}) AclPageReq req) {
+    ApiPageResult<SysAclResp> res = aclService.pageList(req);
     return ApiResp.success(res);
   }
 

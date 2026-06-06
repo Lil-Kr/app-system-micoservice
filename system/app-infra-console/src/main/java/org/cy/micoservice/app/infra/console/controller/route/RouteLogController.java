@@ -2,7 +2,7 @@ package org.cy.micoservice.app.infra.console.controller.route;
 
 import jakarta.validation.Valid;
 import org.cy.micoservice.app.common.base.api.ApiResp;
-import org.cy.micoservice.app.common.base.api.PageResult;
+import org.cy.micoservice.app.common.base.api.ApiPageResult;
 import org.cy.micoservice.app.entity.base.model.api.BasePageReq;
 import org.cy.micoservice.app.entity.gateway.model.entity.LogPrintStrategy;
 import org.cy.micoservice.app.entity.gateway.model.req.LogPrintStrategyAddReq;
@@ -30,9 +30,9 @@ public class RouteLogController {
 
   @NoAuthCheck
   @PostMapping("/page")
-  public ApiResp<PageResult<LogPrintStrategy>> pageRouteConfigList(@RequestBody @Validated({BasePageReq.GroupPageQuery.class}) LogPrintStrategyPageReq req) {
-    PageResult<LogPrintStrategy> logPrintStrategyPageResult = logPrintStrategyService.pagePrintStrategyList(req);
-    return ApiResp.success(logPrintStrategyPageResult);
+  public ApiResp<ApiPageResult<LogPrintStrategy>> pageRouteConfigList(@RequestBody @Validated({BasePageReq.GroupPageQuery.class}) LogPrintStrategyPageReq req) {
+    ApiPageResult<LogPrintStrategy> logPrintStrategyApiPageResult = logPrintStrategyService.pagePrintStrategyList(req);
+    return ApiResp.success(logPrintStrategyApiPageResult);
   }
 
   @NoAuthCheck

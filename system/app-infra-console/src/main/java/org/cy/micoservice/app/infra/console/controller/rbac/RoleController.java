@@ -4,7 +4,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.cy.micoservice.app.common.base.api.ApiResp;
-import org.cy.micoservice.app.common.base.api.PageResult;
+import org.cy.micoservice.app.common.base.api.ApiPageResult;
 import org.cy.micoservice.app.entity.base.model.api.BasePageReq;
 import org.cy.micoservice.app.entity.infra.console.model.req.sys.role.RoleListPageReq;
 import org.cy.micoservice.app.entity.infra.console.model.req.sys.role.RoleSaveReq;
@@ -54,8 +54,8 @@ public class RoleController {
    * @return
    */
   @PostMapping("/pageList")
-  public ApiResp<PageResult<SysRoleResp>> pageList(@RequestBody @Validated({BasePageReq.GroupPageQuery.class}) RoleListPageReq req) {
-    PageResult<SysRoleResp> res = roleService.pageList(req);
+  public ApiResp<ApiPageResult<SysRoleResp>> pageList(@RequestBody @Validated({BasePageReq.GroupPageQuery.class}) RoleListPageReq req) {
+    ApiPageResult<SysRoleResp> res = roleService.pageList(req);
     return ApiResp.success(res);
   }
 

@@ -25,6 +25,9 @@ public class BaseEntity implements Serializable {
   @Serial
   private static final long serialVersionUID = -3071591161451842453L;
 
+  /**
+   * delete statue
+   */
   private Integer deleted;
 
   /**
@@ -40,12 +43,12 @@ public class BaseEntity implements Serializable {
   private Long updateId;
 
   /**
-   * 创建时间
+   * create time
    */
   private LocalDateTime createTime;
 
   /**
-   * 更改时间
+   * update time
    */
   private LocalDateTime updateTime;
 }

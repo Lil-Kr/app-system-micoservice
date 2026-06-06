@@ -7,7 +7,7 @@ import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.cy.micoservice.app.audit.facade.enums.AuditTypeEnum;
-import org.cy.micoservice.app.common.base.provider.PageResponseDTO;
+import org.cy.micoservice.app.common.base.provider.RpcPageResponse;
 import org.cy.micoservice.app.common.constants.CommonConstants;
 import org.cy.micoservice.app.common.enums.biz.DeleteStatusEnum;
 import org.cy.micoservice.app.common.enums.exception.BizErrorEnum;
@@ -155,9 +155,9 @@ public class ChatRelationEsServiceImpl implements ChatRelationEsService {
    * @return
    */
   @Override
-  public PageResponseDTO<ChatRelationRespDTO> listChatRelationFromPage(ChatRelationPageReqDTO reqDTO) {
+  public RpcPageResponse<ChatRelationRespDTO> listChatRelationFromPage(ChatRelationPageReqDTO reqDTO) {
     AssertUtil.isNotNull(reqDTO.getUserId(), BizErrorEnum.PARAM_ERROR);
-    PageResponseDTO<ChatRelationRespDTO> chatRelationsPageResp = chatRelationEsMapper.listChatRelationFromPage(reqDTO);
+    RpcPageResponse<ChatRelationRespDTO> chatRelationsPageResp = chatRelationEsMapper.listChatRelationFromPage(reqDTO);
     if (CollectionUtils.isEmpty(chatRelationsPageResp.getDataList())) return chatRelationsPageResp;
 
     List<ChatRelationRespDTO> chatRelationRespDTOList = chatRelationsPageResp.getDataList();

@@ -15,7 +15,7 @@ import static org.cy.micoservice.app.common.enums.response.RpcReturnCodeEnum.*;
 /**
  * @Author: Lil-K
  * @Date: Created at 2025/6/2
- * @Description: rpc接口请求统一对象
+ * @Description: rpc接口请求统一对象, provider层使用
  */
 @Data
 @AllArgsConstructor

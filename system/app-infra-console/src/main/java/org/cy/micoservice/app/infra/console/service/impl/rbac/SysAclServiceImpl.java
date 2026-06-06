@@ -8,7 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.cy.micoservice.app.common.base.api.ApiResp;
-import org.cy.micoservice.app.common.base.api.PageResult;
+import org.cy.micoservice.app.common.base.api.ApiPageResult;
 import org.cy.micoservice.app.common.utils.DateUtil;
 import org.cy.micoservice.app.common.utils.IdWorker;
 import org.cy.micoservice.app.entity.infra.console.model.entity.sys.*;
@@ -187,13 +187,13 @@ public class SysAclServiceImpl extends ServiceImpl<SysAclMapper, SysAcl> impleme
    * @throws Exception
    */
   @Override
-  public PageResult<SysAclResp> pageList(AclPageReq req) {
+  public ApiPageResult<SysAclResp> pageList(AclPageReq req) {
     List<SysAclResp> list = aclMapper.pageAclList(req);
     Integer count = aclMapper.countPageAclList(req);
     if (CollectionUtils.isEmpty(list)) {
-      return new PageResult<>(new ArrayList<>(0), 0);
+      return new ApiPageResult<>(new ArrayList<>(0), 0);
     }
-    return new PageResult<>(list, count);
+    return new ApiPageResult<>(list, count);
   }
 
   /**

@@ -1,6 +1,6 @@
 package org.cy.micoservice.app.message.facade.interfaces;
 
-import org.cy.micoservice.app.common.base.provider.PageResponseDTO;
+import org.cy.micoservice.app.common.base.provider.RpcPageResponse;
 import org.cy.micoservice.app.common.base.provider.RpcResponse;
 import org.cy.micoservice.app.message.facade.dto.resp.ChatRelationRespDTO;
 import org.cy.micoservice.app.message.facade.dto.req.ChatRelationPageReqDTO;
@@ -24,7 +24,7 @@ public interface ChatRelationFacade {
    * @param chatRelationPageReqDTO
    * @return
    */
-  RpcResponse<PageResponseDTO<ChatRelationRespDTO>> queryInPage(ChatRelationPageReqDTO chatRelationPageReqDTO);
+  RpcResponse<RpcPageResponse<ChatRelationRespDTO>> queryInPage(ChatRelationPageReqDTO chatRelationPageReqDTO);
 
   /**
    * 更新对话关系信息

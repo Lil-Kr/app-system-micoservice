@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import org.apache.commons.collections4.CollectionUtils;
 import org.cy.micoservice.app.common.base.api.ApiResp;
-import org.cy.micoservice.app.common.base.api.PageResult;
+import org.cy.micoservice.app.common.base.api.ApiPageResult;
 import org.cy.micoservice.app.common.utils.DateUtil;
 import org.cy.micoservice.app.entity.infra.console.model.entity.sys.SysRole;
 import org.cy.micoservice.app.entity.infra.console.model.req.sys.role.RoleListPageReq;
@@ -49,13 +49,13 @@ public class SysRoleServiceImpl implements SysRoleService {
 	private IdService idService;
 
 	@Override
-	public PageResult<SysRoleResp> pageList(RoleListPageReq req) {
+	public ApiPageResult<SysRoleResp> pageList(RoleListPageReq req) {
 		List<SysRoleResp> roleList = roleMapper.pageRoleList(req);
 		Integer count = roleMapper.countRolePage(req);
 		if (CollectionUtils.isEmpty(roleList)) {
-			return PageResult.emptyPage();
+			return ApiPageResult.emptyPage();
 		}else {
-			return new PageResult<>(roleList, count);
+			return new ApiPageResult<>(roleList, count);
 		}
 	}
 

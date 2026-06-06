@@ -1,6 +1,6 @@
 package org.cy.micoservice.app.message.provider.service;
 
-import org.cy.micoservice.app.common.base.provider.PageResponseDTO;
+import org.cy.micoservice.app.common.base.provider.RpcPageResponse;
 import org.cy.micoservice.app.message.facade.dto.req.ChatRecordPageReqDTO;
 import org.cy.micoservice.app.message.facade.dto.req.ChatRecordReqDTO;
 import org.cy.micoservice.app.message.facade.dto.resp.ChatRecordRespDTO;
@@ -24,5 +24,5 @@ public interface ChatRecordService {
    * @param chatRecordPageReqDTO
    * @return
    */
-  PageResponseDTO<ChatRecordRespDTO> queryRecordInPage(ChatRecordPageReqDTO chatRecordPageReqDTO);
+  RpcPageResponse<ChatRecordRespDTO> queryRecordInPage(ChatRecordPageReqDTO chatRecordPageReqDTO);
 }

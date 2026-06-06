@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import org.cy.micoservice.app.common.base.provider.PageResponseDTO;
+import org.cy.micoservice.app.common.base.provider.RpcPageResponse;
 import org.cy.micoservice.app.common.utils.BeanCopyUtils;
 import org.cy.micoservice.app.common.utils.IdGenerateUtil;
 import org.cy.micoservice.app.entity.message.model.provider.pojo.mysql.ChatRelation;
@@ -76,22 +76,22 @@ public class ChatRelationServiceImpl extends ServiceImpl<ChatRelationMapper, Cha
   }
 
   @Override
-  public PageResponseDTO<ChatRelationRespDTO> queryInPage(ChatRelationPageReqDTO chatRelationPageReqDTO) {
+  public RpcPageResponse<ChatRelationRespDTO> queryInPage(ChatRelationPageReqDTO chatRelationPageReqDTO) {
     IPage<ChatRelation> chatRelationIPage = new Page<>(chatRelationPageReqDTO.getCurrentPageNum(), chatRelationPageReqDTO.getPageSize());
     LambdaQueryWrapper<ChatRelation> queryWrapper = new LambdaQueryWrapper<>();
     queryWrapper.eq(ChatRelation::getUserId, chatRelationPageReqDTO.getUserId());
     queryWrapper.orderByDesc(ChatRelation::getLatestMsgTime);
     IPage<ChatRelation> chatRelationPage = super.getBaseMapper().selectPage(chatRelationIPage, queryWrapper);
     if (chatRelationPage.getRecords().isEmpty()) {
-      return PageResponseDTO.emptyPage();
+      return RpcPageResponse.emptyPage();
     }
     List<ChatRelationRespDTO> chatRelationRespDTOList = BeanCopyUtils.convertList(chatRelationPage.getRecords(), ChatRelationRespDTO.class);
-    PageResponseDTO<ChatRelationRespDTO> pageResponseDTO = new PageResponseDTO<>();
-    pageResponseDTO.setHasNext(chatRelationPage.getTotal() > (chatRelationPage.getPages() * chatRelationPage.getSize()));
-    pageResponseDTO.setPage(chatRelationPageReqDTO.getCurrentPageNum());
-    pageResponseDTO.setSize(chatRelationPageReqDTO.getPageSize());
-    pageResponseDTO.setDataList(chatRelationRespDTOList);
-    return pageResponseDTO;
+    RpcPageResponse<ChatRelationRespDTO> rpcPageResponse = new RpcPageResponse<>();
+    rpcPageResponse.setHasNext(chatRelationPage.getTotal() > (chatRelationPage.getPages() * chatRelationPage.getSize()));
+    rpcPageResponse.setPage(chatRelationPageReqDTO.getCurrentPageNum());
+    rpcPageResponse.setSize(chatRelationPageReqDTO.getPageSize());
+    rpcPageResponse.setDataList(chatRelationRespDTOList);
+    return rpcPageResponse;
   }
 
   @Override

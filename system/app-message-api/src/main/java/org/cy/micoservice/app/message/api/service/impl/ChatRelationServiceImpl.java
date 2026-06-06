@@ -3,7 +3,7 @@ package org.cy.micoservice.app.message.api.service.impl;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.dubbo.config.annotation.DubboReference;
-import org.cy.micoservice.app.common.base.provider.PageResponseDTO;
+import org.cy.micoservice.app.common.base.provider.RpcPageResponse;
 import org.cy.micoservice.app.common.base.provider.RpcResponse;
 import org.cy.micoservice.app.common.utils.BeanCopyUtils;
 import org.cy.micoservice.app.common.utils.LocalDateTimeTranslatorUtil;
@@ -64,13 +64,13 @@ public class ChatRelationServiceImpl implements ChatRelationService {
    * @return
    */
   @Override
-  public PageResponseDTO<ChatRelationResp> pageChatRelationList(ChatRelationPageReq req) {
+  public RpcPageResponse<ChatRelationResp> pageChatRelationList(ChatRelationPageReq req) {
     // 对话关系查询请求
     ChatRelationPageReqDTO chatRelationPageReqDTO = BeanCopyUtils.convert(req, ChatRelationPageReqDTO.class);
-    RpcResponse<PageResponseDTO<ChatRelationRespDTO>> rpcResponse = chatRelationFacade.queryInPage(chatRelationPageReqDTO);
+    RpcResponse<RpcPageResponse<ChatRelationRespDTO>> rpcResponse = chatRelationFacade.queryInPage(chatRelationPageReqDTO);
     RpcResponse.isRespSuccess(rpcResponse);
-    PageResponseDTO<ChatRelationRespDTO> chatRelationPageResp = rpcResponse.getData();
-    if (chatRelationPageResp.getDataList().isEmpty()) return PageResponseDTO.emptyPage();
+    RpcPageResponse<ChatRelationRespDTO> chatRelationPageResp = rpcResponse.getData();
+    if (chatRelationPageResp.getDataList().isEmpty()) return RpcPageResponse.emptyPage();
     Long currentUserId = req.getUserId();
 
     /**
@@ -112,9 +112,9 @@ public class ChatRelationServiceImpl implements ChatRelationService {
       chatRelationResp.setLatestMsgTime(LocalDateTimeTranslatorUtil.translate(relation.getLatestMsgTime()));
       chatRelationRespList.add(chatRelationResp);
     }
-    PageResponseDTO<ChatRelationResp> pageResponseDTO = BeanCopyUtils.convert(chatRelationPageResp, PageResponseDTO.class);
-    pageResponseDTO.setDataList(chatRelationRespList);
-    return pageResponseDTO;
+    RpcPageResponse<ChatRelationResp> rpcPageResponse = BeanCopyUtils.convert(chatRelationPageResp, RpcPageResponse.class);
+    rpcPageResponse.setDataList(chatRelationRespList);
+    return rpcPageResponse;
   }
 
   @Override

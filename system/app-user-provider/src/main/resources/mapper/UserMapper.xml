@@ -14,16 +14,16 @@
 	<sql id="Base_Join_Column_List">
 		a.id, a.user_id, a.nickname, a.sex, a.salt, a.avatar, a.sign, a.status, a.deleted, a.last_login_time, a.registry_time, a.birthday, a.create_time, a.update_time
 	</sql>
-
-	<select id="getUserById" resultType="org.cy.micoservice.app.entity.user.model.provider.resp.UserResp">
+	
+	<select id="getUserById" resultType="org.cy.micoservice.app.entity.user.model.provider.pojo.User">
 		select <include refid="Base_Column_List"/>
 		from <include refid="Table_Name"/>
 		<where>
 			user_id = #{userId}
 		</where>
 	</select>
-
-	<select id="getUserBySurrogateId" resultType="org.cy.micoservice.app.entity.user.model.provider.resp.UserResp">
+	
+	<select id="getUserBySurrogateId" resultType="org.cy.micoservice.app.entity.user.model.provider.pojo.User">
 		select
 			a.id,
 			a.user_id,
@@ -46,5 +46,13 @@
 			a.surrogate_id = #{surrogateId}
 		</where>
 	</select>
-
+	
+	<select id="queryByOffset" resultType="org.cy.micoservice.app.entity.user.model.provider.pojo.User">
+		select * from t_user where id>#{offset} limit #{size}
+		select <include refid="Base_Column_List"/>
+		from <include refid="Table_Name"/>
+		<where>
+			id > #{offset} limit #{size}
+		</where>
+	</select>
 </mapper>

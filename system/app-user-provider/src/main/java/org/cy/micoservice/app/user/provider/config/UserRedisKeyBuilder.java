@@ -11,8 +11,21 @@ import org.springframework.stereotype.Component;
 @Component
 public class UserRedisKeyBuilder extends RedisKeyBuilder {
 
-  public String buildUserCacheKey(Long userId) {
+  /**
+   * user info cache key
+   * @param userId
+   * @return
+   */
+  public String buildUserInfoCacheKey(Long userId) {
     return super.buildKey(String.format("user:%s", userId));
   }
 
+  /**
+   * user follower cache
+   * @param userId
+   * @return
+   */
+  public String buildUserIsFollowerCacheKey(Long userId, Long followerUserId) {
+    return super.buildKey(String.format("is_follower:%s:%s", userId, followerUserId));
+  }
 }

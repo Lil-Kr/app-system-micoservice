@@ -28,6 +28,9 @@
 		<module>app-infra-console</module>
 		<module>app-infra-console-sdk</module>
 		<module>app-im</module>
+		<module>app-note-content-api</module>
+		<module>app-note-content-facade</module>
+		<module>app-note-content-provider</module>
 		<module>app-picture-api</module>
 		<module>app-picture-facade</module>
 		<module>app-picture-provider</module>

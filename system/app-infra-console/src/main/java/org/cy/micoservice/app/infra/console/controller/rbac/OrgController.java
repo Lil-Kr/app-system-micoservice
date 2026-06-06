@@ -3,7 +3,7 @@ package org.cy.micoservice.app.infra.console.controller.rbac;
 import jakarta.validation.constraints.NotNull;
 import lombok.extern.slf4j.Slf4j;
 import org.cy.micoservice.app.common.base.api.ApiResp;
-import org.cy.micoservice.app.common.base.api.PageResult;
+import org.cy.micoservice.app.common.base.api.ApiPageResult;
 import org.cy.micoservice.app.infra.console.service.SysOrgService;
 import org.cy.micoservice.app.infra.facade.dto.org.OrgLevelDto;
 import org.cy.micoservice.app.entity.infra.console.model.req.sys.org.OrgListAllReq;
@@ -66,8 +66,8 @@ public class OrgController {
    * @return
    */
   @PostMapping("/pageList")
-  public ApiResp<PageResult<SysOrgResp>> pageList(@RequestBody @Validated({BasePageReq.GroupPageQuery.class}) OrgPageReq req) {
-    PageResult<SysOrgResp> list = orgService.pageList(req);
+  public ApiResp<ApiPageResult<SysOrgResp>> pageList(@RequestBody @Validated({BasePageReq.GroupPageQuery.class}) OrgPageReq req) {
+    ApiPageResult<SysOrgResp> list = orgService.pageList(req);
     return ApiResp.success(list);
   }
 

@@ -1,7 +1,7 @@
 package org.cy.micoservice.app.infra.console.service;
 
 import org.cy.micoservice.app.common.base.api.ApiResp;
-import org.cy.micoservice.app.common.base.api.PageResult;
+import org.cy.micoservice.app.common.base.api.ApiPageResult;
 import org.cy.micoservice.app.entity.infra.console.model.entity.sys.SysAdmin;
 import org.cy.micoservice.app.entity.infra.console.model.req.sys.admin.*;
 import org.cy.micoservice.app.entity.infra.console.model.resp.sys.admin.SysAdminResp;
@@ -23,7 +23,7 @@ public interface SysAdminService {
 
 	ApiResp<String> add(AdminSaveReq req);
 
-	PageResult<SysAdminResp> pageList(AdminListPageReq req);
+	ApiPageResult<SysAdminResp> pageList(AdminListPageReq req);
 
 	ApiResp<String> edit(AdminSaveReq req);
 

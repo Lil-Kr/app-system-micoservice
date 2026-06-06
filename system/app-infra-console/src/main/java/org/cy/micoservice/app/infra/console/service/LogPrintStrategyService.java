@@ -1,7 +1,7 @@
 package org.cy.micoservice.app.infra.console.service;
 
 import org.cy.micoservice.app.common.base.api.ApiResp;
-import org.cy.micoservice.app.common.base.api.PageResult;
+import org.cy.micoservice.app.common.base.api.ApiPageResult;
 import org.cy.micoservice.app.entity.gateway.model.entity.LogPrintStrategy;
 import org.cy.micoservice.app.entity.gateway.model.req.LogPrintStrategyAddReq;
 import org.cy.micoservice.app.entity.gateway.model.req.LogPrintStrategyEditReq;
@@ -19,7 +19,7 @@ public interface LogPrintStrategyService {
    * 分页查询
    * @return
    */
-  PageResult<LogPrintStrategy> pagePrintStrategyList(LogPrintStrategyPageReq req);
+  ApiPageResult<LogPrintStrategy> pagePrintStrategyList(LogPrintStrategyPageReq req);
 
   /**
    * 添加路由日志打印策略

@@ -85,6 +85,12 @@
 		
 		<dependency>
 			<groupId>org.cy.micoservice.app</groupId>
+			<artifactId>app-framework-rocketmq-starter</artifactId>
+			<version>${app-framework-parent.version}</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.cy.micoservice.app</groupId>
 			<artifactId>app-framework-id-starter</artifactId>
 			<version>${app-framework-parent.version}</version>
 		</dependency>

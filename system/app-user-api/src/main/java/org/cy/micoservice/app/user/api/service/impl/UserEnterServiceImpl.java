@@ -9,7 +9,7 @@ import org.apache.rocketmq.common.message.Message;
 import org.cy.micoservice.app.framework.rocketmq.starter.producer.RocketMQProducerClient;
 import org.cy.micoservice.app.user.api.config.ApplicationConfig;
 import org.cy.micoservice.app.user.api.service.UserEnterService;
-import org.cy.micoservice.app.user.facade.provider.req.UserEnterInitReqDTO;
+import org.cy.micoservice.app.user.facade.dto.req.UserEnterInitReqDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

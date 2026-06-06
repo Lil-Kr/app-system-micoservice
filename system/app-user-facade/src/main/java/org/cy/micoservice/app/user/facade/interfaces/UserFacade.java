@@ -1,10 +1,10 @@
 package org.cy.micoservice.app.user.facade.interfaces;
 
 import org.cy.micoservice.app.common.base.provider.RpcResponse;
-import org.cy.micoservice.app.entity.user.model.provider.pojo.User;
-import org.cy.micoservice.app.user.facade.dto.resp.SysUserDTO;
-import org.cy.micoservice.app.user.facade.dto.resp.UserRespDTO;
 import org.cy.micoservice.app.user.facade.dto.req.TestReq;
+import org.cy.micoservice.app.user.facade.dto.req.UserRegisterReqDTO;
+import org.cy.micoservice.app.user.facade.dto.resp.UserRegisterRespDTO;
+import org.cy.micoservice.app.user.facade.dto.resp.UserRespDTO;
 
 import java.util.List;
 
@@ -15,11 +15,26 @@ import java.util.List;
  */
 public interface UserFacade {
 
-  User queryUserById(Long userId);
+  /**
+   * user register
+   * @param userRegisterReqDTO
+   * @return
+   */
+  RpcResponse<UserRegisterRespDTO> register(UserRegisterReqDTO userRegisterReqDTO);
 
-  SysUserDTO getUserBySurrogateId(Long surrogateId);
+  /**
+   * query user info by userId
+   * @param userId
+   * @return
+   */
+  RpcResponse<UserRespDTO> queryByUserId(Long userId);
 
-  String test(TestReq req);
+  // /**
+  //  *
+  //  * @param userId
+  //  * @return
+  //  */
+  // RpcResponse<UserShard> queryByUserId(Long userId);
 
   /**
    * 批量查询用户信息
@@ -27,4 +42,7 @@ public interface UserFacade {
    * @return
    */
   RpcResponse<List<UserRespDTO>> queryInUserIds(List<Long> userIds);
+
+
+  String test(TestReq req);
 }

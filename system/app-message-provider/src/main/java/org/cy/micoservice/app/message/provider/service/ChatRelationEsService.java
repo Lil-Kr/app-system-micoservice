@@ -1,6 +1,6 @@
 package org.cy.micoservice.app.message.provider.service;
 
-import org.cy.micoservice.app.common.base.provider.PageResponseDTO;
+import org.cy.micoservice.app.common.base.provider.RpcPageResponse;
 import org.cy.micoservice.app.message.facade.dto.req.ChatRelationPageReqDTO;
 import org.cy.micoservice.app.message.facade.dto.req.ChatRelationReqDTO;
 import org.cy.micoservice.app.message.facade.dto.req.im.ImChatReqDTO;
@@ -36,7 +36,7 @@ public interface ChatRelationEsService {
    * @param request
    * @return
    */
-  PageResponseDTO<ChatRelationRespDTO> listChatRelationFromPage(ChatRelationPageReqDTO request);
+  RpcPageResponse<ChatRelationRespDTO> listChatRelationFromPage(ChatRelationPageReqDTO request);
 
   /**
    * 查询单个会话关系

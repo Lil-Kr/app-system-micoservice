@@ -5,7 +5,7 @@ import com.alibaba.nacos.api.exception.NacosException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.cy.micoservice.app.common.base.api.ApiResp;
-import org.cy.micoservice.app.common.base.api.PageResult;
+import org.cy.micoservice.app.common.base.api.ApiPageResult;
 import org.cy.micoservice.app.common.constants.gateway.GatewayInfraConsoleSdkConstants;
 import org.cy.micoservice.app.common.enums.response.ApiReturnCodeEnum;
 import org.cy.micoservice.app.common.utils.AssertUtil;
@@ -62,13 +62,13 @@ public class RouteConfigServiceImpl implements RouteConfigService, InitializingB
   private String LOCK_KEY;
 
   @Override
-  public PageResult<RouteConfig> pageRouteConfigList(RouteConfigQueryPageReq req) {
+  public ApiPageResult<RouteConfig> pageRouteConfigList(RouteConfigQueryPageReq req) {
     List<RouteConfig> pageList = routeConfigMapper.pageRouteConfigList(req);
     Integer count = routeConfigMapper.countPageRouteConfigList(req);
     if (CollectionUtils.isEmpty(pageList)) {
-      return PageResult.emptyPage();
+      return ApiPageResult.emptyPage();
     }
-    return new PageResult<>(pageList, count);
+    return new ApiPageResult<>(pageList, count);
   }
 
   @Override

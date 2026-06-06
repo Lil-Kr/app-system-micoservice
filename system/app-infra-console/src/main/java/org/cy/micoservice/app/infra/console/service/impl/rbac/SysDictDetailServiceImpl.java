@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.cy.micoservice.app.common.base.api.ApiResp;
-import org.cy.micoservice.app.common.base.api.PageResult;
+import org.cy.micoservice.app.common.base.api.ApiPageResult;
 import org.cy.micoservice.app.entity.infra.console.model.entity.sys.SysDictDetail;
 import org.cy.micoservice.app.entity.infra.console.model.req.sys.dict.DictDetailPageListReq;
 import org.cy.micoservice.app.entity.infra.console.model.req.sys.dict.SaveDictDetailReq;
@@ -148,13 +148,13 @@ public class SysDictDetailServiceImpl extends ServiceImpl<SysDictDetailMapper, S
 	 * @return
 	 */
 	@Override
-	public PageResult<SysDictDetailResp> pageDictDetailList(DictDetailPageListReq req) {
+	public ApiPageResult<SysDictDetailResp> pageDictDetailList(DictDetailPageListReq req) {
 		List<SysDictDetailResp> pageList = dictDetailMapper.pageDictDetailListById(req);
 		Integer count = dictDetailMapper.countPageDictDetail(req);
 		if (CollectionUtils.isEmpty(pageList)) {
-			return new PageResult<>(new ArrayList<>(0), 0);
+			return new ApiPageResult<>(new ArrayList<>(0), 0);
 		}else {
-			return new PageResult<>(pageList, count);
+			return new ApiPageResult<>(pageList, count);
 		}
 	}
 

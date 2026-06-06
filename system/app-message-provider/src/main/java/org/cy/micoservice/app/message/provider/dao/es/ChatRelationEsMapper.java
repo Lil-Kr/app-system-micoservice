@@ -17,7 +17,7 @@ import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.cy.micoservice.app.common.base.provider.PageResponseDTO;
+import org.cy.micoservice.app.common.base.provider.RpcPageResponse;
 import org.cy.micoservice.app.common.enums.biz.DeleteStatusEnum;
 import org.cy.micoservice.app.common.utils.BeanCopyUtils;
 import org.cy.micoservice.app.entity.message.model.provider.pojo.es.ChatRelationEs;
@@ -106,7 +106,7 @@ public class ChatRelationEsMapper {
    * @param request
    * @return
    */
-  public PageResponseDTO<ChatRelationRespDTO> listChatRelationFromPage(ChatRelationPageReqDTO request) {
+  public RpcPageResponse<ChatRelationRespDTO> listChatRelationFromPage(ChatRelationPageReqDTO request) {
     SearchPageRequest pageRequest = new SearchPageRequest();
     pageRequest.setSearchRequest(this.buildSearchRequest(request));
     try {
@@ -118,7 +118,7 @@ public class ChatRelationEsMapper {
       SearchResponse<Object> searchResponse = elasticsearchUtil.searchAfter(pageRequest, Object.class);
       List<Hit<Object>> chatRelationEsHitList = searchResponse.hits().hits();
       // 没有更多数据, 退出循环
-      if (chatRelationEsHitList.isEmpty()) return PageResponseDTO.emptyPage();
+      if (chatRelationEsHitList.isEmpty()) return RpcPageResponse.emptyPage();
 
       List<ChatRelationRespDTO> chatRelationRespList = new ArrayList<>();
       boolean hasNext = true;
@@ -148,13 +148,13 @@ public class ChatRelationEsMapper {
         chatRelationRespList.add(respDTO);
       }
 
-      PageResponseDTO<ChatRelationRespDTO> pageResponseDTO = new PageResponseDTO<>();
-      pageResponseDTO.setPage(request.getCurrentPageNum());
-      pageResponseDTO.setSize(request.getPageSize());
-      pageResponseDTO.setDataList(chatRelationRespList);
-      pageResponseDTO.setHasNext(hasNext);
-      pageResponseDTO.setSearchOffset(latestOffset);
-      return pageResponseDTO;
+      RpcPageResponse<ChatRelationRespDTO> rpcPageResponse = new RpcPageResponse<>();
+      rpcPageResponse.setPage(request.getCurrentPageNum());
+      rpcPageResponse.setSize(request.getPageSize());
+      rpcPageResponse.setDataList(chatRelationRespList);
+      rpcPageResponse.setHasNext(hasNext);
+      rpcPageResponse.setSearchOffset(latestOffset);
+      return rpcPageResponse;
     } catch (Exception e) {
       log.error("chat-relation search error:", e);
       throw new RuntimeException(e);

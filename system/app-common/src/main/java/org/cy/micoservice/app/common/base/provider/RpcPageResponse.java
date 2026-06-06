@@ -13,7 +13,7 @@ import java.util.List;
  * @Description: 分页响应体, provider层使用
  */
 @Data
-public class PageResponseDTO<T> implements Serializable {
+public class RpcPageResponse<T> implements Serializable {
 
   @Serial
   private static final long serialVersionUID = 2611737943133650738L;
@@ -24,10 +24,10 @@ public class PageResponseDTO<T> implements Serializable {
   private boolean hasNext;
   private Long searchOffset;
 
-  public static <T> PageResponseDTO<T> emptyPage() {
-    PageResponseDTO<T> PageResponseDTO = new PageResponseDTO<>();
-    PageResponseDTO.setHasNext(false);
-    PageResponseDTO.setDataList(Collections.emptyList());
-    return PageResponseDTO;
+  public static <T> RpcPageResponse<T> emptyPage() {
+    RpcPageResponse<T> RpcPageResponse = new RpcPageResponse<>();
+    RpcPageResponse.setHasNext(false);
+    RpcPageResponse.setDataList(Collections.emptyList());
+    return RpcPageResponse;
   }
 }

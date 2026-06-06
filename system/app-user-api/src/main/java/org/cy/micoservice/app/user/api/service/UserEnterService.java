@@ -1,6 +1,6 @@
 package org.cy.micoservice.app.user.api.service;
 
-import org.cy.micoservice.app.user.facade.provider.req.UserEnterInitReqDTO;
+import org.cy.micoservice.app.user.facade.dto.req.UserEnterInitReqDTO;
 
 /**
  * @Author: Lil-K

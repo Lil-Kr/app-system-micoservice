@@ -6,7 +6,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.cy.micoservice.app.common.base.api.ApiResp;
-import org.cy.micoservice.app.common.base.api.PageResult;
+import org.cy.micoservice.app.common.base.api.ApiPageResult;
 import org.cy.micoservice.app.common.constants.CommonConstants;
 import org.cy.micoservice.app.common.enums.biz.DeleteStatusEnum;
 import org.cy.micoservice.app.common.enums.response.ApiReturnCodeEnum;
@@ -205,13 +205,13 @@ public class SysAdminServiceImpl extends ServiceImpl<SysAdminMapper, SysAdmin> i
   }
 
   @Override
-  public PageResult<SysAdminResp> pageList(AdminListPageReq req) {
+  public ApiPageResult<SysAdminResp> pageList(AdminListPageReq req) {
     List<SysAdminResp> list =  adminMapper.pageAdminList(req);
     Integer count = adminMapper.countAdminList(req);
     if (CollectionUtils.isNotEmpty(list)) {
-      return new PageResult<>(list, count);
+      return new ApiPageResult<>(list, count);
     } else {
-      return new PageResult<>(new ArrayList<>(0), 0);
+      return new ApiPageResult<>(new ArrayList<>(0), 0);
     }
   }
 

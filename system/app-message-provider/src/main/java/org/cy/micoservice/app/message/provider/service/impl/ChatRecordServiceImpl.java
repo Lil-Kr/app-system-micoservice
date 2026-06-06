@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.apache.commons.collections4.CollectionUtils;
-import org.cy.micoservice.app.common.base.provider.PageResponseDTO;
+import org.cy.micoservice.app.common.base.provider.RpcPageResponse;
 import org.cy.micoservice.app.common.utils.BeanCopyUtils;
 import org.cy.micoservice.app.common.utils.IdGenerateUtil;
 import org.cy.micoservice.app.entity.message.model.provider.pojo.mysql.ChatRecord;
@@ -54,9 +54,9 @@ public class ChatRecordServiceImpl extends ServiceImpl<ChatRecordMapper, ChatRec
    * @return
    */
   @Override
-  public PageResponseDTO<ChatRecordRespDTO> queryRecordInPage(ChatRecordPageReqDTO chatRecordPageReqDTO) {
+  public RpcPageResponse<ChatRecordRespDTO> queryRecordInPage(ChatRecordPageReqDTO chatRecordPageReqDTO) {
     if (chatRecordPageReqDTO.getRelationId() == null) {
-      return PageResponseDTO.emptyPage();
+      return RpcPageResponse.emptyPage();
     }
     IPage<ChatRecord> page = new Page<>(chatRecordPageReqDTO.getCurrentPageNum(),chatRecordPageReqDTO.getPageSize());
     LambdaQueryWrapper<ChatRecord> queryWrapper = new LambdaQueryWrapper<>();
@@ -65,14 +65,14 @@ public class ChatRecordServiceImpl extends ServiceImpl<ChatRecordMapper, ChatRec
     IPage<ChatRecord> chatRecordPage  = super.getBaseMapper().selectPage(page,queryWrapper);
     List<ChatRecord> recordList = chatRecordPage.getRecords();
     if (CollectionUtils.isEmpty(recordList)) {
-      return PageResponseDTO.emptyPage();
+      return RpcPageResponse.emptyPage();
     }
     List<ChatRecordRespDTO> chatRecordRespDTOS = BeanCopyUtils.convertList(recordList, ChatRecordRespDTO.class);
-    PageResponseDTO<ChatRecordRespDTO> pageResponseDTO = new PageResponseDTO<>();
-    pageResponseDTO.setDataList(chatRecordRespDTOS);
-    pageResponseDTO.setPage(chatRecordPageReqDTO.getCurrentPageNum());
-    pageResponseDTO.setSize(chatRecordPageReqDTO.getPageSize());
-    pageResponseDTO.setHasNext(chatRecordPage.getTotal() > (chatRecordPage.getPages() * chatRecordPage.getSize()));
-    return pageResponseDTO;
+    RpcPageResponse<ChatRecordRespDTO> rpcPageResponse = new RpcPageResponse<>();
+    rpcPageResponse.setDataList(chatRecordRespDTOS);
+    rpcPageResponse.setPage(chatRecordPageReqDTO.getCurrentPageNum());
+    rpcPageResponse.setSize(chatRecordPageReqDTO.getPageSize());
+    rpcPageResponse.setHasNext(chatRecordPage.getTotal() > (chatRecordPage.getPages() * chatRecordPage.getSize()));
+    return rpcPageResponse;
   }
 }

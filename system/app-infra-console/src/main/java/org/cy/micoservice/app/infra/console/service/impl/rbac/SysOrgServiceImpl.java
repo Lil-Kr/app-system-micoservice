@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.apache.commons.collections4.CollectionUtils;
 import org.cy.micoservice.app.common.base.api.ApiResp;
-import org.cy.micoservice.app.common.base.api.PageResult;
+import org.cy.micoservice.app.common.base.api.ApiPageResult;
 import org.cy.micoservice.app.common.utils.DateUtil;
 import org.cy.micoservice.app.entity.infra.console.model.entity.sys.SysAdmin;
 import org.cy.micoservice.app.entity.infra.console.model.entity.sys.SysOrg;
@@ -213,13 +213,13 @@ public class SysOrgServiceImpl extends ServiceImpl<SysOrgMapper, SysOrg> impleme
 	 * @return
 	 */
 	@Override
-	public PageResult<SysOrgResp> pageList(OrgPageReq req) {
+	public ApiPageResult<SysOrgResp> pageList(OrgPageReq req) {
 		List<SysOrgResp> pageList = orgMapper.pageList(req);
 		Integer count = orgMapper.countByList(req);
 		if (CollectionUtils.isEmpty(pageList)) {
-			return new PageResult<>(new ArrayList<>(0), 0);
+			return new ApiPageResult<>(new ArrayList<>(0), 0);
 		}
-		return new PageResult<>(pageList, count);
+		return new ApiPageResult<>(pageList, count);
 	}
 
 	@Override

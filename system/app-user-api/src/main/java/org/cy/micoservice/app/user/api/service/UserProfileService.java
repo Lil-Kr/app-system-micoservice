@@ -1,8 +1,7 @@
 package org.cy.micoservice.app.user.api.service;
 
 import org.cy.micoservice.app.common.base.api.ApiResp;
-import org.cy.micoservice.app.entity.user.model.provider.pojo.User;
-import org.cy.micoservice.app.user.api.vo.resp.SysUserResp;
+import org.cy.micoservice.app.user.api.vo.resp.UserRespVO;
 
 /**
  * @Author: Lil-K
@@ -11,7 +10,7 @@ import org.cy.micoservice.app.user.api.vo.resp.SysUserResp;
  */
 public interface UserProfileService {
 
-  User profile(Long id);
+  ApiResp<UserRespVO> profile(Long id);
 
-  ApiResp<SysUserResp> getUserBySurrogateId(Long surrogateId);
+  ApiResp<UserRespVO> getUserBySurrogateId(Long surrogateId);
 }

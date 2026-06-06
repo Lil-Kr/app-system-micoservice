@@ -1,7 +1,7 @@
 package org.cy.micoservice.app.infra.console.service;
 
 import org.cy.micoservice.app.common.base.api.ApiResp;
-import org.cy.micoservice.app.common.base.api.PageResult;
+import org.cy.micoservice.app.common.base.api.ApiPageResult;
 import org.cy.micoservice.app.infra.facade.dto.org.OrgLevelDto;
 import org.cy.micoservice.app.entity.infra.console.model.req.sys.org.OrgListAllReq;
 import org.cy.micoservice.app.entity.infra.console.model.req.sys.org.OrgPageReq;
@@ -25,7 +25,7 @@ public interface SysOrgService {
 
 	ApiResp<String> delete(Long surrogateId);
 
-	PageResult<SysOrgResp> pageList(OrgPageReq req);
+	ApiPageResult<SysOrgResp> pageList(OrgPageReq req);
 
 	List<SysOrgResp> list(OrgListAllReq req);
 

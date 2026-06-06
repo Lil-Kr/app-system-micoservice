@@ -1,37 +1,70 @@
 package org.cy.micoservice.app.user.provider.service;
 
-import org.cy.micoservice.app.common.base.api.ApiResp;
-import org.cy.micoservice.app.common.base.api.PageResult;
+import org.cy.micoservice.app.common.base.provider.RpcPageResponse;
+import org.cy.micoservice.app.common.base.provider.RpcResponse;
 import org.cy.micoservice.app.entity.user.model.provider.pojo.User;
 import org.cy.micoservice.app.entity.user.model.provider.req.UserListPageReq;
-import org.cy.micoservice.app.entity.user.model.provider.req.UserLoginAdminReq;
-import org.cy.micoservice.app.entity.user.model.provider.req.UserRegisterReq;
-import org.cy.micoservice.app.entity.user.model.provider.req.UserSaveReq;
 import org.cy.micoservice.app.entity.user.model.provider.resp.UserResp;
+import org.cy.micoservice.app.user.facade.dto.req.UserRegisterReqDTO;
+import org.cy.micoservice.app.user.facade.dto.req.UserSaveReqDTO;
+
+import java.util.Collection;
+import java.util.List;
 
 /**
  * @Author: Lil-K
- * @Date: 2025/11/20
+ * @Date: 2026/6/6
  * @Description:
  */
 public interface UserService {
 
-  String queryUserById(Long userId);
+  /**
+   * user register
+   * @param reqDTO
+   * @return
+   */
+  User register(UserRegisterReqDTO reqDTO);
 
-  User getUserById(Long id);
+  /**
+   * query user info by id
+   * @param userId
+   * @return
+   */
+  User queryUserById(Long userId);
 
-  UserResp getUserBySurrogateId(Long surrogateId);
+  /**
+   *
+   * @param offset
+   * @param limit
+   * @return
+   */
+  List<User> queryByOffset(Long offset, Long limit);
 
-  ApiResp<User> adminLogin(UserLoginAdminReq req);
+  /**
+   * batch query user ids
+   * @param userIds
+   * @return
+   */
+  List<User> queryInUserIds(Collection<Long> userIds);
 
-  ApiResp<Integer> registerAdmin(UserRegisterReq req);
+  /**
+   * pagination query user list
+   * @param req
+   * @return
+   */
+  RpcPageResponse<UserResp> pageUserList(UserListPageReq req);
 
-  ApiResp<String> add(UserSaveReq req);
+  /**
+   * edit user info
+   * @param req
+   * @return
+   */
+  boolean update(UserSaveReqDTO req);
 
-  PageResult<UserResp> pageList(UserListPageReq req);
-
-  ApiResp<String> edit(UserSaveReq req);
-
-  ApiResp<String> delete(Long surrogateId);
-
+  /**
+   * delete uver info
+   * @param userId
+   * @return
+   */
+  RpcResponse<String> delete(Long userId);
 }

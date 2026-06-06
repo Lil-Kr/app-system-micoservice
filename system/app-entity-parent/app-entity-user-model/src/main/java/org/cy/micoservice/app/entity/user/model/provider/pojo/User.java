@@ -3,37 +3,30 @@ package org.cy.micoservice.app.entity.user.model.provider.pojo;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
-import lombok.experimental.SuperBuilder;
-import org.cy.micoservice.app.entity.base.model.api.BaseEntity;
 
 import java.io.Serial;
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Date;
 
 /**
  * @Author: Lil-K
  * @Date: 2025/12/28
  * @Description:
  */
-@EqualsAndHashCode(callSuper = true)
 @Data
-@SuperBuilder
-@NoArgsConstructor
-@AllArgsConstructor
 @TableName("t_user")
-public class User extends BaseEntity {
+public class User implements Serializable {
   @Serial
   private static final long serialVersionUID = -2371943614366233777L;
+
+  @TableId(type = IdType.AUTO)
+  private Long id;
 
   /**
    * 用户id
    */
-  @TableId(value = "user_id", type = IdType.INPUT)
   private Long userId;
 
   /**
@@ -42,24 +35,19 @@ public class User extends BaseEntity {
   private String nickname;
 
   /**
-   * 头像
-   */
-  private String avatar;
-
-  /**
-   * 状态
-   */
-  private Integer status;
-
-  /**
-   * 首次注册时间
-   */
-  private Date registryTime;
-
-  /**
    * 性别
    */
   private Integer sex;
+
+  /**
+   * salt value
+   */
+  private String salt;
+
+  /**
+   * avatar
+   */
+  private String avatar;
 
   /**
    * 个性签名
@@ -67,12 +55,37 @@ public class User extends BaseEntity {
   private String sign;
 
   /**
-   * 生日
+   * 状态
    */
-  private LocalDate birthday;
+  private Integer status;
+
+  /**
+   * delete statue
+   */
+  private Integer deleted;
 
   /**
    * 上次登录时间
    */
   private LocalDateTime lastLoginTime;
+
+  /**
+   * 首次注册时间
+   */
+  private LocalDateTime registryTime;
+
+  /**
+   * 生日
+   */
+  private LocalDate birthday;
+
+  /**
+   * create time
+   */
+  private LocalDateTime createTime;
+
+  /**
+   * update time
+   */
+  private LocalDateTime updateTime;
 }
