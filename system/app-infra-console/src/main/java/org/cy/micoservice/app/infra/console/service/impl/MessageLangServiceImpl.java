@@ -1,6 +1,6 @@
 package org.cy.micoservice.app.infra.console.service.impl;
 
-import org.cy.micoservice.app.infra.console.service.MessageLangService;
+import org.cy.micoservice.app.infra.console.service.interfaces.MessageLangService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;

@@ -18,10 +18,3 @@ spring:
   config:
     import:
       - optional:nacos:app-user-provider.yaml
-
-# field encrypt & decrypt
-#mybatis:
-#  field:
-#    crypto:
-#      algorithm:
-#      key:

@@ -3,7 +3,8 @@ package org.cy.micoservice.app.gateway.service.impl;
 import lombok.extern.slf4j.Slf4j;
 import org.cy.micoservice.app.common.enums.response.RpcReturnCodeEnum;
 import org.cy.micoservice.app.common.utils.AssertUtil;
-import org.cy.micoservice.app.entity.gateway.model.entity.RouteConfig;
+import org.cy.micoservice.app.entity.gateway.model.RouteConfig;
+import org.cy.micoservice.app.gateway.constants.RouteConstant;
 import org.cy.micoservice.app.gateway.facade.enums.GatewayRouterSchemaEnum;
 import org.cy.micoservice.app.gateway.service.RouteDefinitionWriterService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,39 +34,43 @@ import static org.springframework.cloud.gateway.handler.predicate.RoutePredicate
 @Service
 public class RouteDefinitionWriterServiceImpl implements RouteDefinitionWriterService {
 
-  private final String ROUTE_CONFIG_PREFIX = "route-config-";
-
-  private final String REFRESH_KEY = "gateway-route-refresh";
-
   @Autowired
   private RouteDefinitionWriter routeDefinitionWriter;
 
   @Autowired
   private ApplicationEventPublisher publisher;
 
+  /**
+   *
+   * @param routeConfig
+   * @return
+   */
   @Override
   public boolean save(RouteConfig routeConfig) {
     try {
-      if (!checkRouteConfigValid(routeConfig)) {
+      if (! this.checkRouteConfigValid(routeConfig)) {
         log.error("route config not valid: {}", routeConfig);
         return false;
       }
-      RouteDefinition routeDefinition = new RouteDefinition();
       String schema = routeConfig.getSchema();
       AssertUtil.isNotBlank(GatewayRouterSchemaEnum.getByCode(schema), RpcReturnCodeEnum.RPC_PARAMETER_ERROR);
 
-      routeDefinition.setId(ROUTE_CONFIG_PREFIX + routeConfig.getId());
+      RouteDefinition routeDefinition = new RouteDefinition();
+      routeDefinition.setId(RouteConstant.ROUTE_CONFIG_PREFIX + routeConfig.getId());
       routeDefinition.setUri(UriComponentsBuilder.fromUriString(routeConfig.getUri()).build().toUri());
-      List<PredicateDefinition> predicateDefinitionList = new ArrayList<>();
+
       PredicateDefinition path = new PredicateDefinition();
       path.setName(NameUtils.normalizeRoutePredicateName(PathRoutePredicateFactory.class));
       path.addArg(PATTERN_KEY, routeConfig.getPath());
+
+      List<PredicateDefinition> predicateDefinitionList = new ArrayList<>();
       predicateDefinitionList.add(path);
       routeDefinition.setPredicates(predicateDefinitionList);
 
+      // must be do subscribe();
       routeDefinitionWriter.save(Mono.just(routeDefinition)).subscribe();
       // Nacos 2.2.0 需要手动刷新
-      publisher.publishEvent(new RefreshRoutesEvent(REFRESH_KEY));
+      publisher.publishEvent(new RefreshRoutesEvent(RouteConstant.REFRESH_KEY));
       log.info("route config saved: {}", routeConfig);
       return true;
     } catch (Exception e) {
@@ -74,12 +79,21 @@ public class RouteDefinitionWriterServiceImpl implements RouteDefinitionWriterSe
     return false;
   }
 
+  /**
+   *
+   * @param configId
+   */
   @Override
   public void delete(Long configId) {
-    routeDefinitionWriter.delete(Mono.just(ROUTE_CONFIG_PREFIX + configId)).subscribe();
-    publisher.publishEvent(new RefreshRoutesEvent(REFRESH_KEY));
+    routeDefinitionWriter.delete(Mono.just(RouteConstant.ROUTE_CONFIG_PREFIX + configId)).subscribe();
+    publisher.publishEvent(new RefreshRoutesEvent(RouteConstant.REFRESH_KEY));
   }
 
+  /**
+   *
+   * @param routeConfig
+   * @return
+   */
   private boolean checkRouteConfigValid (RouteConfig routeConfig) {
     if (Objects.isNull(routeConfig) || Objects.isNull(routeConfig.getId())) {
       return false;

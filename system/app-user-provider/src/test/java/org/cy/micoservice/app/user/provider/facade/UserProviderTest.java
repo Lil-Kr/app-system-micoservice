@@ -6,7 +6,7 @@ import org.apache.dubbo.config.ApplicationConfig;
 import org.apache.dubbo.config.ReferenceConfig;
 import org.apache.dubbo.config.RegistryConfig;
 import org.cy.micoservice.app.common.base.provider.RpcResponse;
-import org.cy.micoservice.app.entity.user.model.provider.pojo.UserShard;
+import org.cy.micoservice.app.user.facade.dto.resp.UserRespDTO;
 import org.cy.micoservice.app.user.facade.interfaces.UserFacade;
 import org.junit.Before;
 import org.junit.Test;
@@ -47,7 +47,7 @@ public class UserProviderTest {
     // 获取远程服务代理
     UserFacade userFacade = reference.get();
     try {
-      RpcResponse<UserShard> userRpcResponse = userFacade.queryByUserId(null);
+      RpcResponse<UserRespDTO> userRpcResponse = userFacade.queryByUserId(null);
       log.info("userDTO: {}", JSONArray.toJSONString(userRpcResponse.getData()));
     } catch (Exception e) {
       e.printStackTrace();

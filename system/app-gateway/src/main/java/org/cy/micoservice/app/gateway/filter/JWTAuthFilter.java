@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.cy.micoservice.app.common.constants.gateway.GatewayHeadersConstants;
 import org.cy.micoservice.app.common.security.impl.AES128GCMCrypto;
-import org.cy.micoservice.app.entity.gateway.model.entity.RouteConfig;
+import org.cy.micoservice.app.entity.gateway.model.RouteConfig;
 import org.cy.micoservice.app.framework.identiy.starter.response.TokenBodyResponse;
 import org.cy.micoservice.app.framework.identiy.starter.template.AuthTemplate;
 import org.cy.micoservice.app.gateway.config.GatewayApplicationProperties;

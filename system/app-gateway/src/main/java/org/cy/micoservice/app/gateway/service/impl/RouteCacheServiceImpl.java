@@ -2,7 +2,7 @@ package org.cy.micoservice.app.gateway.service.impl;
 
 import org.apache.commons.lang3.StringUtils;
 import org.cy.micoservice.app.common.constants.CommonFormatConstants;
-import org.cy.micoservice.app.entity.gateway.model.entity.RouteConfig;
+import org.cy.micoservice.app.entity.gateway.model.RouteConfig;
 import org.cy.micoservice.app.gateway.service.RouteCacheService;
 import org.springframework.stereotype.Service;
 

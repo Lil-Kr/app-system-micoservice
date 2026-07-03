@@ -2,7 +2,7 @@ package org.cy.micoservice.app.shortlink.api.config;
 
 import com.alicp.jetcache.Cache;
 import com.alicp.jetcache.anno.CacheType;
-import org.cy.micoservice.app.entity.shortlink.model.provider.pojo.ShortUrlMapping;
+import org.cy.micoservice.app.entity.shortlink.model.ShortUrlMapping;
 import org.cy.micoservice.app.shortlink.api.factory.JetCacheFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;

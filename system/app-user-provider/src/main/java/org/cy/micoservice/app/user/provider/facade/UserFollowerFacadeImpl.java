@@ -15,9 +15,8 @@ import java.util.List;
 /**
  * @Author: Lil-K
  * @Date: 2026/5/6
- * @Description:
+ * @Description: user follower facade
  */
-
 @Slf4j
 @Service
 @DubboService

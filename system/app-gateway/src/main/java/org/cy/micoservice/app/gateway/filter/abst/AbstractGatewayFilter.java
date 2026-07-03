@@ -27,6 +27,12 @@ public abstract class AbstractGatewayFilter implements GlobalFilter {
    */
   protected abstract Mono<Void> doFilter(ServerWebExchange exchange, GatewayFilterChain chain);
 
+  /**
+   *
+   * @param exchange
+   * @param chain
+   * @return
+   */
   @Override
   public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
     if (isSupport(exchange)) {

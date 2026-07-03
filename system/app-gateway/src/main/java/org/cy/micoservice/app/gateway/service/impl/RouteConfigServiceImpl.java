@@ -1,6 +1,6 @@
 package org.cy.micoservice.app.gateway.service.impl;
 
-import org.cy.micoservice.app.entity.gateway.model.entity.RouteConfig;
+import org.cy.micoservice.app.entity.gateway.model.RouteConfig;
 import org.cy.micoservice.app.gateway.facade.enums.GatewayRouterStatusEnum;
 import org.cy.micoservice.app.gateway.dao.RouteConfigMapper;
 import org.cy.micoservice.app.gateway.service.RouteConfigService;
@@ -22,12 +22,12 @@ public class RouteConfigServiceImpl implements RouteConfigService {
   private RouteConfigMapper routeConfigMapper;
 
   @Override
-  public List<RouteConfig> routeConfigAllValidaList() {
-    return routeConfigMapper.routeConfigAllValidaList(GatewayRouterStatusEnum.VALID.getCode());
+  public List<RouteConfig> queryRouteConfigAllValidaList() {
+    return routeConfigMapper.queryRouteConfigAllValidaList(GatewayRouterStatusEnum.VALID.getCode());
   }
 
   @Override
-  public List<RouteConfig> findInConfigIds(Set<Long> saveConfigIds) {
-    return routeConfigMapper.findInConfigIds(saveConfigIds);
+  public List<RouteConfig> queryInConfigIds(Set<Long> saveConfigIds) {
+    return routeConfigMapper.queryInConfigIds(saveConfigIds);
   }
 }

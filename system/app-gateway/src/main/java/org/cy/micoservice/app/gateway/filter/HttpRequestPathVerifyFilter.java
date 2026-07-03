@@ -1,7 +1,7 @@
 package org.cy.micoservice.app.gateway.filter;
 
 import lombok.extern.slf4j.Slf4j;
-import org.cy.micoservice.app.entity.gateway.model.entity.RouteConfig;
+import org.cy.micoservice.app.entity.gateway.model.RouteConfig;
 import org.cy.micoservice.app.gateway.facade.constants.GatewayConstants;
 import org.cy.micoservice.app.gateway.filter.abst.AbstractGatewayFilter;
 import org.cy.micoservice.app.gateway.service.RouteCacheService;

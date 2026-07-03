@@ -1,7 +1,7 @@
 package org.cy.micoservice.app.user.provider.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import org.cy.micoservice.app.entity.user.model.provider.pojo.User;
+import org.cy.micoservice.app.entity.user.model.User;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -11,6 +11,7 @@ import java.util.List;
  * @Date: 2025/3/7
  * @Description:
  */
+@Deprecated
 @Repository
 public interface UserMapper extends BaseMapper<User> {
 

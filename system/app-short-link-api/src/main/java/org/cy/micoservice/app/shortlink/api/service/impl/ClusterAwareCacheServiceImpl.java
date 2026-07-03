@@ -7,7 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.dubbo.config.annotation.DubboReference;
 import org.cy.micoservice.app.common.base.provider.RpcResponse;
 import org.cy.micoservice.app.common.utils.BeanCopyUtils;
-import org.cy.micoservice.app.entity.shortlink.model.provider.pojo.ShortUrlMapping;
+import org.cy.micoservice.app.entity.shortlink.model.ShortUrlMapping;
 import org.cy.micoservice.app.shortlink.api.config.ShortLinkApiProperties;
 import org.cy.micoservice.app.shortlink.api.config.ShortLinkCacheKeyBuilder;
 import org.cy.micoservice.app.shortlink.api.service.ClusterAwareCacheService;

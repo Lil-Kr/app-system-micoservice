@@ -2,9 +2,9 @@ package org.cy.micoservice.app.shortlink.api.service;
 
 import jakarta.servlet.http.HttpServletResponse;
 import org.cy.micoservice.app.common.base.api.ApiResp;
-import org.cy.micoservice.app.entity.shortlink.model.api.req.CreateShortUrlReq;
-import org.cy.micoservice.app.entity.shortlink.model.api.req.ShortUrlGetReq;
-import org.cy.micoservice.app.entity.shortlink.model.api.resp.CreateShortUrlResp;
+import org.cy.micoservice.app.shortlink.api.vo.req.CreateShortUrlReq;
+import org.cy.micoservice.app.shortlink.api.vo.req.ShortUrlGetReq;
+import org.cy.micoservice.app.shortlink.api.vo.resp.CreateShortUrlResp;
 
 import java.io.IOException;
 

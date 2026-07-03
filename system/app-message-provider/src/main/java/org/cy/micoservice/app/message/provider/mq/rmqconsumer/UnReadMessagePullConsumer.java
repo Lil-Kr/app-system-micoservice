@@ -11,7 +11,7 @@ import org.apache.rocketmq.client.exception.MQClientException;
 import org.apache.rocketmq.common.consumer.ConsumeFromWhere;
 import org.apache.rocketmq.common.message.MessageExt;
 import org.cy.micoservice.app.common.constants.CommonFormatConstants;
-import org.cy.micoservice.app.entity.message.model.provider.pojo.es.ChatBoxEs;
+import org.cy.micoservice.app.entity.message.model.es.ChatBoxEs;
 import org.cy.micoservice.app.framework.rocketmq.starter.consumer.RocketMQConsumerProperties;
 import org.cy.micoservice.app.message.facade.dto.resp.ChatRecordRespDTO;
 import org.cy.micoservice.app.message.facade.dto.resp.ChatRelationRespDTO;

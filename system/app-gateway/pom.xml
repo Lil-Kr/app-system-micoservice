@@ -82,18 +82,6 @@
 		<!-- 自研组件 -->
 		<dependency>
 			<groupId>org.cy.micoservice.app</groupId>
-			<artifactId>app-gateway-facade</artifactId>
-			<version>${app-framework-parent.version}</version>
-		</dependency>
-		
-		<dependency>
-			<groupId>org.cy.micoservice.app</groupId>
-			<artifactId>app-entity-gateway-model</artifactId>
-			<version>${app-entity-parent.version}</version>
-		</dependency>
-		
-		<dependency>
-			<groupId>org.cy.micoservice.app</groupId>
 			<artifactId>app-framework-mybatis-starter</artifactId>
 			<version>${app-framework-parent.version}</version>
 		</dependency>
@@ -108,6 +96,18 @@
 			<groupId>org.cy.micoservice.app</groupId>
 			<artifactId>app-framework-identify-starter</artifactId>
 			<version>${app-framework-parent.version}</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.cy.micoservice.app</groupId>
+			<artifactId>app-gateway-facade</artifactId>
+			<version>${app-framework-parent.version}</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.cy.micoservice.app</groupId>
+			<artifactId>app-entity-gateway-model</artifactId>
+			<version>${app-entity-parent.version}</version>
 		</dependency>
 	</dependencies>
 	

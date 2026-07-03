@@ -1,6 +1,6 @@
 package org.cy.micoservice.app.gateway.service.impl;
 
-import org.cy.micoservice.app.entity.gateway.model.entity.RouteChangeLog;
+import org.cy.micoservice.app.entity.gateway.model.RouteChangeLog;
 import org.cy.micoservice.app.gateway.dao.RouteChangeLogMapper;
 import org.cy.micoservice.app.gateway.service.RouteConfigChangeLogService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +20,7 @@ public class RouteConfigChangeLogServiceImpl implements RouteConfigChangeLogServ
   private RouteChangeLogMapper routeChangeLogMapper;
 
   @Override
-  public List<RouteChangeLog> findGtVersion(Long version) {
+  public List<RouteChangeLog> queryGtVersion(Long version) {
     return routeChangeLogMapper.findGtVersion(version);
   }
 }

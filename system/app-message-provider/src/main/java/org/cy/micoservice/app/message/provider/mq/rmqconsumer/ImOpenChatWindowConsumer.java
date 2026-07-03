@@ -10,12 +10,12 @@ import org.apache.rocketmq.common.consumer.ConsumeFromWhere;
 import org.apache.rocketmq.common.message.MessageExt;
 import org.cy.micoservice.app.common.constants.CommonFormatConstants;
 import org.cy.micoservice.app.common.enums.biz.DeleteStatusEnum;
-import org.cy.micoservice.app.entity.message.model.provider.pojo.es.ChatBoxEs;
-import org.cy.micoservice.app.entity.message.model.provider.req.OpenChatReq;
+import org.cy.micoservice.app.entity.message.model.es.ChatBoxEs;
 import org.cy.micoservice.app.framework.rocketmq.starter.consumer.RocketMQConsumerProperties;
+import org.cy.micoservice.app.message.facade.dto.req.OpenChatReqDTO;
 import org.cy.micoservice.app.message.provider.config.MessageApplicationProperties;
-import org.cy.micoservice.app.message.provider.service.ChatBoxEsService;
 import org.cy.micoservice.app.message.provider.constant.MessageChatRelationConstants;
+import org.cy.micoservice.app.message.provider.service.ChatBoxEsService;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -78,7 +78,7 @@ public class ImOpenChatWindowConsumer implements InitializingBean {
   private void openChatWindowHandler(List<MessageExt> messages) {
     List<ChatBoxEs> chatBoxEsList = messages.stream()
       .map(message -> {
-        OpenChatReq openChatReq = JSON.parseObject(message.getBody(), OpenChatReq.class);
+        OpenChatReqDTO openChatReq = JSON.parseObject(message.getBody(), OpenChatReqDTO.class);
         return ChatBoxEs.builder()
           .id(String.format(MessageChatRelationConstants.RELATION_ID_FORMAT, openChatReq.getRelationId(), openChatReq.getUserId()))
           .userId(openChatReq.getUserId())

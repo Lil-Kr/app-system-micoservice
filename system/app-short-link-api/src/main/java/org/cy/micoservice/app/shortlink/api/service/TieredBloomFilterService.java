@@ -1,6 +1,6 @@
 package org.cy.micoservice.app.shortlink.api.service;
 
-import org.cy.micoservice.app.entity.shortlink.model.api.pojo.NodeInfo;
+import org.cy.micoservice.app.shortlink.api.pojo.NodeInfo;
 
 /**
  * @Author: Lil-K

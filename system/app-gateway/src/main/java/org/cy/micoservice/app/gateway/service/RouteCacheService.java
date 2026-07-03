@@ -1,6 +1,6 @@
 package org.cy.micoservice.app.gateway.service;
 
-import org.cy.micoservice.app.entity.gateway.model.entity.RouteConfig;
+import org.cy.micoservice.app.entity.gateway.model.RouteConfig;
 
 /**
  * @Author: Lil-K

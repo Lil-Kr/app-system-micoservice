@@ -19,7 +19,7 @@ public class GatewayAsyncTaskSubmitter {
 
   private static final int OVER_LIMIT_QUEUE_SIZE_1 = 4000;
 
-  /** ============================== 线程组-1 ============================== **/
+  /** ============================== thread group -1 ============================== **/
   private final ThreadPoolExecutor executor = new ThreadPoolExecutor (
     4,
     Runtime.getRuntime().availableProcessors() * 2,
@@ -77,7 +77,7 @@ public class GatewayAsyncTaskSubmitter {
       });
   }
 
-  /** ============================== 线程组-2 ============================== **/
+  /** ============================== thread group-2 ============================== **/
   private static final int BLOCKING_QUEUE_SIZE_2 = 5000;
 
   private static final int OVER_LIMIT_QUEUE_SIZE_2 = 4000;

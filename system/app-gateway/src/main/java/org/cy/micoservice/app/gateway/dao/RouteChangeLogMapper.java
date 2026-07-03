@@ -1,7 +1,7 @@
 package org.cy.micoservice.app.gateway.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import org.cy.micoservice.app.entity.gateway.model.entity.RouteChangeLog;
+import org.cy.micoservice.app.entity.gateway.model.RouteChangeLog;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;

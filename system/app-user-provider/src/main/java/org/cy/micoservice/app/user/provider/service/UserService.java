@@ -2,12 +2,11 @@ package org.cy.micoservice.app.user.provider.service;
 
 import org.cy.micoservice.app.common.base.provider.RpcPageResponse;
 import org.cy.micoservice.app.common.base.provider.RpcResponse;
-import org.cy.micoservice.app.entity.user.model.provider.pojo.User;
-import org.cy.micoservice.app.entity.user.model.provider.req.UserListPageReq;
-import org.cy.micoservice.app.entity.user.model.provider.resp.UserResp;
+import org.cy.micoservice.app.entity.user.model.User;
+import org.cy.micoservice.app.user.facade.dto.req.UserListPageReqDTO;
 import org.cy.micoservice.app.user.facade.dto.req.UserRegisterReqDTO;
 import org.cy.micoservice.app.user.facade.dto.req.UserSaveReqDTO;
-
+import org.cy.micoservice.app.user.facade.dto.resp.UserRespDTO;
 import java.util.Collection;
 import java.util.List;
 
@@ -16,6 +15,7 @@ import java.util.List;
  * @Date: 2026/6/6
  * @Description:
  */
+@Deprecated
 public interface UserService {
 
   /**
@@ -52,7 +52,7 @@ public interface UserService {
    * @param req
    * @return
    */
-  RpcPageResponse<UserResp> pageUserList(UserListPageReq req);
+  RpcPageResponse<UserRespDTO> pageUserList(UserListPageReqDTO req);
 
   /**
    * edit user info

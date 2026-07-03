@@ -3,11 +3,13 @@ package org.cy.micoservice.app.user.provider.service.impl;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.cy.micoservice.app.common.base.provider.RpcPageResponse;
 import org.cy.micoservice.app.common.base.provider.RpcResponse;
+import org.cy.micoservice.app.common.utils.BeanCopyUtils;
 import org.cy.micoservice.app.common.utils.DateUtil;
-import org.cy.micoservice.app.entity.user.model.provider.pojo.UserShard;
-import org.cy.micoservice.app.entity.user.model.provider.req.UserListPageReq;
-import org.cy.micoservice.app.entity.user.model.provider.resp.UserResp;
+import org.cy.micoservice.app.entity.user.model.UserShard;
+import org.cy.micoservice.app.user.facade.dto.req.UserListPageReqDTO;
+import org.cy.micoservice.app.user.facade.dto.req.UserRegisterReqDTO;
 import org.cy.micoservice.app.user.facade.dto.req.UserSaveReqDTO;
+import org.cy.micoservice.app.user.facade.dto.resp.UserRespDTO;
 import org.cy.micoservice.app.user.provider.dao.UserShardMapper;
 import org.cy.micoservice.app.user.provider.service.UserShardService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,12 +31,13 @@ public class UserShardServiceImpl extends ServiceImpl<UserShardMapper, UserShard
 
   /**
    * user register
-   * @param userShard
+   * @param userShardDTO
    * @return
    */
   @Override
-  public UserShard register(UserShard userShard) {
-    userShard.setRegistryTime(DateUtil.localDateTimeNow());
+  public UserShard register(UserRegisterReqDTO userShardDTO) {
+    userShardDTO.setRegistryTime(DateUtil.localDateTimeNow());
+    UserShard userShard = BeanCopyUtils.convert(userShardDTO, UserShard.class);
     userShardMapper.insert(userShard);
     return userShard;
   }
@@ -45,7 +48,7 @@ public class UserShardServiceImpl extends ServiceImpl<UserShardMapper, UserShard
    * @return
    */
   @Override
-  public UserShard getUserByShardId(Long userId) {
+  public UserShard queryUserById(Long userId) {
     return userShardMapper.getUserByShardId(userId);
   }
 
@@ -70,13 +73,18 @@ public class UserShardServiceImpl extends ServiceImpl<UserShardMapper, UserShard
   }
 
   @Override
-  public RpcPageResponse<UserResp> pageUserList(UserListPageReq req) {
+  public RpcPageResponse<UserRespDTO> pageUserList(UserListPageReqDTO req) {
     return null;
   }
 
+  /**
+   *
+   * @param req
+   * @return
+   */
   @Override
-  public RpcResponse<String> update(UserSaveReqDTO req) {
-    return null;
+  public boolean update(UserSaveReqDTO req) {
+    return true;
   }
 
   @Override

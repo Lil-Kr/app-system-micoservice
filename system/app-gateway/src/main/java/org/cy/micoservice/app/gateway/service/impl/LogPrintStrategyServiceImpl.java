@@ -4,7 +4,7 @@ import com.alibaba.fastjson2.JSONArray;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import lombok.extern.slf4j.Slf4j;
 import org.cy.micoservice.app.common.enums.biz.DeleteStatusEnum;
-import org.cy.micoservice.app.entity.gateway.model.entity.LogPrintStrategy;
+import org.cy.micoservice.app.entity.gateway.model.LogPrintStrategy;
 import org.cy.micoservice.app.gateway.dao.LogPrintStrategyMapper;
 import org.cy.micoservice.app.gateway.facade.dto.LogRequestDTO;
 import org.cy.micoservice.app.gateway.facade.enums.LogPrintStrategyTypeEnum;

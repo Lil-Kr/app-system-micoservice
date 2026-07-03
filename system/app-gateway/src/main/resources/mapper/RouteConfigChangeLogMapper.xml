@@ -11,7 +11,7 @@
 		id, config_id, version, change_body, change_event, create_id, update_id, create_time, update_time, deleted
 	</sql>
 	
-	<select id="findGtVersion" resultType="org.cy.micoservice.app.entity.gateway.model.entity.RouteChangeLog">
+	<select id="findGtVersion" resultType="org.cy.micoservice.app.entity.gateway.model.RouteChangeLog">
 		select <include refid="Base_Column_List" />
 		from <include refid="Table_Name" />
 		<where>

@@ -23,6 +23,7 @@
 		<module>app-entity-user-model</module>
 		<module>app-entity-goods-model</module>
 		<module>app-entity-short-link-model</module>
+		<module>app-entity-note-content-model</module>
 	</modules>
 	
 	<properties>

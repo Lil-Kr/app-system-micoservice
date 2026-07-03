@@ -15,18 +15,22 @@ public class DateUtil {
 
   private static DateTimeFormatter formatterForDate = DateTimeFormatter.ofPattern(YYYY_MM_DD);
 
+  private static DateTimeFormatter formatterForDateYYYYMMDD = DateTimeFormatter.ofPattern(YYYYMMDD);
+
+  private static DateTimeFormatter formatterForDateyyyyMMdd_HH = DateTimeFormatter.ofPattern(yyyyMMdd_HH);
+
   private DateUtil() {}
 
   /**
    * 格式化时间转换为时间戳
    * 格式: Long -> yyyy-MM-dd HH:mm:ss
-   * @param date
+   * @param millis
    * @return 时间戳
    */
-  public static String getDateTimeFormat(long date) {
-    LocalDateTime localDateTime = new Date(date).toInstant().atOffset(ZoneOffset.of("+8")).toLocalDateTime();
-    String format = DateTimeFormatter.ofPattern(YYYY_MM_DD_HH_MM_SS).format(localDateTime);
-    return format;
+  public static String getDateTimeFormat(long millis) {
+    return Instant.ofEpochMilli(millis)
+      .atZone(ZoneId.of("Asia/Shanghai"))
+      .format(formatterForTime);
   }
 
   /**
@@ -34,7 +38,7 @@ public class DateUtil {
    * @return
    */
   public static Long getCurrentDateTimeMilli() {
-    return LocalDateTime.now().toInstant(ZoneOffset.of("+8")).toEpochMilli();
+    return Instant.now().toEpochMilli();
   }
 
   /**
@@ -72,17 +76,19 @@ public class DateUtil {
    */
   public static LocalDateTime dateToLocalDate(Date date) {
     Instant instant = date.toInstant();
-    ZoneId zoneId = ZoneId.systemDefault();
-    return instant.atZone(zoneId).toLocalDateTime();
-  }
-
-  public static LocalDateTime localDateTimeNow() {
-    ZoneId zoneId = ZoneId.systemDefault();
-    return LocalDateTime.now(zoneId);
+    return instant.atZone(ZoneId.systemDefault()).toLocalDateTime();
   }
 
   /**
-   * LocalDateTime 转化成 Date
+   * get localDateTime for now
+   * @return
+   */
+  public static LocalDateTime localDateTimeNow() {
+    return LocalDateTime.now(ZoneId.systemDefault());
+  }
+
+  /**
+   * LocalDateTime -> Date
    * @return
    */
   public static Date dateTimeNow() {
@@ -92,7 +98,7 @@ public class DateUtil {
   }
 
   /**
-   * LocalDateTime 转化成 Date
+   * LocalDateTime -> Date
    * @param localDateTime
    * @return
    */

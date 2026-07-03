@@ -1,7 +1,7 @@
 package org.cy.micoservice.app.gateway.service;
 
 
-import org.cy.micoservice.app.entity.gateway.model.entity.RouteConfig;
+import org.cy.micoservice.app.entity.gateway.model.RouteConfig;
 import java.util.List;
 import java.util.Set;
 
@@ -12,8 +12,17 @@ import java.util.Set;
  */
 public interface RouteConfigService {
 
-  List<RouteConfig> routeConfigAllValidaList();
+  /**
+   * query all VALID route config list
+   * @return
+   */
+  List<RouteConfig> queryRouteConfigAllValidaList();
 
-  List<RouteConfig> findInConfigIds(Set<Long> saveConfigIds);
+  /**
+   * query config list by config_ids
+   * @param saveConfigIds
+   * @return
+   */
+  List<RouteConfig> queryInConfigIds(Set<Long> saveConfigIds);
 
 }

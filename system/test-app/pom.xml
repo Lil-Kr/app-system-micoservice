@@ -99,12 +99,6 @@
 		
 		<dependency>
 			<groupId>org.cy.micoservice.app</groupId>
-			<artifactId>app-infra-console-sdk</artifactId>
-			<version>${app-infra-console-sdk.version}</version>
-		</dependency>
-		
-		<dependency>
-			<groupId>org.cy.micoservice.app</groupId>
 			<artifactId>app-framework-identify-starter</artifactId>
 			<version>${app-framework-parent.version}</version>
 		</dependency>

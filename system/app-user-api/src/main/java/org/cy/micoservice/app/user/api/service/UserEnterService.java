@@ -1,5 +1,6 @@
 package org.cy.micoservice.app.user.api.service;
 
+
 import org.cy.micoservice.app.user.facade.dto.req.UserEnterInitReqDTO;
 
 /**
@@ -11,7 +12,7 @@ public interface UserEnterService {
 
   /**
    * 发送MQ通知, 用户进入程序时触发
-   * @param userEnterInitReqDTO
+   * @param reqDTO
    */
-  boolean enter(UserEnterInitReqDTO req);
+  boolean enter(UserEnterInitReqDTO reqDTO);
 }

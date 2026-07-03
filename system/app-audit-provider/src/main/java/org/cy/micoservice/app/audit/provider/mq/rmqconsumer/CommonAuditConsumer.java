@@ -16,7 +16,7 @@ import org.apache.rocketmq.common.message.MessageExt;
 import org.cy.micoservice.app.audit.facade.dto.AuditMsgDTO;
 import org.cy.micoservice.app.audit.facade.dto.AuditResultDTO;
 import org.cy.micoservice.app.audit.facade.dto.AuditResultMessageDTO;
-import org.cy.micoservice.app.audit.facade.dto.NoteTextAuditBody;
+import org.cy.micoservice.app.audit.facade.dto.note.content.NoteTextAuditBody;
 import org.cy.micoservice.app.audit.facade.dto.text.TextAuditBody;
 import org.cy.micoservice.app.audit.facade.enums.AuditTypeEnum;
 import org.cy.micoservice.app.audit.facade.enums.TextAuditBodyTypeEnum;

@@ -1,8 +1,9 @@
 package org.cy.micoservice.app.user.facade.interfaces;
 
 import org.cy.micoservice.app.common.base.provider.RpcResponse;
-import org.cy.micoservice.app.user.facade.dto.req.TestReq;
+import org.cy.micoservice.app.user.facade.dto.req.TestReqDTO;
 import org.cy.micoservice.app.user.facade.dto.req.UserRegisterReqDTO;
+import org.cy.micoservice.app.user.facade.dto.req.UserSaveReqDTO;
 import org.cy.micoservice.app.user.facade.dto.resp.UserRegisterRespDTO;
 import org.cy.micoservice.app.user.facade.dto.resp.UserRespDTO;
 
@@ -43,6 +44,7 @@ public interface UserFacade {
    */
   RpcResponse<List<UserRespDTO>> queryInUserIds(List<Long> userIds);
 
+  RpcResponse<Boolean> update(UserSaveReqDTO req);
 
-  String test(TestReq req);
+  String test(TestReqDTO req);
 }

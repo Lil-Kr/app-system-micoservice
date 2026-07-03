@@ -15,6 +15,10 @@
 		<maven.compiler.target>17</maven.compiler.target>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<app-framework-parent.version>1.0.0</app-framework-parent.version>
+		<app-common.version>1.0.0</app-common.version>
+		<app-gateway-facade.version>1.0.0</app-gateway-facade.version>
+		<app-gateway-model.version>1.0.0</app-gateway-model.version>
+		<app-infra-facade.version>1.0.0</app-infra-facade.version>
 	</properties>
 	
 	<dependencies>
@@ -48,26 +52,32 @@
 		<!-- 自定义组件 -->
 		<dependency>
 			<groupId>org.cy.micoservice.app</groupId>
+			<artifactId>app-framework-web-starter</artifactId>
+			<version>${app-framework-parent.version}</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.cy.micoservice.app</groupId>
 			<artifactId>app-common</artifactId>
-			<version>1.0.0</version>
+			<version>${app-common.version}</version>
 		</dependency>
 		
 		<dependency>
 			<groupId>org.cy.micoservice.app</groupId>
 			<artifactId>app-gateway-facade</artifactId>
-			<version>1.0.0</version>
+			<version>${app-gateway-facade.version}</version>
 		</dependency>
 		
 		<dependency>
 			<groupId>org.cy.micoservice.app</groupId>
 			<artifactId>app-entity-gateway-model</artifactId>
-			<version>1.0.0</version>
+			<version>${app-gateway-model.version}</version>
 		</dependency>
 		
 		<dependency>
 			<groupId>org.cy.micoservice.app</groupId>
-			<artifactId>app-framework-web-starter</artifactId>
-			<version>${app-framework-parent.version}</version>
+			<artifactId>app-infra-facade</artifactId>
+			<version>${app-infra-facade.version}</version>
 		</dependency>
 	</dependencies>
 	

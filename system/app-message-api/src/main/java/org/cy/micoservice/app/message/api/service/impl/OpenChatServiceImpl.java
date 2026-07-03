@@ -6,7 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.rocketmq.client.producer.SendResult;
 import org.apache.rocketmq.client.producer.SendStatus;
 import org.apache.rocketmq.common.message.Message;
-import org.cy.micoservice.app.entity.message.model.provider.req.OpenChatReq;
+import org.cy.micoservice.app.message.api.vo.req.OpenChatReq;
 import org.cy.micoservice.app.framework.rocketmq.starter.producer.RocketMQProducerClient;
 import org.cy.micoservice.app.message.api.config.ApplicationProperties;
 import org.cy.micoservice.app.message.api.service.OpenChatService;

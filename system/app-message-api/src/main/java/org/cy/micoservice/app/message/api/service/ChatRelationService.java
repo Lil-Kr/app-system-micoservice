@@ -2,9 +2,9 @@ package org.cy.micoservice.app.message.api.service;
 
 
 import org.cy.micoservice.app.common.base.provider.RpcPageResponse;
-import org.cy.micoservice.app.entity.message.model.provider.req.ChatRelationPageReq;
-import org.cy.micoservice.app.entity.message.model.provider.req.ChatRelationReq;
-import org.cy.micoservice.app.entity.message.model.provider.resp.ChatRelationResp;
+import org.cy.micoservice.app.message.api.vo.req.ChatRelationPageReq;
+import org.cy.micoservice.app.message.api.vo.req.ChatRelationReq;
+import org.cy.micoservice.app.message.api.vo.resp.ChatRelationResp;
 
 /**
  * @Author: Lil-K

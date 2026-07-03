@@ -3,10 +3,9 @@ package org.cy.micoservice.app.infra.console.sdk.http;
 import feign.Headers;
 import feign.RequestLine;
 import org.cy.micoservice.app.common.base.api.ApiResp;
-import org.cy.micoservice.app.entity.gateway.model.entity.RouteConfig;
-import org.cy.micoservice.app.entity.gateway.model.req.RouteConfigQueryListReq;
-import org.cy.micoservice.app.entity.gateway.model.req.RouteConfigSaveReq;
-
+import org.cy.micoservice.app.entity.gateway.model.RouteConfig;
+import org.cy.micoservice.app.infra.facade.dto.RouteConfigQueryListReqDTO;
+import org.cy.micoservice.app.infra.facade.dto.RouteConfigSaveReqDTO;
 import java.util.List;
 
 /**
@@ -18,9 +17,9 @@ public interface InfraConsoleFacade {
 
   @RequestLine("POST /api/route/config/createInternal")
   @Headers("Content-Type: application/json")
-  ApiResp<Long> createRouteConfig(RouteConfigSaveReq req);
+  ApiResp<Long> createRouteConfig(RouteConfigSaveReqDTO req);
 
   @RequestLine("POST /api/route/config/listInternal")
   @Headers("Content-Type: application/json")
-  ApiResp<List<RouteConfig>> routeList(RouteConfigQueryListReq req);
+  ApiResp<List<RouteConfig>> routeList(RouteConfigQueryListReqDTO req);
 }

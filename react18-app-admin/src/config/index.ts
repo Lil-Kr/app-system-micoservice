@@ -24,68 +24,71 @@ export const PREFIX_BASE_BACKEND_URL = import.meta.env.VITE_PREFIX_BASE_BACKEND_
 /**
  * blog-label
  */
-export const PREFIX_URL_BLOG_LABEL = '/api/blog/label'
+export const PREFIX_URL_BLOG_LABEL = '/blog/label'
 
 /**
  * blog-category
  */
-export const PREFIX_URL_BLOG_CATEGORY = '/api/blog/category'
+export const PREFIX_URL_BLOG_CATEGORY = '/blog/category'
 
 /**
  * blog-topic
  */
-export const PREFIX_URL_BLOG_TOPIC = '/api/blog/topic'
+export const PREFIX_URL_BLOG_TOPIC = '/blog/topic'
 
 /**
  * blog-content
  */
-export const PREFIX_URL_BLOG_CONTENT = '/api/blog/content'
+export const PREFIX_URL_BLOG_CONTENT = '/blog/content'
 
 /**
  * blog-diary
  */
-export const PREFIX_URL_BLOG_DIARY = '/api/blog/diary'
+export const PREFIX_URL_BLOG_DIARY = '/blog/diary'
 
 /**
  * image-category
  */
-export const PREFIX_URL_IMAGE_CATEGORY = '/api/image/category'
+export const PREFIX_URL_IMAGE_CATEGORY = '/image/category'
 
-export const PREFIX_URL_IMAGE_INFO = '/api/image/info'
+/**
+ * 
+ */
+export const PREFIX_URL_IMAGE_INFO = '/image/info'
 
 /**
  * sys-org
  */
-export const PREFIX_URL_SYS_ORG = '/api/sys/org'
+export const PREFIX_URL_SYS_ORG = '/sys/org'
 
 /**
  * sys-admin
  */
-export const PREFIX_URL_SYS_USER = '/api/sys/admin'
+export const PREFIX_URL_SYS_USER = '/sys/admin'
 
 /**
  * sys-acl-*
  */
-export const PREFIX_URL_SYS_ACL_MODULE = '/api/sys/aclModule'
+export const PREFIX_URL_SYS_ACL_MODULE = '/sys/aclModule'
 
-export const PREFIX_URL_SYS_ACL = '/api/sys/acl'
+export const PREFIX_URL_SYS_ACL = '/sys/acl'
 
 /**
  * sys-dict
  */
-export const PREFIX_URL_SYS_DICT = '/api/sys/dict'
+export const PREFIX_URL_SYS_DICT = '/sys/dict'
 
 /**
  * sys-role
  */
-export const PREFIX_URL_SYS_ROLE = '/api/sys/role'
+export const PREFIX_URL_SYS_ROLE = '/sys/role'
 
 /**
  * sys-menu
  */
-export const PREFIX_URL_SYS_MENU = '/api/sys/auth'
+export const PREFIX_URL_SYS_MENU = '/sys/auth'
 
 /**
  * route-config
  */
-export const PREFIX_URL_ROUTE_CONFIG = '/api/route/config'
+export const PREFIX_URL_ROUTE_CONFIG = '/route/config'

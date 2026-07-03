@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
  * @Description: sync user info switch
  */
 @Service
-@DubboService(group = "sync-group",version = "1.2.0")
+@DubboService(group = "sync-group", version = "1.2.0")
 public class SyncTaskFacadeImpl implements SyncTaskFacade {
 
   @Autowired
@@ -21,5 +21,10 @@ public class SyncTaskFacadeImpl implements SyncTaskFacade {
   @Override
   public boolean startTask() {
     return userSyncTask.startSyncTask();
+  }
+
+  @Override
+  public void startVerifyUserDataTask() {
+    userSyncTask.startVerifyUserDataTask();
   }
 }

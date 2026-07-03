@@ -1,7 +1,7 @@
 package org.cy.micoservice.app.gateway.service;
 
 
-import org.cy.micoservice.app.entity.gateway.model.entity.RouteChangeLog;
+import org.cy.micoservice.app.entity.gateway.model.RouteChangeLog;
 
 import java.util.List;
 
@@ -17,5 +17,5 @@ public interface RouteConfigChangeLogService {
    * @param version
    * @return
    */
-  List<RouteChangeLog> findGtVersion(Long version);
+  List<RouteChangeLog> queryGtVersion(Long version);
 }

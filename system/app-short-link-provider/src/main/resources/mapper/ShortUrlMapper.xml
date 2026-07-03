@@ -15,7 +15,7 @@
 		a.id, a.short_code, a.origin_url, a.origin_url_hash, a.expire_days, a.access_count, a.status, a.create_id, a.update_id, a.create_time, a.update_time
 	</sql>
 	
-	<select id="findByShortCode" resultType="org.cy.micoservice.app.entity.shortlink.model.provider.pojo.ShortUrlMapping">
+	<select id="findByShortCode" resultType="org.cy.micoservice.app.entity.shortlink.model.ShortUrlMapping">
 		select <include refid="Base_Column_List" />
 		from <include refid="Table_Name" />
 		<where>

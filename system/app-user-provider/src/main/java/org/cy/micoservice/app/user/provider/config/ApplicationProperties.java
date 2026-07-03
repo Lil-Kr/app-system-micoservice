@@ -21,4 +21,21 @@ public class ApplicationProperties {
    */
   @Value("${sync.user.info.topic:}")
   private String syncUserInfoTopic;
+
+  /**
+   * switch traffic routing config
+   */
+  @Value("${dynamic.read.rate:0.5}")
+  private Double dynamicReadRate;
+
+  @Value("${dynamic.write.rate:0}")
+  private Double dynamicWriteRate;
+
+  // ==================== ES index ====================
+  @Value("${es.user.follower.index:app.user.user-follower-relation}")
+  private String userFollowerRelationEsIndex;
+
+  @Value("${es.user.phone.index:app.user.user-phone-relation}")
+  private String userPhoneRelationEsIndex;
+
 }

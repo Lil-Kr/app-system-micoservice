@@ -11,8 +11,9 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum TextAuditBodyTypeEnum {
-
+  // 笔记审核
   NOTE(1,"note"),
+  // IM-聊天审核
   CHAT(2,"chat"),
   ;
 

@@ -1,6 +1,6 @@
 package org.cy.micoservice.app.gateway.config;
 
-import com.alibaba.fastjson2.JSON;
+import com.alibaba.fastjson2.JSONObject;
 import com.alibaba.nacos.api.NacosFactory;
 import com.alibaba.nacos.api.config.ConfigService;
 import com.alibaba.nacos.api.config.listener.Listener;
@@ -8,12 +8,12 @@ import com.alibaba.nacos.api.exception.NacosException;
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
-import org.cy.micoservice.app.entity.gateway.model.entity.RouteChangeLog;
-import org.cy.micoservice.app.entity.gateway.model.entity.RouteConfig;
+import org.cy.micoservice.app.entity.gateway.model.RouteChangeLog;
+import org.cy.micoservice.app.entity.gateway.model.RouteConfig;
+import org.cy.micoservice.app.gateway.facade.dto.ChangeBodyDTO;
 import org.cy.micoservice.app.gateway.facade.enums.GatewayRouterChangeEventEnum;
 import org.cy.micoservice.app.gateway.facade.enums.GatewayRouterStatusEnum;
 import org.cy.micoservice.app.gateway.facade.utils.NacosRouteVersionUtils;
-import org.cy.micoservice.app.gateway.facade.dto.ChangeBodyDTO;
 import org.cy.micoservice.app.gateway.service.RouteCacheService;
 import org.cy.micoservice.app.gateway.service.RouteConfigChangeLogService;
 import org.cy.micoservice.app.gateway.service.RouteConfigService;
@@ -30,7 +30,7 @@ import java.util.concurrent.Executor;
 /**
  * @Author: Lil-K
  * @Date: 2025/11/24
- * @Description: 网关理由配置刷新监听
+ * @Description: gateway config refresh listener
  */
 @Slf4j
 @Configuration
@@ -62,17 +62,19 @@ public class RouteConfigRefreshListener {
     properties.put("username", applicationProperties.getUsername());
     properties.put("password", applicationProperties.getPassword());
     ConfigService configService = NacosFactory.createConfigService(properties);
+
     String dataId = applicationProperties.getRefreshDataId();
     String group = applicationProperties.getRefreshGroup();
     String config = configService.getConfig(dataId, group, NACOS_TIMEOUT_MS);
-    log.info("first load config is: {}", config);
+    log.info("first load config version is: {}", config);
 
+    // load current version number
     Long version = NacosRouteVersionUtils.parseConfigVersionFromConfig(config);
     this.currentVersion = version;
     log.info("first load config version is: {}", version);
 
     /**
-     * 订阅 Nacos
+     * subscribe Nacos
      */
     configService.addListener(dataId, group, new Listener() {
       @Override
@@ -81,6 +83,7 @@ public class RouteConfigRefreshListener {
         return null;
       }
 
+      // notice
       @Override
       public void receiveConfigInfo(String configInfo) {
         log.info("receive config info: {}", configInfo);
@@ -89,9 +92,9 @@ public class RouteConfigRefreshListener {
           log.info("current config version is: {}", currentVersion);
 
           // reload from mysql config then refresh local gateway config
-          List<RouteChangeLog> routeChangeLogList = routeConfigChangeLogService.findGtVersion(currentVersion);
+          List<RouteChangeLog> routeChangeLogList = routeConfigChangeLogService.queryGtVersion(currentVersion);
           routeChangeLogHandler(routeChangeLogList);
-          // 更新版本号(追加)
+          // update version number(append)
           currentVersion = version;
         }
       }
@@ -109,7 +112,8 @@ public class RouteConfigRefreshListener {
     for (RouteChangeLog routeChangeLog : routeChangeLogList) {
       String changeEvent = routeChangeLog.getChangeEvent();
       String changeBody = routeChangeLog.getChangeBody();
-      ChangeBodyDTO changeBodyDTO = JSON.parseObject(changeBody, ChangeBodyDTO.class);
+      ChangeBodyDTO changeBodyDTO = JSONObject.parseObject(changeBody, ChangeBodyDTO.class);
+
       if (GatewayRouterChangeEventEnum.UPDATE.getCode().equals(changeEvent)) {
         RouteConfig afterRouteConfig = changeBodyDTO.getAfter();
         Integer status = afterRouteConfig.getStatus();
@@ -128,16 +132,18 @@ public class RouteConfigRefreshListener {
       }
     }
 
+    // save config
     if (CollectionUtils.isNotEmpty(saveConfigIds)) {
-      List<RouteConfig> needSaveConfigs = routerConfigService.findInConfigIds(saveConfigIds);
+      List<RouteConfig> needSaveConfigs = routerConfigService.queryInConfigIds(saveConfigIds);
       for (RouteConfig needSaveConfig : needSaveConfigs) {
-        boolean success = routeDefinitionWriterService.save(needSaveConfig);
-        if (!success) {
+        boolean saveStatue = routeDefinitionWriterService.save(needSaveConfig);
+        if (! saveStatue) {
           log.error("save route definition failed, configId: {}", needSaveConfig.getId());
         }
       }
     }
 
+    // delete config
     if (CollectionUtils.isNotEmpty(deletedConfigIds)) {
       for (Long deletedConfigId : deletedConfigIds) {
         routeDefinitionWriterService.delete(deletedConfigId);

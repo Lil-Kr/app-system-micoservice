@@ -4,7 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.cy.micoservice.app.common.base.provider.RpcResponse;
 import org.cy.micoservice.app.common.utils.BeanCopyUtils;
 import org.cy.micoservice.app.common.utils.DateUtil;
-import org.cy.micoservice.app.entity.shortlink.model.provider.pojo.ShortUrlMapping;
+import org.cy.micoservice.app.entity.shortlink.model.ShortUrlMapping;
 import org.cy.micoservice.app.framework.id.starter.service.IdService;
 import org.cy.micoservice.app.shortlink.facade.dto.req.CreateShortUrlReqDTO;
 import org.cy.micoservice.app.shortlink.facade.dto.resp.CreateShortUrlRespDTO;

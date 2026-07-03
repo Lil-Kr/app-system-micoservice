@@ -1,6 +1,6 @@
 package org.cy.micoservice.app.message.api.service.impl;
 
-import org.cy.micoservice.app.entity.message.model.provider.resp.ImConfigResp;
+import org.cy.micoservice.app.message.api.vo.resp.ImConfigResp;
 import org.cy.micoservice.app.framework.identiy.starter.config.AuthProperties;
 import org.cy.micoservice.app.framework.identiy.starter.uitls.JWTUtil;
 import org.cy.micoservice.app.message.api.service.ImConfigService;

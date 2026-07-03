@@ -3,7 +3,7 @@ package org.cy.micoservice.app.shortlink.provider.task;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.cy.micoservice.app.entity.shortlink.model.provider.pojo.ShortUrlMapping;
+import org.cy.micoservice.app.entity.shortlink.model.ShortUrlMapping;
 import org.cy.micoservice.app.shortlink.provider.dao.ShortUrlMapper;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;

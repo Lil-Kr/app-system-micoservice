@@ -3,7 +3,7 @@ package org.cy.micoservice.app.gateway.facade.dto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.cy.micoservice.app.entity.gateway.model.entity.RouteConfig;
+import org.cy.micoservice.app.entity.gateway.model.RouteConfig;
 
 import java.io.Serial;
 import java.io.Serializable;

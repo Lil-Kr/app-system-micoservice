@@ -2,7 +2,7 @@ package org.cy.micoservice.app.gateway.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Param;
-import org.cy.micoservice.app.entity.gateway.model.entity.RouteConfig;
+import org.cy.micoservice.app.entity.gateway.model.RouteConfig;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -16,7 +16,7 @@ import java.util.Set;
 @Repository
 public interface RouteConfigMapper extends BaseMapper<RouteConfig> {
 
-  List<RouteConfig> routeConfigAllValidaList(Integer status);
+  List<RouteConfig> queryRouteConfigAllValidaList(Integer status);
 
-  List<RouteConfig> findInConfigIds(@Param("configIds") Set<Long> saveConfigIds);
+  List<RouteConfig> queryInConfigIds(@Param("configIds") Set<Long> saveConfigIds);
 }

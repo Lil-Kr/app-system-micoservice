@@ -1,9 +1,9 @@
 package org.cy.micoservice.app.infra.console.service.impl;
 
 
-import org.cy.micoservice.app.entity.infra.console.model.req.image.ImageUploadReq;
-import org.cy.micoservice.app.entity.infra.console.model.req.sys.admin.AvatarUploadReq;
-import org.cy.micoservice.app.infra.console.service.UploadService;
+import org.cy.micoservice.app.infra.console.vo.req.image.ImageUploadReq;
+import org.cy.micoservice.app.infra.console.vo.req.sys.admin.AvatarUploadReq;
+import org.cy.micoservice.app.infra.console.service.interfaces.UploadService;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;

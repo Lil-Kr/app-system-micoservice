@@ -1,6 +1,6 @@
 package org.cy.micoservice.app.shortlink.api.service;
 
-import org.cy.micoservice.app.entity.shortlink.model.provider.pojo.ShortUrlMapping;
+import org.cy.micoservice.app.entity.shortlink.model.ShortUrlMapping;
 
 /**
  * @Author: Lil-K

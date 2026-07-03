@@ -7,7 +7,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.cy.micoservice.app.common.base.provider.RpcPageResponse;
 import org.cy.micoservice.app.common.utils.BeanCopyUtils;
 import org.cy.micoservice.app.common.utils.IdGenerateUtil;
-import org.cy.micoservice.app.entity.message.model.provider.pojo.mysql.ChatRelation;
+import org.cy.micoservice.app.entity.message.model.mysql.ChatRelation;
 import org.cy.micoservice.app.message.facade.dto.req.ChatRecordReqDTO;
 import org.cy.micoservice.app.message.facade.dto.req.ChatRelationPageReqDTO;
 import org.cy.micoservice.app.message.facade.dto.req.ChatRelationReqDTO;

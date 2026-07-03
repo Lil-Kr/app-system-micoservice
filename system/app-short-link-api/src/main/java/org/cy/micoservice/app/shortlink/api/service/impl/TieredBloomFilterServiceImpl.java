@@ -2,7 +2,7 @@ package org.cy.micoservice.app.shortlink.api.service.impl;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.cy.micoservice.app.entity.shortlink.model.api.pojo.NodeInfo;
+import org.cy.micoservice.app.shortlink.api.pojo.NodeInfo;
 import org.cy.micoservice.app.shortlink.api.service.BloomFilterStreamService;
 import org.cy.micoservice.app.shortlink.api.service.LocalBloomFilterService;
 import org.cy.micoservice.app.shortlink.api.service.RedisBloomFilterService;

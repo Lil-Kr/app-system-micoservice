@@ -2,13 +2,13 @@ package org.cy.micoservice.app.infra.console.sdk.core;
 
 import lombok.extern.slf4j.Slf4j;
 import org.cy.micoservice.app.common.base.api.ApiResp;
-import org.cy.micoservice.app.entity.gateway.model.entity.RouteConfig;
-import org.cy.micoservice.app.entity.gateway.model.req.RouteConfigQueryListReq;
-import org.cy.micoservice.app.entity.gateway.model.req.RouteConfigSaveReq;
+import org.cy.micoservice.app.entity.gateway.model.RouteConfig;
 import org.cy.micoservice.app.infra.console.sdk.config.FeignClientFactory;
 import org.cy.micoservice.app.infra.console.sdk.config.NacosServiceDiscovery;
 import org.cy.micoservice.app.infra.console.sdk.config.SdkProperties;
 import org.cy.micoservice.app.infra.console.sdk.http.InfraConsoleFacade;
+import org.cy.micoservice.app.infra.facade.dto.RouteConfigQueryListReqDTO;
+import org.cy.micoservice.app.infra.facade.dto.RouteConfigSaveReqDTO;
 import org.springframework.stereotype.Component;
 
 import java.util.Collections;
@@ -59,16 +59,16 @@ public class InfraConsoleClient {
    * @param request
    * @return
    */
-  public ApiResp<Long> createRouteConfig(RouteConfigSaveReq request) {
+  public ApiResp<Long> createRouteConfig(RouteConfigSaveReqDTO request) {
     return this.getInfraConsoleFacade().createRouteConfig(request);
   }
 
   /**
-   * 查询所有
+   * query all route list
    * @param req
    * @return
    */
-  public Set<String> routeList(RouteConfigQueryListReq req) {
+  public Set<String> routeList(RouteConfigQueryListReqDTO req) {
     ApiResp<List<RouteConfig>> resp = this.getInfraConsoleFacade().routeList(req);
     return Optional.ofNullable(resp.getData())
       .orElse(Collections.emptyList())

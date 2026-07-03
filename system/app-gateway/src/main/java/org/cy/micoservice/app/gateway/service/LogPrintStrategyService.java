@@ -1,6 +1,6 @@
 package org.cy.micoservice.app.gateway.service;
 
-import org.cy.micoservice.app.entity.gateway.model.entity.LogPrintStrategy;
+import org.cy.micoservice.app.entity.gateway.model.LogPrintStrategy;
 import org.cy.micoservice.app.gateway.facade.dto.LogRequestDTO;
 import org.cy.micoservice.app.gateway.facade.print.abst.BaseLogPrintStrategy;
 

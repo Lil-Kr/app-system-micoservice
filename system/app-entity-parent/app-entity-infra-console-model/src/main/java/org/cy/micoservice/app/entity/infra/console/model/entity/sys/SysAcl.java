@@ -7,7 +7,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
-import org.cy.micoservice.app.entity.base.model.api.BaseEntity;
+import org.cy.micoservice.app.entity.base.model.entity.BaseEntity;
 
 import java.io.Serial;
 

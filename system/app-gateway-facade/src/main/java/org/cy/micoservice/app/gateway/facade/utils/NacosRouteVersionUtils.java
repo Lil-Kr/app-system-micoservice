@@ -7,7 +7,7 @@ import org.cy.micoservice.app.common.exception.BizException;
 /**
  * @Author: Lil-K
  * @Date: 2025/11/25
- * @Description: 解析 Nacos 配置版本,  lastUpdateVersion=16
+ * @Description: 解析 Nacos 路由动态配置版本号,  lastUpdateVersion=1
  */
 public class NacosRouteVersionUtils {
 

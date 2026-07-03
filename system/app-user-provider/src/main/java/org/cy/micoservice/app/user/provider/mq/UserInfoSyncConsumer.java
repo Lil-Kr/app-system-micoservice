@@ -10,7 +10,7 @@ import org.apache.rocketmq.client.consumer.listener.MessageListenerOrderly;
 import org.apache.rocketmq.client.exception.MQClientException;
 import org.apache.rocketmq.common.consumer.ConsumeFromWhere;
 import org.apache.rocketmq.common.message.MessageExt;
-import org.cy.micoservice.app.entity.user.model.provider.pojo.UserShard;
+import org.cy.micoservice.app.entity.user.model.UserShard;
 import org.cy.micoservice.app.framework.rocketmq.starter.consumer.RocketMQConsumerProperties;
 import org.cy.micoservice.app.user.facade.dto.req.UserSaveReqDTO;
 import org.cy.micoservice.app.user.facade.enums.SyncUserInfoMsgTypeEnum;
@@ -44,6 +44,7 @@ public class UserInfoSyncConsumer {
    *
    * @throws MQClientException
    */
+  // @PostConstruct
   public void startConsume() throws MQClientException {
     DefaultMQPushConsumer mqPushConsumer = new DefaultMQPushConsumer();
     mqPushConsumer.setVipChannelEnabled(false);
@@ -53,8 +54,8 @@ public class UserInfoSyncConsumer {
     // each pull 1 message
     mqPushConsumer.setConsumeMessageBatchMaxSize(1);
     mqPushConsumer.subscribe(applicationProperties.getSyncUserInfoTopic(), "");
+    // 顺序消费场景, MessageListenerOrderly
     mqPushConsumer.setMessageListener(new MessageListenerOrderly() {
-      // 顺序消费场景
       @Override
       public ConsumeOrderlyStatus consumeMessage(List<MessageExt> msgs, ConsumeOrderlyContext context) {
         try {
@@ -71,7 +72,7 @@ public class UserInfoSyncConsumer {
           }
         } catch (Exception e) {
           log.info("用户信息同步过程异常: ", e);
-          // if happen exception, will block, need
+          // if happen exception, will block, need to human intervention
           return ConsumeOrderlyStatus.SUSPEND_CURRENT_QUEUE_A_MOMENT;
         }
         return ConsumeOrderlyStatus.SUCCESS;

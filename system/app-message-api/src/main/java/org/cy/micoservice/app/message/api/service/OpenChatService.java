@@ -1,6 +1,6 @@
 package org.cy.micoservice.app.message.api.service;
 
-import org.cy.micoservice.app.entity.message.model.provider.req.OpenChatReq;
+import org.cy.micoservice.app.message.api.vo.req.OpenChatReq;
 
 /**
  * @Author: Lil-K

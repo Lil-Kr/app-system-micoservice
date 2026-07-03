@@ -3,7 +3,7 @@ package org.cy.micoservice.app.gateway.config;
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.cy.micoservice.app.common.constants.gateway.GatewayInfraConsoleSdkConstants;
-import org.cy.micoservice.app.entity.gateway.model.entity.RouteConfig;
+import org.cy.micoservice.app.entity.gateway.model.RouteConfig;
 import org.cy.micoservice.app.gateway.config.async.GatewayAsyncTaskSubmitter;
 import org.cy.micoservice.app.gateway.facade.enums.GatewayRouterSchemaEnum;
 import org.cy.micoservice.app.gateway.service.DubboInvokerService;
@@ -46,17 +46,18 @@ public class RouteDefinitionConfig {
     log.info("first loading route config from db start");
     // 异步读取DB中的 route config 数据
     CompletableFuture<List<RouteConfig>> routeConfigListFuture = taskSubmitter.supplyAsync("query-route-config-data",
-        () -> routerConfigService.routeConfigAllValidaList(),
+        () -> routerConfigService.queryRouteConfigAllValidaList(),
         Collections::emptyList,
-        500L);
+        1000L);
 
     // 异步执行dubbo初始化配置
-    CompletableFuture<Void> initDubboInvoke = taskSubmitter.runAsync("init-dubbo-nacos-config", this::initDubboInvoke, () -> {}, 500L);
+    CompletableFuture<Void> initDubboInvoke = taskSubmitter.runAsync("init-dubbo-nacos-config", this::initDubboInvoke, () -> {}, 1000L);
     CompletableFuture.allOf(routeConfigListFuture, initDubboInvoke).join();
 
     List<RouteConfig> routeConfigList = routeConfigListFuture.get();
     for (RouteConfig routeConfig : routeConfigList) {
       if (GatewayRouterSchemaEnum.HTTP.getCode().equals(routeConfig.getSchema())) {
+        // save router config
         routeDefinitionWriterService.save(routeConfig);
         routeCacheService.put(routeConfig);
       } else {

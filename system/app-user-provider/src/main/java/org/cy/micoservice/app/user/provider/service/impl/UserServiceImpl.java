@@ -9,13 +9,12 @@ import org.cy.micoservice.app.common.base.provider.RpcPageResponse;
 import org.cy.micoservice.app.common.base.provider.RpcResponse;
 import org.cy.micoservice.app.common.utils.BeanCopyUtils;
 import org.cy.micoservice.app.common.utils.DateUtil;
-import org.cy.micoservice.app.entity.user.model.provider.pojo.User;
-import org.cy.micoservice.app.entity.user.model.provider.pojo.UserShard;
-import org.cy.micoservice.app.entity.user.model.provider.req.UserListPageReq;
-import org.cy.micoservice.app.entity.user.model.provider.resp.UserResp;
+import org.cy.micoservice.app.entity.user.model.User;
 import org.cy.micoservice.app.framework.rocketmq.starter.producer.RocketMQProducerClient;
+import org.cy.micoservice.app.user.facade.dto.req.UserListPageReqDTO;
 import org.cy.micoservice.app.user.facade.dto.req.UserRegisterReqDTO;
 import org.cy.micoservice.app.user.facade.dto.req.UserSaveReqDTO;
+import org.cy.micoservice.app.user.facade.dto.resp.UserRespDTO;
 import org.cy.micoservice.app.user.facade.enums.SyncUserInfoMsgTypeEnum;
 import org.cy.micoservice.app.user.provider.bo.SyncUserInfoMQMsgBO;
 import org.cy.micoservice.app.user.provider.config.ApplicationProperties;
@@ -33,6 +32,7 @@ import java.util.List;
  * @Date: 2026/6/6
  * @Description: user service (old)
  */
+@Deprecated
 @Slf4j
 @Service
 public class UserServiceImpl implements UserService {
@@ -65,8 +65,8 @@ public class UserServiceImpl implements UserService {
     boolean isStartedSyncTask = userSyncTask.getStartTime() != null && System.nanoTime() > userSyncTask.getStartTime();
     if (isStartedSyncTask) {
       // 避免重复insert, 依靠t_user分表底层的user_id作为唯一索引来避免重复
-      UserShard userShard = BeanCopyUtils.convert(user, UserShard.class);
-      this.sendSyncMsg(SyncUserInfoMsgTypeEnum.INSERT, JSON.toJSONString(userShard));
+      // UserShard userShard = BeanCopyUtils.convert(user, UserShard.class);
+      // this.sendSyncMsg(SyncUserInfoMsgTypeEnum.INSERT, JSON.toJSONString(userShard));
     }
     return user;
   }
@@ -108,7 +108,7 @@ public class UserServiceImpl implements UserService {
    * @return
    */
   @Override
-  public RpcPageResponse<UserResp> pageUserList(UserListPageReq req) {
+  public RpcPageResponse<UserRespDTO> pageUserList(UserListPageReqDTO req) {
     return null;
   }
 
@@ -119,8 +119,6 @@ public class UserServiceImpl implements UserService {
    */
   @Override
   public boolean update(UserSaveReqDTO reqDTO) {
-
-
 
     /**
      * user data migrate to new databases, new user data need incremental synchronization

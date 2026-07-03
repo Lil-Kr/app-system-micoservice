@@ -15,9 +15,9 @@ public class AuditApplicationProperties {
 
   /** ========================= topic ========================= **/
   /**
-   * 审核请求 topic
+   * note content audit topic
    */
-  @Value("${im.common.audit.topic:}")
+  @Value("${im.common.audit.topic:note-content-audit-topic}")
   private String commonAuditTopic;
 
   /**

@@ -11,7 +11,7 @@
 		id, app_name, `schema`, `method`, `path`, uri, dubbo_invoke_param_class, auth_type, `status`, deleted, create_id, update_id, create_time, update_time
 	</sql>
 	
-	<select id="routeConfigAllValidaList" resultType="org.cy.micoservice.app.entity.gateway.model.entity.RouteConfig">
+	<select id="queryRouteConfigAllValidaList" resultType="org.cy.micoservice.app.entity.gateway.model.RouteConfig">
 		select <include refid="Base_Column_List" />
 		from <include refid="Table_Name" />
 		<where>
@@ -21,7 +21,7 @@
 		</where>
 	</select>
 	
-	<select id="findInConfigIds" resultType="org.cy.micoservice.app.entity.gateway.model.entity.RouteConfig">
+	<select id="queryInConfigIds" resultType="org.cy.micoservice.app.entity.gateway.model.RouteConfig">
 		select <include refid="Base_Column_List" />
 		from <include refid="Table_Name" />
 		<where>

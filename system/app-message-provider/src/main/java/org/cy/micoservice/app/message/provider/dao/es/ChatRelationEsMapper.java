@@ -20,7 +20,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.cy.micoservice.app.common.base.provider.RpcPageResponse;
 import org.cy.micoservice.app.common.enums.biz.DeleteStatusEnum;
 import org.cy.micoservice.app.common.utils.BeanCopyUtils;
-import org.cy.micoservice.app.entity.message.model.provider.pojo.es.ChatRelationEs;
+import org.cy.micoservice.app.entity.message.model.es.ChatRelationEs;
 import org.cy.micoservice.app.framework.elasticsearch.starter.dto.SearchPageRequest;
 import org.cy.micoservice.app.framework.elasticsearch.starter.utils.ElasticsearchUtil;
 import org.cy.micoservice.app.message.facade.dto.req.ChatRelationPageReqDTO;

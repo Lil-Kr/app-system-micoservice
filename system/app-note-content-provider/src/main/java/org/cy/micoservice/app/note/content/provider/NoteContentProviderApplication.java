@@ -1,6 +1,7 @@
 package org.cy.micoservice.app.note.content.provider;
 
 import org.apache.dubbo.config.spring.context.annotation.EnableDubbo;
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -14,7 +15,7 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 @SpringBootApplication
 @EnableDubbo
 @EnableDiscoveryClient
-// @MapperScan(basePackages = {"org.cy.micoservice.app.user.provider.dao"})
+@MapperScan(basePackages = {"org.cy.micoservice.app.note.content.provider.dao"})
 public class NoteContentProviderApplication {
 
   public static void main(String[] args) {

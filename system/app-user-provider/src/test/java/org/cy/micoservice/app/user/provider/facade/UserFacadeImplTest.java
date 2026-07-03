@@ -4,10 +4,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.dubbo.config.ApplicationConfig;
 import org.apache.dubbo.config.ReferenceConfig;
 import org.apache.dubbo.config.RegistryConfig;
-import org.cy.micoservice.app.user.facade.dto.req.TestReq;
+import org.cy.micoservice.app.user.facade.dto.req.TestReqDTO;
 import org.cy.micoservice.app.user.facade.interfaces.UserFacade;
 import org.junit.Before;
 import org.junit.Test;
+
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 
 @Slf4j
 public class UserFacadeImplTest {
@@ -39,10 +42,18 @@ public class UserFacadeImplTest {
     // 获取远程服务代理
     UserFacade userFacade = reference.get();
     try {
-      String res = userFacade.test(new TestReq());
+      String res = userFacade.test(new TestReqDTO());
       log.info("userDTO: {}", res);
     } catch (Exception e) {
       e.printStackTrace();
     }
+  }
+
+  /**
+   *
+   */
+  @Test
+  public void test3() {
+    System.out.println(LocalDateTime.now().toInstant(ZoneOffset.of("+8")).toEpochMilli());
   }
 }

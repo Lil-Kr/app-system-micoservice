@@ -5,7 +5,7 @@ import com.alibaba.fastjson2.JSONObject;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.dubbo.rpc.service.GenericService;
 import org.cy.micoservice.app.common.constants.gateway.GatewayInfraConsoleSdkConstants;
-import org.cy.micoservice.app.entity.gateway.model.entity.RouteConfig;
+import org.cy.micoservice.app.entity.gateway.model.RouteConfig;
 import org.cy.micoservice.app.gateway.facade.constants.GatewayConstants;
 import org.cy.micoservice.app.gateway.facade.enums.GatewayRouterSchemaEnum;
 import org.cy.micoservice.app.gateway.filter.abst.AbstractGatewayFilter;
