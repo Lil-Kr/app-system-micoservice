@@ -29,6 +29,16 @@ public class NacosServiceImpl implements NacosService, InitializingBean, Disposa
   private ConfigService configService;
 
   @Override
+  public void afterPropertiesSet() throws Exception {
+    Properties properties = new Properties();
+    properties.put("serverAddr", applicationProperties.getServerAddr());
+    properties.put("namespace", applicationProperties.getNamespace());
+    properties.put("username", applicationProperties.getUsername());
+    properties.put("password", applicationProperties.getPassword());
+    configService = NacosFactory.createConfigService(properties);
+  }
+
+  @Override
   public Long incrVersion() throws NacosException {
     try {
       /**
@@ -38,8 +48,8 @@ public class NacosServiceImpl implements NacosService, InitializingBean, Disposa
       long version = NacosRouteVersionUtils.parseConfigVersionFromConfig(config);
       version = version + 1;
 
-      String finalVersionString = NacosRouteVersionUtils.formatConfigVersion(version);
-      boolean published = configService.publishConfig(applicationProperties.getRefreshDataId(), applicationProperties.getRefreshGroup(), finalVersionString, "properties");
+      String finalVersionStr = NacosRouteVersionUtils.formatConfigVersion(version);
+      boolean published = configService.publishConfig(applicationProperties.getRefreshDataId(), applicationProperties.getRefreshGroup(), finalVersionStr, "properties");
 
       log.info("publish status: {}", published);
       configService.shutDown();
@@ -48,16 +58,6 @@ public class NacosServiceImpl implements NacosService, InitializingBean, Disposa
       log.error("nacos config error: {}", e.getMessage());
       throw e;
     }
-  }
-
-  @Override
-  public void afterPropertiesSet() throws Exception {
-    Properties properties = new Properties();
-    properties.put("serverAddr", applicationProperties.getServerAddr());
-    properties.put("namespace", applicationProperties.getNamespace());
-    properties.put("username", applicationProperties.getUsername());
-    properties.put("password", applicationProperties.getPassword());
-    configService = NacosFactory.createConfigService(properties);
   }
 
   @Override

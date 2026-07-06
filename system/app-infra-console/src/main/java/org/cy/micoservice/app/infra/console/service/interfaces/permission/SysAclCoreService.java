@@ -1,6 +1,6 @@
 package org.cy.micoservice.app.infra.console.service.interfaces.permission;
 
-import org.cy.micoservice.app.entity.infra.console.model.entity.sys.SysAcl;
+import org.cy.micoservice.app.entity.infra.console.model.sys.SysAcl;
 
 import java.util.List;
 
@@ -14,7 +14,7 @@ public interface SysAclCoreService {
 	/**
 	 * 获取当前用户所拥有的权限列表
 	 */
-	// List<SysAcl> getCurrentUserAclList();
+	List<SysAcl> getCurrentAdminAclList();
 
 	List<SysAcl> getCurrentAdminAclList(Long adminId);
 
@@ -23,9 +23,25 @@ public interface SysAclCoreService {
 	 */
 	List<SysAcl> getRoleAclList(Long roleSurrogateId);
 
-	List<SysAcl> getAdminAclList(Long userId);
+	/**
+	 *
+	 * @param adminId
+	 * @return
+	 */
+	List<SysAcl> getAdminAclList(Long adminId);
 
-	List<SysAcl> getAdminAclList(Long userId, Integer type);
+	/**
+	 *
+	 * @param adminId
+	 * @param type
+	 * @return
+	 */
+	List<SysAcl> getAdminAclList(Long adminId, Integer type);
 
+	/**
+	 *
+	 * @param url
+	 * @return
+	 */
 	boolean hasUrlAcl(String url);
 }

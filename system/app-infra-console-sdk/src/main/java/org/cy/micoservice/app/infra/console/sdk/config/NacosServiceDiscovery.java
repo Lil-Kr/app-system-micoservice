@@ -18,27 +18,27 @@ import java.util.Random;
  */
 public class NacosServiceDiscovery {
 
-    private final NamingService namingService;
-    private final Random random = new Random();
+  private final NamingService namingService;
+  private final Random random = new Random();
 
-    public NacosServiceDiscovery(String serverAddr, String namespace, String user, String pwd) throws NacosException {
-        Properties props = new Properties();
-        props.put("namespace", namespace);
-        props.put("serverAddr", serverAddr);
-        props.put("username", user);
-        props.put("password", pwd);
-        this.namingService = NacosFactory.createNamingService(props);
-    }
+  public NacosServiceDiscovery(String serverAddr, String namespace, String username, String password) throws NacosException {
+    Properties props = new Properties();
+    props.put("namespace", namespace);
+    props.put("serverAddr", serverAddr);
+    props.put("username", username);
+    props.put("password", password);
+    this.namingService = NacosFactory.createNamingService(props);
+  }
 
-    /**
-     * 获取一个健康实例(随机负载均衡)
-     */
-    public Instance getRandomHealthyInstance(String serviceName, String group) throws NacosException {
-        List<Instance> instances = namingService.selectInstances(serviceName, group, true);
-        if (CollectionUtils.isEmpty(instances)) {
-            throw new IllegalStateException("No healthy instances for service: " + serviceName);
-        }
-        // 随机选一个 instance 调用
-        return instances.get(random.nextInt(instances.size()));
+  /**
+   * 获取一个健康实例(随机负载均衡)
+   */
+  public Instance getRandomHealthyInstance(String serviceName, String group) throws NacosException {
+    List<Instance> instances = namingService.selectInstances(serviceName, group, true);
+    if (CollectionUtils.isEmpty(instances)) {
+      throw new IllegalStateException("No healthy instances for service: " + serviceName);
     }
+    // 随机选一个 instance 调用
+    return instances.get(random.nextInt(instances.size()));
+  }
 }

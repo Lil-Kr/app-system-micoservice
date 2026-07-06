@@ -3,7 +3,7 @@ package org.cy.micoservice.app.gateway.facade.print;
 
 import com.alibaba.fastjson2.JSON;
 import org.cy.micoservice.app.gateway.facade.print.abst.BaseLogPrintStrategy;
-import org.cy.micoservice.app.gateway.facade.dto.LogRequestDTO;
+import org.cy.micoservice.app.gateway.facade.dto.gateway.req.LogReqDTO;
 
 import java.io.Serial;
 
@@ -33,8 +33,8 @@ public class TimeGapPrintStrategy extends BaseLogPrintStrategy {
   }
 
   @Override
-  public boolean isSupport(LogRequestDTO logRequestDTO) {
-    Long currentTime = logRequestDTO.getEventTime();
+  public boolean isSupport(LogReqDTO logReqDTO) {
+    Long currentTime = logReqDTO.getEventTime();
     if (currentTime == null) {
       return false;
     }

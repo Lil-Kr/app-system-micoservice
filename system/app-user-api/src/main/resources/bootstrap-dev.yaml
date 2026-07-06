@@ -25,3 +25,10 @@ spring:
   config:
     import:
       - optional:nacos:app-user-api.yaml
+
+## slf4j log level
+logging:
+  level:
+    root: info
+    org.cy.micoservice.app.user.api: DEBUG
+    org.cy.micoservice.app.infra.console.sdk: DEBUG

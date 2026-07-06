@@ -9,8 +9,8 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.cy.micoservice.app.common.base.api.ApiResp;
 import org.cy.micoservice.app.common.enums.biz.ValidStatusEnum;
 import org.cy.micoservice.app.common.utils.DateUtil;
-import org.cy.micoservice.app.entity.infra.console.model.entity.sys.SysAcl;
-import org.cy.micoservice.app.entity.infra.console.model.entity.sys.SysRoleAcl;
+import org.cy.micoservice.app.entity.infra.console.model.sys.SysAcl;
+import org.cy.micoservice.app.entity.infra.console.model.sys.SysRoleAcl;
 import org.cy.micoservice.app.infra.console.vo.req.sys.acl.AclReq;
 import org.cy.micoservice.app.infra.console.vo.req.sys.roleacl.RoleAclSaveReq;
 import org.cy.micoservice.app.infra.console.dao.permission.SysAclMapper;
@@ -121,7 +121,7 @@ public class SysRoleAclServiceImpl extends ServiceImpl<SysRoleAclMapper, SysRole
 		 * 缓存失效: 用户的权限点失效
 		 */
 		List<Long> adminIdList = roleUserMapper.selectAdminIdListByRoleId(req.getRoleId());
-		permissionCacheService.invalidUserAclCache(adminIdList);
+		permissionCacheService.invalidAdminAclCache(adminIdList);
 		return ApiResp.success("修改角色对应权限点成功");
 	}
 

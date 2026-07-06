@@ -1,0 +1,46 @@
+import { PREFIX_URL_SYS_ROLE } from '@/config'
+import { AclModuleTreeResp } from '@/types/apis/sys/acl/aclType'
+import {
+  RoleAclTreeReq,
+  RoleAddReq,
+  RoleApi,
+  RoleDelReq,
+  RoleEditReq,
+  RoleListPageReq,
+  RoleAdminListResp,
+  RoleAdminReq,
+  SysRoleTableType,
+  UpdateRoleAclsReq,
+  UpdateRoleAdminReq
+} from '@/types/apis/sys/role/roleType'
+import { Result, ResultPage } from '@/types/base/response'
+import { baseAxiosRequest } from '@/utils/http/request'
+
+const roleApi: RoleApi = {
+  retrievePageRoleList(req: RoleListPageReq) {
+    return baseAxiosRequest.post<ResultPage<SysRoleTableType>>(PREFIX_URL_SYS_ROLE + '/pageList', req)
+  },
+  add(req: RoleAddReq) {
+    return baseAxiosRequest.post<Result<string>>(PREFIX_URL_SYS_ROLE + '/add', req)
+  },
+  update(req: RoleEditReq) {
+    return baseAxiosRequest.post<Result<string>>(PREFIX_URL_SYS_ROLE + '/edit', req)
+  },
+  delete(req: RoleDelReq) {
+    return baseAxiosRequest.delete<Result<string>>(PREFIX_URL_SYS_ROLE + '/delete', req)
+  },
+  roleAclTree(req: RoleAclTreeReq) {
+    return baseAxiosRequest.post<Result<AclModuleTreeResp[]>>(PREFIX_URL_SYS_ROLE + '/roleAclTree', req)
+  },
+  roleAdminList(req: RoleAdminReq) {
+    return baseAxiosRequest.post<Result<RoleAdminListResp>>(PREFIX_URL_SYS_ROLE + '/roleAdminList', req)
+  },
+  updateRoleAcls(req: UpdateRoleAclsReq) {
+    return baseAxiosRequest.post<Result<string>>(PREFIX_URL_SYS_ROLE + '/updateRoleAcls', req)
+  },
+  updateRoleAdmin(req: UpdateRoleAdminReq) {
+    return baseAxiosRequest.post<Result<string>>(PREFIX_URL_SYS_ROLE + '/updateRoleAdmins', req)
+  }
+}
+
+export default roleApi

@@ -24,14 +24,14 @@ public interface LogPrintStrategyService {
   /**
    * 添加路由日志打印策略
    */
-  ApiResp<String> add(LogPrintStrategyAddReq req);
+  ApiResp<String> create(LogPrintStrategyAddReq req);
 
   /**
    * 编辑 路由日志打印策略
    * @param req
    * @return
    */
-  ApiResp<String> edit(LogPrintStrategyEditReq req);
+  ApiResp<String> update(LogPrintStrategyEditReq req);
 
   /**
    * 删除 路由日志打印策略

@@ -2,14 +2,14 @@ package org.cy.micoservice.app.infra.console.controller.permission;
 
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
-import org.cy.micoservice.app.common.base.api.ApiResp;
 import org.cy.micoservice.app.common.base.api.ApiPageResult;
+import org.cy.micoservice.app.common.base.api.ApiResp;
 import org.cy.micoservice.app.entity.base.model.api.BasePageReq;
+import org.cy.micoservice.app.infra.console.service.interfaces.permission.SysAclService;
 import org.cy.micoservice.app.infra.console.vo.req.sys.acl.AclDeleteReq;
 import org.cy.micoservice.app.infra.console.vo.req.sys.acl.AclPageReq;
 import org.cy.micoservice.app.infra.console.vo.req.sys.acl.AclReq;
 import org.cy.micoservice.app.infra.console.vo.resp.sys.acl.SysAclResp;
-import org.cy.micoservice.app.infra.console.service.interfaces.permission.SysAclService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -28,7 +28,7 @@ public class AclController {
   private SysAclService aclService;
 
   /**
-   * 分页查询权限点列表
+   * query acl list by pagination
    * @param req
    * @return
    * @throws Exception
@@ -40,7 +40,7 @@ public class AclController {
   }
 
   /**
-   * 权限点信息保存
+   * create acl
    * @param req
    * @return
    */
@@ -50,7 +50,7 @@ public class AclController {
   }
 
   /**
-   * 修改权限点信息
+   * update acl
    * @param req
    * @return
    */
@@ -60,7 +60,7 @@ public class AclController {
   }
 
   /**
-   * 删除权限点
+   * delete acl
    * @param req
    * @return
    */

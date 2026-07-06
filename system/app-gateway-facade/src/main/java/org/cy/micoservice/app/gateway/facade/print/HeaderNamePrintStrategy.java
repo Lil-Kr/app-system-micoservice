@@ -3,7 +3,7 @@ package org.cy.micoservice.app.gateway.facade.print;
 import com.alibaba.fastjson2.JSON;
 import org.apache.commons.collections4.MapUtils;
 import org.cy.micoservice.app.gateway.facade.print.abst.BaseLogPrintStrategy;
-import org.cy.micoservice.app.gateway.facade.dto.LogRequestDTO;
+import org.cy.micoservice.app.gateway.facade.dto.gateway.req.LogReqDTO;
 
 import java.io.Serial;
 import java.util.List;
@@ -35,8 +35,8 @@ public class HeaderNamePrintStrategy extends BaseLogPrintStrategy {
   }
 
   @Override
-  public boolean isSupport(LogRequestDTO logRequestDTO) {
-    Map<String, List<String>> headers = logRequestDTO.getHeaders();
+  public boolean isSupport(LogReqDTO logReqDTO) {
+    Map<String, List<String>> headers = logReqDTO.getHeaders();
     if (MapUtils.isEmpty(headers)) {
       return false;
     }

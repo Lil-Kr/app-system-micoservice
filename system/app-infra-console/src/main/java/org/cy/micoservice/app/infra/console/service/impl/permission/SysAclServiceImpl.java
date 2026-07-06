@@ -11,11 +11,12 @@ import org.cy.micoservice.app.common.base.api.ApiResp;
 import org.cy.micoservice.app.common.base.api.ApiPageResult;
 import org.cy.micoservice.app.common.utils.DateUtil;
 import org.cy.micoservice.app.common.utils.IdWorker;
-import org.cy.micoservice.app.entity.infra.console.model.entity.sys.*;
+import org.cy.micoservice.app.entity.infra.console.model.sys.*;
+import org.cy.micoservice.app.infra.console.facade.eunm.permission.AclTypeEnum;
 import org.cy.micoservice.app.infra.console.vo.req.sys.acl.AclPageReq;
 import org.cy.micoservice.app.infra.console.vo.req.sys.acl.AclReq;
 import org.cy.micoservice.app.infra.console.vo.resp.sys.acl.SysAclResp;
-import org.cy.micoservice.app.infra.console.constant.CommonConstants;
+import org.cy.micoservice.app.infra.console.facade.constants.CommonConstants;
 import org.cy.micoservice.app.infra.console.dao.permission.*;
 import org.cy.micoservice.app.infra.console.service.interfaces.permission.PermissionCacheService;
 import org.cy.micoservice.app.infra.console.service.interfaces.permission.SysAclService;
@@ -80,7 +81,7 @@ public class SysAclServiceImpl extends ServiceImpl<SysAclMapper, SysAcl> impleme
      */
     QueryWrapper<SysAcl> query2 = new QueryWrapper<>();
     // 菜单类型需要检查重复, 每个权限模块下只能有一个菜单类型权限点
-    if (req.getType() == 1) {
+    if (req.getType() == AclTypeEnum.MENU.getCode()) {
       query2.eq("type", req.getType());
       query2.eq("acl_module_id", req.getAclModuleId());
       SysAcl acl = aclMapper.selectOne(query2);
@@ -117,7 +118,7 @@ public class SysAclServiceImpl extends ServiceImpl<SysAclMapper, SysAcl> impleme
     }
 
     // 更新缓存
-    permissionCacheService.invalidAllUserAclCache();
+    permissionCacheService.invalidAllAdminAclCache();
     return ApiResp.success("添加权限点成功");
   }
 
@@ -175,7 +176,7 @@ public class SysAclServiceImpl extends ServiceImpl<SysAclMapper, SysAcl> impleme
       return ApiResp.warning(UPDATE_ERROR);
     }
     // 更新缓存
-    permissionCacheService.invalidAllUserAclCache();
+    permissionCacheService.invalidAllAdminAclCache();
     return ApiResp.success(SUCCESS);
   }
 
@@ -251,13 +252,13 @@ public class SysAclServiceImpl extends ServiceImpl<SysAclMapper, SysAcl> impleme
   @Override
   public ApiResp<String> delete(Long id) {
     QueryWrapper<SysAcl> wrapper = new QueryWrapper<>();
-    wrapper.eq("surrogate_id", id);
+    wrapper.eq("acl_id", id);
     int delete = aclMapper.delete(wrapper);
     if (delete < 1) {
       return ApiResp.failure(DEL_ERROR);
     }
     // 更新缓存
-    permissionCacheService.invalidAllUserAclCache();
+    permissionCacheService.invalidAllAdminAclCache();
     return ApiResp.success();
   }
 

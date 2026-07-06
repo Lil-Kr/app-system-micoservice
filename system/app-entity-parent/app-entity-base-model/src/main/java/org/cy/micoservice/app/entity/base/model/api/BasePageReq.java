@@ -13,8 +13,8 @@ import java.io.Serial;
  * @Date: 2024/4/4
  * @Description: BasePageReq
  */
-@EqualsAndHashCode(callSuper = true)
 @Data
+@EqualsAndHashCode(callSuper = true)
 public class BasePageReq extends BaseReq {
 
   @Serial
@@ -27,7 +27,7 @@ public class BasePageReq extends BaseReq {
    */
   @NotNull(groups = {GroupPageQuery.class}, message = "current page number cant not be null")
   @Min(groups = {GroupPageQuery.class}, value = 1, message ="page number cant not less than 1")
-  @Max(groups = {GroupPageQuery.class}, value = 10, message ="page number cant not greater than 10")
+  @Max(groups = {GroupPageQuery.class}, value = 50, message ="page number cant not greater than 50")
   private Integer currentPageNum;
 
   /**

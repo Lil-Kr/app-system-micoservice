@@ -2,7 +2,7 @@ package org.cy.micoservice.app.infra.console.utils.aclmodule;
 
 
 import org.cy.micoservice.app.infra.console.dto.permission.aclmodule.AclModuleDTO;
-import org.cy.micoservice.app.entity.infra.console.model.entity.sys.SysAclModule;
+import org.cy.micoservice.app.entity.infra.console.model.sys.SysAclModule;
 
 import java.util.Comparator;
 

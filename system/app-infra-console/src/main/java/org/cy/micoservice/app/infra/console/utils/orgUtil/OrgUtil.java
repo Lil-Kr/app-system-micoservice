@@ -2,7 +2,7 @@ package org.cy.micoservice.app.infra.console.utils.orgUtil;
 
 
 import org.cy.micoservice.app.infra.console.dto.permission.org.OrgLevelDTO;
-import org.cy.micoservice.app.entity.infra.console.model.entity.sys.SysOrg;
+import org.cy.micoservice.app.entity.infra.console.model.sys.SysOrg;
 
 import java.util.Comparator;
 

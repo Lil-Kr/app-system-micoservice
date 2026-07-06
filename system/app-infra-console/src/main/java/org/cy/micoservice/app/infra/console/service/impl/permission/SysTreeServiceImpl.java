@@ -16,9 +16,9 @@ import org.cy.micoservice.app.infra.console.utils.orgUtil.LevelUtil;
 import org.cy.micoservice.app.infra.console.dto.permission.acl.AclDTO;
 import org.cy.micoservice.app.infra.console.dto.permission.aclmodule.AclModuleDTO;
 import org.cy.micoservice.app.infra.console.dto.permission.org.OrgLevelDTO;
-import org.cy.micoservice.app.entity.infra.console.model.entity.sys.SysAcl;
-import org.cy.micoservice.app.entity.infra.console.model.entity.sys.SysAclModule;
-import org.cy.micoservice.app.entity.infra.console.model.entity.sys.SysOrg;
+import org.cy.micoservice.app.entity.infra.console.model.sys.SysAcl;
+import org.cy.micoservice.app.entity.infra.console.model.sys.SysAclModule;
+import org.cy.micoservice.app.entity.infra.console.model.sys.SysOrg;
 import org.cy.micoservice.app.infra.console.vo.req.sys.role.RoleSaveReq;
 import org.cy.micoservice.app.infra.console.utils.orgUtil.OrgUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -288,12 +288,12 @@ public class SysTreeServiceImpl implements SysTreeService {
 
 	/**
 	 * 用户权限树
-	 * @param userId
+	 * @param adminId
 	 * @return
 	 */
 	@Override
-	public List<AclModuleDTO> userAclTree(Long userId) {
-		List<SysAcl> userAclList = coreService.getAdminAclList(userId);
+	public List<AclModuleDTO> adminAclTree(Long adminId) {
+		List<SysAcl> userAclList = coreService.getAdminAclList(adminId);
 		List<AclDTO> aclDTOList = userAclList.stream()
 			.map(acl -> {
 				AclDTO dto = AclDTO.adapt(acl);

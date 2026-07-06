@@ -2,15 +2,15 @@ package org.cy.micoservice.app.infra.console.controller.permission;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.extern.slf4j.Slf4j;
-import org.cy.micoservice.app.common.base.api.ApiResp;
 import org.cy.micoservice.app.common.base.api.ApiPageResult;
-import org.cy.micoservice.app.infra.console.service.interfaces.permission.SysOrgService;
+import org.cy.micoservice.app.common.base.api.ApiResp;
+import org.cy.micoservice.app.entity.base.model.api.BasePageReq;
 import org.cy.micoservice.app.infra.console.dto.permission.org.OrgLevelDTO;
+import org.cy.micoservice.app.infra.console.service.interfaces.permission.SysOrgService;
 import org.cy.micoservice.app.infra.console.vo.req.sys.org.OrgListAllReq;
 import org.cy.micoservice.app.infra.console.vo.req.sys.org.OrgPageReq;
 import org.cy.micoservice.app.infra.console.vo.req.sys.org.OrgReq;
 import org.cy.micoservice.app.infra.console.vo.resp.sys.org.SysOrgResp;
-import org.cy.micoservice.app.entity.base.model.api.BasePageReq;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -71,6 +71,11 @@ public class OrgController {
     return ApiResp.success(list);
   }
 
+  /**
+   *
+   * @param req
+   * @return
+   */
   @PostMapping("/list")
   public ApiResp<List<SysOrgResp>> list(@RequestBody OrgListAllReq req) {
     List<SysOrgResp> list = orgService.list(req);

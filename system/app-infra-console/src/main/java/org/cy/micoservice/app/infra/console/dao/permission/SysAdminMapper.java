@@ -2,7 +2,7 @@ package org.cy.micoservice.app.infra.console.dao.permission;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Param;
-import org.cy.micoservice.app.entity.infra.console.model.entity.sys.SysAdmin;
+import org.cy.micoservice.app.entity.infra.console.model.sys.SysAdmin;
 import org.cy.micoservice.app.infra.console.vo.req.sys.admin.AdminListPageReq;
 import org.cy.micoservice.app.infra.console.vo.req.sys.admin.AdminLoginReq;
 import org.cy.micoservice.app.infra.console.vo.req.sys.admin.AdminSaveReq;
@@ -32,7 +32,7 @@ public interface SysAdminMapper extends BaseMapper<SysAdmin> {
 
   SysAdmin getAdminByAccount(String account);
 
-  Integer updateAdminById(@Param("param") SysAdmin user);
+  Integer updateAdminById(@Param("param") SysAdmin admin);
 
   List<SysAdminResp> pageAdminList(@Param("param") AdminListPageReq req);
 

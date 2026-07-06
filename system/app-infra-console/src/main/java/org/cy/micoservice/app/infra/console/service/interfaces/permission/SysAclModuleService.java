@@ -3,7 +3,7 @@ package org.cy.micoservice.app.infra.console.service.interfaces.permission;
 import com.baomidou.mybatisplus.extension.service.IService;
 import org.cy.micoservice.app.common.base.api.ApiResp;
 import org.cy.micoservice.app.infra.console.dto.permission.aclmodule.AclModuleDTO;
-import org.cy.micoservice.app.entity.infra.console.model.entity.sys.SysAclModule;
+import org.cy.micoservice.app.entity.infra.console.model.sys.SysAclModule;
 import org.cy.micoservice.app.infra.console.vo.req.sys.aclmodule.AclModuleListReq;
 import org.cy.micoservice.app.infra.console.vo.req.sys.aclmodule.AclModuleReq;
 import org.cy.micoservice.app.infra.console.vo.resp.sys.aclmodule.SysAclModuleResp;

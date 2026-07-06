@@ -2,14 +2,14 @@ package org.cy.micoservice.app.infra.console.controller.permission;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.extern.slf4j.Slf4j;
-import org.cy.micoservice.app.common.base.api.ApiResp;
 import org.cy.micoservice.app.common.base.api.ApiPageResult;
-import org.cy.micoservice.app.infra.console.vo.req.sys.dict.*;
-import org.cy.micoservice.app.infra.console.vo.resp.sys.dic.SysDictDetailResp;
-import org.cy.micoservice.app.infra.console.vo.resp.sys.dic.SysDictResp;
+import org.cy.micoservice.app.common.base.api.ApiResp;
 import org.cy.micoservice.app.entity.base.model.api.BasePageReq;
 import org.cy.micoservice.app.infra.console.service.interfaces.permission.SysDictDetailService;
 import org.cy.micoservice.app.infra.console.service.interfaces.permission.SysDictService;
+import org.cy.micoservice.app.infra.console.vo.req.sys.dict.*;
+import org.cy.micoservice.app.infra.console.vo.resp.sys.dic.SysDictDetailResp;
+import org.cy.micoservice.app.infra.console.vo.resp.sys.dic.SysDictResp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -33,16 +33,31 @@ public class DictController {
   @Autowired
   private SysDictDetailService dictDetailService;
 
+  /**
+   *
+   * @param req
+   * @return
+   */
   @PostMapping("/add")
   public ApiResp<String> add (@RequestBody @Validated({DictSaveReq.DictAddGroup.class}) DictSaveReq req) {
     return dictService.add(req);
   }
 
+  /**
+   *
+   * @param req
+   * @return
+   */
   @PostMapping("/edit")
   public ApiResp<String> edit (@RequestBody @Validated({DictSaveReq.DictEditGroup.class}) DictSaveReq req) {
     return dictService.edit(req);
   }
 
+  /**
+   *
+   * @param surrogateId
+   * @return
+   */
   @DeleteMapping("/delete")
   public ApiResp<String> delete (@RequestParam("surrogateId") @NotNull(message = "surrogateId是必须的") Long surrogateId) {
     return dictService.delete(surrogateId);

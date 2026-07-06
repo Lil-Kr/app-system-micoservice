@@ -18,6 +18,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<app-common.version>1.0.0</app-common.version>
 		<app-framework-parent.version>1.0.0</app-framework-parent.version>
+		<app-infra-console-sdk.version>1.0.0</app-infra-console-sdk.version>
 		<app-user-facade.version>1.0.0</app-user-facade.version>
 	</properties>
 	
@@ -44,6 +45,7 @@
 		</dependency>
 		
 		<!-- 自研组件 -->
+		
 		<dependency>
 			<groupId>org.cy.micoservice.app</groupId>
 			<artifactId>app-common</artifactId>
@@ -78,6 +80,12 @@
 			<groupId>org.cy.micoservice.app</groupId>
 			<artifactId>app-user-facade</artifactId>
 			<version>${app-user-facade.version}</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.cy.micoservice.app</groupId>
+			<artifactId>app-infra-console-sdk</artifactId>
+			<version>${app-infra-console-sdk.version}</version>
 		</dependency>
 	</dependencies>
 	

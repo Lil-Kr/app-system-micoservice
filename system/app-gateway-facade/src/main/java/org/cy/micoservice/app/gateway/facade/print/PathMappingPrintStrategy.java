@@ -2,7 +2,7 @@ package org.cy.micoservice.app.gateway.facade.print;
 
 
 import com.alibaba.fastjson2.JSON;
-import org.cy.micoservice.app.gateway.facade.dto.LogRequestDTO;
+import org.cy.micoservice.app.gateway.facade.dto.gateway.req.LogReqDTO;
 import org.cy.micoservice.app.gateway.facade.print.abst.BaseLogPrintStrategy;
 
 import java.io.Serial;
@@ -38,8 +38,8 @@ public class PathMappingPrintStrategy extends BaseLogPrintStrategy {
   }
 
   @Override
-  public boolean isSupport(LogRequestDTO logRequestDTO) {
-    String requestPath = logRequestDTO.getPath();
+  public boolean isSupport(LogReqDTO logReqDTO) {
+    String requestPath = logReqDTO.getPath();
     if (pathExpression.equals(requestPath)) {
       return true;
     }

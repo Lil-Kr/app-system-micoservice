@@ -33,7 +33,7 @@ public class GlobalSqlInterceptor implements Interceptor {
 
   @Override
   public Object intercept(Invocation invocation) throws Throwable {
-    log.info("======================== sql intercept ========================");
+    log.debug("======================== sql intercept ========================");
     StatementHandler statementHandler = (StatementHandler) invocation.getTarget();
 
     BoundSql boundSql = statementHandler.getBoundSql();
@@ -58,36 +58,36 @@ public class GlobalSqlInterceptor implements Interceptor {
      * 获取 mapper 的名称
      */
     String className = namespace.substring(0, namespace.lastIndexOf("."));
-    log.info("sql intercept className: {}", className);
+    log.debug("sql intercept className: {}", className);
 
     /**
      * 获取调用 mapper 的方法名
      */
     String methodName = namespace.substring(namespace.lastIndexOf(".") + 1, namespace.length());
-    log.info("sql intercept methodName: {}", methodName);
+    log.debug("sql intercept methodName: {}", methodName);
 
     /** page 开头的方法需要分页 **/
     if (StringUtils.isNotEmpty(methodName) && methodName.toLowerCase().startsWith("page")) {
       ParameterHandler parameter = (ParameterHandler)metaObject.getValue("delegate.parameterHandler");
       Map<String, Object> parameterObject = (Map<String, Object>) parameter.getParameterObject();
-      log.info("parameterObject: {}", JSONObject.toJSONString(parameterObject));
+      log.debug("parameterObject: {}", JSONObject.toJSONString(parameterObject));
 
       /**
        * 反序列化到 page 对象
        */
-      BasePageReq pageReqParameter = (BasePageReq)parameterObject.get("param");
-      log.info("param: {}", JSONObject.toJSONString(parameterObject));
+      BasePageReq pageReqParameter = (BasePageReq) parameterObject.get("param");
+      log.debug("param: {}", JSONObject.toJSONString(parameterObject));
 
       Integer currentPageNum = pageReqParameter.getCurrentPageNum();
       Integer pageSize = pageReqParameter.getPageSize();
 
       StringBuffer baseSql = new StringBuffer(boundSql.getSql());
-      log.info("base SQL: {}", baseSql);
+      log.debug("base SQL: {}", baseSql);
 
       baseSql.append(" limit ")
         .append((currentPageNum - 1) * pageSize + ", ")
         .append(pageSize);
-      log.info("limit SQL: {}", baseSql);
+      log.debug("limit SQL: {}", baseSql);
       metaObject.setValue("delegate.boundSql.sql", baseSql.toString());
     }
 

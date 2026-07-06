@@ -2,21 +2,22 @@ package org.cy.micoservice.app.infra.console.controller.permission;
 
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
-import org.cy.micoservice.app.common.base.api.ApiResp;
 import org.cy.micoservice.app.common.base.api.ApiPageResult;
+import org.cy.micoservice.app.common.base.api.ApiResp;
 import org.cy.micoservice.app.entity.base.model.api.BasePageReq;
-import org.cy.micoservice.app.entity.infra.console.model.entity.sys.SysAdmin;
-import org.cy.micoservice.app.infra.console.vo.req.sys.admin.*;
-import org.cy.micoservice.app.infra.console.vo.resp.sys.admin.SysAdminResp;
-import org.cy.micoservice.app.framework.web.starter.annotations.NoAuthCheck;
+import org.cy.micoservice.app.entity.infra.console.model.sys.SysAdmin;
 import org.cy.micoservice.app.framework.web.starter.web.RequestContext;
+import org.cy.micoservice.app.infra.console.aspect.annotations.IgnoreAuthCheck;
+import org.cy.micoservice.app.infra.console.aspect.holder.RequestHolder;
 import org.cy.micoservice.app.infra.console.service.interfaces.MessageLangService;
 import org.cy.micoservice.app.infra.console.service.interfaces.permission.SysAdminService;
+import org.cy.micoservice.app.infra.console.vo.req.sys.admin.*;
+import org.cy.micoservice.app.infra.console.vo.resp.sys.admin.SysAdminResp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import static org.cy.micoservice.app.common.constants.CommonConstants.LANG_ZH;
+import static org.cy.micoservice.app.infra.console.facade.constants.InfraLangConstants.LANG_ZH;
 
 /**
  * @Author: Lil-K
@@ -39,7 +40,7 @@ public class AdminController {
    * @param req
    * @return
    */
-  @NoAuthCheck
+  @IgnoreAuthCheck
   @PutMapping("/login")
   public ApiResp<SysAdmin> login(@RequestBody @Validated({AdminLoginReq.AdminLogin.class}) AdminLoginReq req) throws Exception {
     return adminService.adminLogin(req);
@@ -50,7 +51,7 @@ public class AdminController {
    * @param req
    * @return
    */
-  @NoAuthCheck
+  @IgnoreAuthCheck
   @PostMapping("/register")
   public ApiResp<Integer> register(@RequestBody @Valid AdminRegisterReq req) {
     req.setAdminId(RequestContext.getUserId());
@@ -66,7 +67,11 @@ public class AdminController {
     return ApiResp.success(msgLangService.getMessage(LANG_ZH, "admin.logout.success"));
   }
 
-  @NoAuthCheck
+  /**
+   *
+   * @return
+   * @throws Exception
+   */
   @GetMapping("/getToken")
   public ApiResp<SysAdmin> getToken() throws Exception {
     return adminService.getToken();
@@ -118,8 +123,8 @@ public class AdminController {
    */
   @GetMapping("/get")
   public ApiResp<SysAdmin> get() {
-    // SysAdmin currentUser = RequestHolder.getCurrentUser();
-    return ApiResp.success(SysAdmin.builder().build());
+    SysAdmin admin = RequestHolder.getCurrentAdmin();
+    return ApiResp.success(admin);
   }
 
   /**

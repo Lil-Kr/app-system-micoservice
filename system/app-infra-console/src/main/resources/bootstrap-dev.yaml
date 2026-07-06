@@ -18,3 +18,10 @@ spring:
   config:
     import:
       - optional:nacos:app-infra-console.yaml
+
+# slf4j log
+logging:
+  level:
+    root: INFO
+    org.cy.micoservice.app.infra.console: DEBUG
+    org.cy.micoservice.app.framework.mybatis.starter.interceptor: DEBUG

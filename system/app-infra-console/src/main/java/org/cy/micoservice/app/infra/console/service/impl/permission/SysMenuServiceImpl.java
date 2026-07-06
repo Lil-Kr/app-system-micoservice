@@ -6,17 +6,19 @@ import com.google.common.collect.Maps;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.cy.micoservice.app.common.base.api.ApiResp;
-import org.cy.micoservice.app.entity.infra.console.model.entity.sys.SysAcl;
-import org.cy.micoservice.app.entity.infra.console.model.entity.sys.SysMenu;
-import org.cy.micoservice.app.infra.console.vo.req.sys.permission.PermissionReq;
+import org.cy.micoservice.app.entity.infra.console.model.sys.SysAcl;
+import org.cy.micoservice.app.entity.infra.console.model.sys.SysMenu;
+import org.cy.micoservice.app.infra.console.aspect.holder.RequestHolder;
 import org.cy.micoservice.app.infra.console.dao.permission.SysAclModuleMapper;
+import org.cy.micoservice.app.infra.console.dto.permission.acl.AclDTO;
+import org.cy.micoservice.app.infra.console.dto.permission.aclmodule.AclModuleDTO;
+import org.cy.micoservice.app.infra.console.facade.constants.CommonConstants;
+import org.cy.micoservice.app.infra.console.facade.eunm.permission.AclTypeEnum;
 import org.cy.micoservice.app.infra.console.service.interfaces.MessageLangService;
 import org.cy.micoservice.app.infra.console.service.interfaces.permission.SysAclCoreService;
 import org.cy.micoservice.app.infra.console.service.interfaces.permission.SysPermissionService;
 import org.cy.micoservice.app.infra.console.service.interfaces.permission.SysRoleService;
 import org.cy.micoservice.app.infra.console.service.interfaces.permission.SysTreeService;
-import org.cy.micoservice.app.infra.console.dto.permission.acl.AclDTO;
-import org.cy.micoservice.app.infra.console.dto.permission.aclmodule.AclModuleDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -38,16 +40,12 @@ public class SysMenuServiceImpl implements SysPermissionService {
 
   @Autowired
   private MessageLangService msgService;
-
   @Autowired
   private SysRoleService roleService;
-
   @Autowired
   private SysTreeService treeService;
-
   @Autowired
-  private SysAclCoreService coreService;
-
+  private SysAclCoreService aclCoreService;
   @Autowired
   private SysAclModuleMapper aclModuleMapper;
 
@@ -60,35 +58,35 @@ public class SysMenuServiceImpl implements SysPermissionService {
    * @return
    */
   @Override
-  public ApiResp<Map<String, Object>> permission(PermissionReq req) {
-    Map<String, Object> userPermissionMap = Maps.newHashMap();
+  public ApiResp<Map<String, Object>> permission() {
+    Map<String, Object> adminPermissionMap = Maps.newHashMap();
     /**
      * 1. 获取当前用户对应的菜单权限
      */
-    Long adminId = req.getAdminId();
-    List<AclModuleDTO> aclModuleDTOList = treeService.userAclTree(adminId);
+    Long adminId = RequestHolder.getCurrentAdmin().getId();
+    List<AclModuleDTO> aclModuleDTOList = treeService.adminAclTree(adminId);
 
     /**
-     * 转换为菜单结构
+     * 2. 转换为菜单结构
      */
-    List<SysMenu> menuList = changeTreeToMenu(aclModuleDTOList, FRONT_ROUTER_PREFIX);
+    List<SysMenu> menuList = this.changeTreeToMenu(aclModuleDTOList, FRONT_ROUTER_PREFIX);
 
     /**
-     * 2. 请求当前用户[按钮]类型的权限点
+     * 3. 请求当前用户[按钮]类型的权限点
      * type:2 -> 按钮类型
      */
-    List<SysAcl> userAclList = coreService.getAdminAclList(adminId, 2);
-    List<String> btnSignList = Optional.ofNullable(userAclList)
+    List<SysAcl> adminAclBtnTypeList = aclCoreService.getAdminAclList(adminId, AclTypeEnum.BUTTON.getCode());
+    List<String> btnSignList = Optional.ofNullable(adminAclBtnTypeList)
       .filter(CollectionUtils::isNotEmpty)
       .map(list -> list.stream().map(SysAcl::getBtnSign).collect(Collectors.toList()))
       .orElseGet(ArrayList::new);
 
     /**
-     * 3. 组装数据, 同时给出菜单数据和按钮数据
+     * 4. 组装数据, 同时给出菜单数据和按钮数据
      */
-    userPermissionMap.put("menuList", menuList);
-    userPermissionMap.put("btnSignList", btnSignList);
-    return ApiResp.success(userPermissionMap);
+    adminPermissionMap.put(CommonConstants.PERMISSION_TREE_MENU_KEY, menuList);
+    adminPermissionMap.put(CommonConstants.PERMISSION_TREE_BTN_KEY, btnSignList);
+    return ApiResp.success(adminPermissionMap);
   }
 
   /**
@@ -102,13 +100,13 @@ public class SysMenuServiceImpl implements SysPermissionService {
       return menuList;
     }
 
-    for (AclModuleDTO aclModuleDto : aclModuleDTOList) {
+    for (AclModuleDTO aclModuleDTO : aclModuleDTOList) {
       /**
        * 检查当前模块是否有满足条件的权限点
        */
-      boolean hasValidAcl = aclModuleDto.getAclDTOList().stream()
+      boolean hasValidAcl = aclModuleDTO.getAclDTOList().stream()
         .anyMatch(acl -> acl.isChecked() && acl.isHasAcl());
-      if (!hasValidAcl && CollectionUtils.isEmpty(aclModuleDto.getAclModuleDTOList())) {
+      if (!hasValidAcl && CollectionUtils.isEmpty(aclModuleDTO.getAclModuleDTOList())) {
         continue;
       }
 
@@ -117,12 +115,12 @@ public class SysMenuServiceImpl implements SysPermissionService {
       /**
        * case1: 当前模块构成菜单时, 并且本身需要跳转url, 并且没有下级子模块时, 比如[首页]
        */
-      if (!aclModuleDto.getMenuUrl().equals("-")
-        && CollectionUtils.isNotEmpty(aclModuleDto.getAclDTOList())
-        && CollectionUtils.isEmpty(aclModuleDto.getAclModuleDTOList())
+      if (!aclModuleDTO.getMenuUrl().equals(CommonConstants.DEFAULT_SPLIT_SEPARATOR)
+        && CollectionUtils.isNotEmpty(aclModuleDTO.getAclDTOList())
+        && CollectionUtils.isEmpty(aclModuleDTO.getAclModuleDTOList())
       ) {
-        AclDTO aclDto = aclModuleDto.getAclDTOList().stream()
-          .filter(acl -> acl.getType() == 1 && acl.isChecked() && acl.isHasAcl()) // 过滤条件
+        AclDTO aclDto = aclModuleDTO.getAclDTOList().stream()
+          .filter(acl -> acl.getType() == AclTypeEnum.MENU.getCode() && acl.isChecked() && acl.isHasAcl()) // 过滤条件
           .findAny()
           .orElse(null);
 
@@ -138,12 +136,12 @@ public class SysMenuServiceImpl implements SysPermissionService {
       /**
        * case2: 当本层不作为跳转菜单, 就以权限点中的菜单作为跳转
        */
-      if (aclModuleDto.getMenuUrl().equals("-")
-        && CollectionUtils.isNotEmpty(aclModuleDto.getAclDTOList())
-        && CollectionUtils.isEmpty(aclModuleDto.getAclModuleDTOList())
+      if (aclModuleDTO.getMenuUrl().equals(CommonConstants.DEFAULT_SPLIT_SEPARATOR)
+        && CollectionUtils.isNotEmpty(aclModuleDTO.getAclDTOList())
+        && CollectionUtils.isEmpty(aclModuleDTO.getAclModuleDTOList())
       ) {
-        AclDTO aclDto = aclModuleDto.getAclDTOList().stream()
-          .filter(acl -> acl.getType() == 1 && acl.isChecked() && acl.isHasAcl()) // 过滤条件
+        AclDTO aclDto = aclModuleDTO.getAclDTOList().stream()
+          .filter(acl -> acl.getType() == AclTypeEnum.MENU.getCode() && acl.isChecked() && acl.isHasAcl()) // 过滤条件
           .findAny()
           .orElse(null);
 
@@ -159,20 +157,20 @@ public class SysMenuServiceImpl implements SysPermissionService {
       /**
        * case3: 当权限模块有值, 权限点为空时, 说明当前权限模块有子菜单, 需要递归处理
        */
-      if (!aclModuleDto.getMenuUrl().equals("-")
-        && CollectionUtils.isEmpty(aclModuleDto.getAclDTOList())
-        && CollectionUtils.isNotEmpty(aclModuleDto.getAclModuleDTOList())) {
+      if (!aclModuleDTO.getMenuUrl().equals(CommonConstants.DEFAULT_SPLIT_SEPARATOR)
+        && CollectionUtils.isEmpty(aclModuleDTO.getAclDTOList())
+        && CollectionUtils.isNotEmpty(aclModuleDTO.getAclModuleDTOList())) {
         /**
          * 递归处理子菜单
          */
-        List<SysMenu> subMenuList = changeTreeToMenu(aclModuleDto.getAclModuleDTOList(), rootPath + aclModuleDto.getMenuUrl());
+        List<SysMenu> subMenuList = changeTreeToMenu(aclModuleDTO.getAclModuleDTOList(), rootPath + aclModuleDTO.getMenuUrl());
 
         // 如果子菜单列表不为空, 才将当前模块作为父菜单
         if (CollectionUtils.isNotEmpty(subMenuList)) {
-          menu.setKey(aclModuleDto.getMenuUrl());
-          menu.setTitle(aclModuleDto.getName());
-          menu.setPath(rootPath + aclModuleDto.getMenuUrl());
-          menu.setUniqueSign(pathToCamelCase(rootPath + aclModuleDto.getMenuUrl()));
+          menu.setKey(aclModuleDTO.getMenuUrl());
+          menu.setTitle(aclModuleDTO.getName());
+          menu.setPath(rootPath + aclModuleDTO.getMenuUrl());
+          menu.setUniqueSign(pathToCamelCase(rootPath + aclModuleDTO.getMenuUrl()));
           menu.getChildren().addAll(subMenuList);
           menuList.add(menu);
         }

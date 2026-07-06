@@ -1,7 +1,7 @@
 package org.cy.micoservice.app.gateway.facade.print.abst;
 
 import lombok.Data;
-import org.cy.micoservice.app.gateway.facade.dto.LogRequestDTO;
+import org.cy.micoservice.app.gateway.facade.dto.gateway.req.LogReqDTO;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -36,6 +36,6 @@ public abstract class BaseLogPrintStrategy implements Serializable {
   /**
    * 判断当前策略是否满足
    */
-  public abstract boolean isSupport(LogRequestDTO logRequestDTO);
+  public abstract boolean isSupport(LogReqDTO logReqDTO);
 
 }

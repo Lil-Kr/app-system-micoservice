@@ -10,9 +10,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.cy.micoservice.app.entity.gateway.model.RouteChangeLog;
 import org.cy.micoservice.app.entity.gateway.model.RouteConfig;
-import org.cy.micoservice.app.gateway.facade.dto.ChangeBodyDTO;
-import org.cy.micoservice.app.gateway.facade.enums.GatewayRouterChangeEventEnum;
-import org.cy.micoservice.app.gateway.facade.enums.GatewayRouterStatusEnum;
+import org.cy.micoservice.app.gateway.facade.dto.gateway.RouteChangeBodyDTO;
+import org.cy.micoservice.app.gateway.facade.enums.GatewayChangeEventEnum;
+import org.cy.micoservice.app.gateway.facade.enums.GatewayStatusEnum;
 import org.cy.micoservice.app.gateway.facade.utils.NacosRouteVersionUtils;
 import org.cy.micoservice.app.gateway.service.RouteCacheService;
 import org.cy.micoservice.app.gateway.service.RouteConfigChangeLogService;
@@ -112,21 +112,21 @@ public class RouteConfigRefreshListener {
     for (RouteChangeLog routeChangeLog : routeChangeLogList) {
       String changeEvent = routeChangeLog.getChangeEvent();
       String changeBody = routeChangeLog.getChangeBody();
-      ChangeBodyDTO changeBodyDTO = JSONObject.parseObject(changeBody, ChangeBodyDTO.class);
+      RouteChangeBodyDTO routeChangeBodyDTO = JSONObject.parseObject(changeBody, RouteChangeBodyDTO.class);
 
-      if (GatewayRouterChangeEventEnum.UPDATE.getCode().equals(changeEvent)) {
-        RouteConfig afterRouteConfig = changeBodyDTO.getAfter();
+      if (GatewayChangeEventEnum.UPDATE.getCode().equals(changeEvent)) {
+        RouteConfig afterRouteConfig = routeChangeBodyDTO.getAfter();
         Integer status = afterRouteConfig.getStatus();
 
-        if (GatewayRouterStatusEnum.INVALID.getCode().equals(status)) {
+        if (GatewayStatusEnum.INVALID.getCode().equals(status)) {
           deletedConfigIds.add(routeChangeLog.getConfigId());
           routeCacheService.remove(afterRouteConfig.getMethod(), afterRouteConfig.getPath());
         } else {
           saveConfigIds.add(routeChangeLog.getConfigId());
           routeCacheService.put(afterRouteConfig);
         }
-      } else if (GatewayRouterChangeEventEnum.DELETED.getCode().equals(changeEvent)) {
-        RouteConfig beforeRouteConfig = changeBodyDTO.getBefore();
+      } else if (GatewayChangeEventEnum.DELETED.getCode().equals(changeEvent)) {
+        RouteConfig beforeRouteConfig = routeChangeBodyDTO.getBefore();
         deletedConfigIds.add(routeChangeLog.getConfigId());
         routeCacheService.remove(beforeRouteConfig.getMethod(), beforeRouteConfig.getPath());
       }

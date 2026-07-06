@@ -3,7 +3,7 @@
 <mapper namespace="org.cy.micoservice.app.infra.console.dao.permission.SysOrgMapper">
 
 	<!-- 通用查询映射结果 -->
-	<resultMap id="BaseResultMap" type="org.cy.micoservice.app.entity.infra.console.model.entity.sys.SysOrg">
+	<resultMap id="BaseResultMap" type="org.cy.micoservice.app.entity.infra.console.model.sys.SysOrg">
 		<id column="id" property="id"/>
 		<result column="surrogate_id" property="surrogateId"/>
 		<result column="number" property="number"/>

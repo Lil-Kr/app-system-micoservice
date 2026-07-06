@@ -41,7 +41,7 @@ public class RouteConfigChangeLogServiceImpl implements RouteConfigChangeLogServ
   }
 
   @Override
-  public List<RouteChangeLog> selectById(Long configId) {
+  public List<RouteChangeLog> queryRouteChangeLogList(Long configId) {
     QueryWrapper<RouteChangeLog> queryWrapper = new QueryWrapper<>();
     queryWrapper.eq("config_id", configId);
     return routeChangeLogMapper.selectList(queryWrapper);

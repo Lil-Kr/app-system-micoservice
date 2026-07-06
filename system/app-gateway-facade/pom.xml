@@ -13,10 +13,8 @@
 	<packaging>jar</packaging>
 	
 	<properties>
-		<maven.compiler.source>17</maven.compiler.source>
-		<maven.compiler.target>17</maven.compiler.target>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<app-entity-parent.version>1.0.0</app-entity-parent.version>
+		<app-common.version>1.0.0</app-common.version>
 	</properties>
 
 	<dependencies>
@@ -30,7 +28,7 @@
 		<dependency>
 			<groupId>org.cy.micoservice.app</groupId>
 			<artifactId>app-common</artifactId>
-			<version>1.0.0</version>
+			<version>${app-common.version}</version>
 			<optional>true</optional>
 		</dependency>
 		

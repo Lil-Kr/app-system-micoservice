@@ -4,6 +4,7 @@ import jakarta.validation.constraints.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.cy.micoservice.app.entity.base.model.api.BaseReq;
+import org.cy.micoservice.app.infra.console.facade.eunm.permission.AclTypeEnum;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -37,7 +38,7 @@ public class AclReq extends BaseReq implements Serializable {
 	 * 权限名
 	 */
 	@NotBlank(message = "name权限点名不能为空")
-	@Size(min = 2,max = 20,message = "权限名长度为2~20个字符之间")
+	@Size(min = 2,max = 20, message = "权限名长度为2~20个字符之间")
 	private String name;
 
 	/**
@@ -49,11 +50,12 @@ public class AclReq extends BaseReq implements Serializable {
 	/**
 	 * 请求的url
 	 */
-	@Size(min = 1,max = 100,message = "权限点的url长度为 1~100 个字符之间")
+	@Size(min = 1,max = 100, message = "权限点的url长度为 1~100 个字符之间")
 	private String url;
 
 	/**
-	 * 1:菜单权限, 2按钮权限, 3其他
+	 * 权限点类型
+	 * @see AclTypeEnum
 	 */
 	@NotNull(message = "type 权限点类型不能为空")
 	private Integer type;
@@ -94,6 +96,6 @@ public class AclReq extends BaseReq implements Serializable {
 	/**
 	 * 备注
 	 */
-	@Size(min = 1,max = 100,message = "权限点备注长度为1~100个字符之间")
+	@Size(min = 1,max = 100, message = "权限点备注长度为1~100个字符之间")
 	private String remark;
 }

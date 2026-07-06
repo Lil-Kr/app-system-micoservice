@@ -6,13 +6,13 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.cy.micoservice.app.common.base.api.ApiResp;
 import org.cy.micoservice.app.common.base.api.ApiPageResult;
 import org.cy.micoservice.app.common.utils.DateUtil;
-import org.cy.micoservice.app.entity.infra.console.model.entity.sys.SysAdmin;
-import org.cy.micoservice.app.entity.infra.console.model.entity.sys.SysOrg;
+import org.cy.micoservice.app.entity.infra.console.model.sys.SysAdmin;
+import org.cy.micoservice.app.entity.infra.console.model.sys.SysOrg;
 import org.cy.micoservice.app.infra.console.vo.req.sys.org.OrgListAllReq;
 import org.cy.micoservice.app.infra.console.vo.req.sys.org.OrgPageReq;
 import org.cy.micoservice.app.infra.console.vo.req.sys.org.OrgReq;
 import org.cy.micoservice.app.infra.console.vo.resp.sys.org.SysOrgResp;
-import org.cy.micoservice.app.infra.console.constant.CommonConstants;
+import org.cy.micoservice.app.infra.console.facade.constants.CommonConstants;
 import org.cy.micoservice.app.infra.console.dao.permission.SysAdminMapper;
 import org.cy.micoservice.app.infra.console.dao.permission.SysOrgMapper;
 import org.cy.micoservice.app.infra.console.service.interfaces.MessageLangService;
@@ -29,7 +29,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import static org.cy.micoservice.app.common.constants.CommonConstants.LANG_ZH;
+import static org.cy.micoservice.app.infra.console.facade.constants.InfraLangConstants.LANG_ZH;
 import static org.cy.micoservice.app.common.enums.response.ApiReturnCodeEnum.*;
 
 /**

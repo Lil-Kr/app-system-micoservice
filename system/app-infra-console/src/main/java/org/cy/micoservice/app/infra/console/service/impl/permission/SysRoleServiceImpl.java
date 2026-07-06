@@ -6,7 +6,7 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.cy.micoservice.app.common.base.api.ApiResp;
 import org.cy.micoservice.app.common.base.api.ApiPageResult;
 import org.cy.micoservice.app.common.utils.DateUtil;
-import org.cy.micoservice.app.entity.infra.console.model.entity.sys.SysRole;
+import org.cy.micoservice.app.entity.infra.console.model.sys.SysRole;
 import org.cy.micoservice.app.infra.console.vo.req.sys.role.RoleListPageReq;
 import org.cy.micoservice.app.infra.console.vo.req.sys.role.RoleSaveReq;
 import org.cy.micoservice.app.infra.console.vo.resp.sys.role.SysRoleResp;
@@ -23,7 +23,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
-import static org.cy.micoservice.app.common.constants.CommonConstants.LANG_ZH;
+import static org.cy.micoservice.app.infra.console.facade.constants.InfraLangConstants.LANG_ZH;
 import static org.cy.micoservice.app.common.enums.response.ApiReturnCodeEnum.*;
 
 /**

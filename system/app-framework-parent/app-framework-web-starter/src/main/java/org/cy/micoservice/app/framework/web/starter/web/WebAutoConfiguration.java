@@ -1,7 +1,7 @@
 package org.cy.micoservice.app.framework.web.starter.web;
 
+import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -10,7 +10,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
  * @Date: 2025/11/23
  * @Description: web配置类
  */
-@Configuration
+@AutoConfiguration
 public class WebAutoConfiguration implements WebMvcConfigurer {
 
   @Bean

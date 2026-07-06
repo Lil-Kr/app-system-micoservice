@@ -2,14 +2,14 @@ package org.cy.micoservice.app.gateway.config;
 
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
-import org.cy.micoservice.app.common.constants.gateway.GatewayInfraConsoleSdkConstants;
 import org.cy.micoservice.app.entity.gateway.model.RouteConfig;
 import org.cy.micoservice.app.gateway.config.async.GatewayAsyncTaskSubmitter;
-import org.cy.micoservice.app.gateway.facade.enums.GatewayRouterSchemaEnum;
+import org.cy.micoservice.app.gateway.facade.enums.GatewaySchemaEnum;
 import org.cy.micoservice.app.gateway.service.DubboInvokerService;
 import org.cy.micoservice.app.gateway.service.RouteCacheService;
 import org.cy.micoservice.app.gateway.service.RouteConfigService;
 import org.cy.micoservice.app.gateway.service.RouteDefinitionWriterService;
+import org.cy.micoservice.app.infra.console.facade.constants.InfraConsoleSdkConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 
@@ -56,7 +56,7 @@ public class RouteDefinitionConfig {
 
     List<RouteConfig> routeConfigList = routeConfigListFuture.get();
     for (RouteConfig routeConfig : routeConfigList) {
-      if (GatewayRouterSchemaEnum.HTTP.getCode().equals(routeConfig.getSchema())) {
+      if (GatewaySchemaEnum.HTTP.getCode().equals(routeConfig.getSchema())) {
         // save router config
         routeDefinitionWriterService.save(routeConfig);
         routeCacheService.put(routeConfig);
@@ -81,7 +81,7 @@ public class RouteDefinitionConfig {
    */
   private void createDubboGenericInvoke(RouteConfig routeConfig) {
     String originUri = routeConfig.getUri();
-    originUri = originUri.replaceAll(GatewayInfraConsoleSdkConstants.DUBBO_URL_PREFIX, "");
+    originUri = originUri.replaceAll(InfraConsoleSdkConstants.DUBBO_URL_PREFIX, "");
     // org.cy.micoservice.app.user.facade.interfaces.UserFacade#test
     String[] uriArray = originUri.split("#");
     dubboInvokerService.save(uriArray[0]);

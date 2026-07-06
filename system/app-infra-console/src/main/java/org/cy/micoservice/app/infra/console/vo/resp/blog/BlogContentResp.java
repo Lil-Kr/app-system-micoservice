@@ -1,9 +1,9 @@
 package org.cy.micoservice.app.infra.console.vo.resp.blog;
 
 import lombok.Data;
-import lombok.ToString;
-import org.cy.micoservice.app.entity.infra.console.model.entity.blog.BlogContent;
-import org.cy.micoservice.app.entity.infra.console.model.entity.blog.BlogLabel;
+import lombok.EqualsAndHashCode;
+import org.cy.micoservice.app.entity.infra.console.model.blog.BlogContent;
+import org.cy.micoservice.app.entity.infra.console.model.blog.BlogLabel;
 
 import java.io.Serializable;
 import java.util.List;
@@ -13,7 +13,7 @@ import java.util.List;
  * @Date: 2024/5/24
  * @Description:
  */
-@ToString
+@EqualsAndHashCode(callSuper = true)
 @Data
 public class BlogContentResp extends BlogContent implements Serializable {
 

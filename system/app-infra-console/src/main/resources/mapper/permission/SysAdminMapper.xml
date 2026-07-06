@@ -37,7 +37,7 @@
 		</if>
 	</select>
 
-	<select id="getAdminById" resultType="org.cy.micoservice.app.entity.infra.console.model.entity.sys.SysAdmin">
+	<select id="getAdminById" resultType="org.cy.micoservice.app.entity.infra.console.model.sys.SysAdmin">
 		select
 		<include refid="Base_Column_List"/>
 		from sys_admin
@@ -72,7 +72,7 @@
 		</where>
 	</select>
 
-	<select id="getAdminByToken" resultType="org.cy.micoservice.app.entity.infra.console.model.entity.sys.SysAdmin">
+	<select id="getAdminByToken" resultType="org.cy.micoservice.app.entity.infra.console.model.sys.SysAdmin">
 		select
 		<include refid="Base_Column_List"/>
 		from sys_admin
@@ -81,7 +81,7 @@
 		</where>
 	</select>
 
-	<select id="getAdminByKeyword" resultType="org.cy.micoservice.app.entity.infra.console.model.entity.sys.SysAdmin">
+	<select id="getAdminByKeyword" resultType="org.cy.micoservice.app.entity.infra.console.model.sys.SysAdmin">
 		select surrogate_id, token, account, user_name, email
 		from sys_admin
 		<where>
@@ -101,7 +101,7 @@
 	</select>
 
 	<!-- 根据账号查询用户 -->
-	<select id="getAdminByAccount" resultType="org.cy.micoservice.app.entity.infra.console.model.entity.sys.SysAdmin">
+	<select id="getAdminByAccount" resultType="org.cy.micoservice.app.entity.infra.console.model.sys.SysAdmin">
 		select
 		<include refid="Base_Column_List"/>
 		from sys_admin
@@ -162,7 +162,7 @@
 		</where>
 	</update>
 
-	<select id="loginAdmin" resultType="org.cy.micoservice.app.entity.infra.console.model.entity.sys.SysAdmin">
+	<select id="loginAdmin" resultType="org.cy.micoservice.app.entity.infra.console.model.sys.SysAdmin">
 		select <include refid="Base_Column_List"/>
 		from <include refid="Table_Name"/>
 		<where>
@@ -342,7 +342,7 @@
 	</select>
 
 	<!--  no need order by create_time -->
-	<select id="selectAdminAllList" resultType="org.cy.micoservice.app.entity.infra.console.model.entity.sys.SysAdmin">
+	<select id="selectAdminAllList" resultType="org.cy.micoservice.app.entity.infra.console.model.sys.SysAdmin">
 		select
 			a.id,
 			a.account,

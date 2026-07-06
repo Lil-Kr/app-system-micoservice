@@ -1,7 +1,7 @@
 package org.cy.micoservice.app.infra.console.dao.permission;
 
 import org.apache.ibatis.annotations.Param;
-import org.cy.micoservice.app.entity.infra.console.model.entity.sys.SysAclData;
+import org.cy.micoservice.app.entity.infra.console.model.sys.SysAclData;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;

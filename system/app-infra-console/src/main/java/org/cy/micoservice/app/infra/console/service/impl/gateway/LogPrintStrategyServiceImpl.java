@@ -12,6 +12,7 @@ import org.cy.micoservice.app.common.utils.BeanCopyUtils;
 import org.cy.micoservice.app.common.utils.DateUtil;
 import org.cy.micoservice.app.common.utils.IdWorker;
 import org.cy.micoservice.app.entity.gateway.model.LogPrintStrategy;
+import org.cy.micoservice.app.infra.console.aspect.holder.RequestHolder;
 import org.cy.micoservice.app.infra.console.vo.req.gateway.LogPrintStrategyAddReq;
 import org.cy.micoservice.app.infra.console.vo.req.gateway.LogPrintStrategyEditReq;
 import org.cy.micoservice.app.infra.console.vo.req.gateway.LogPrintStrategyPageReq;
@@ -49,7 +50,7 @@ public class LogPrintStrategyServiceImpl implements LogPrintStrategyService {
   }
 
   @Override
-  public ApiResp<String> add(LogPrintStrategyAddReq req) {
+  public ApiResp<String> create(LogPrintStrategyAddReq req) {
     QueryWrapper<LogPrintStrategy> queryWrapper = new QueryWrapper<>();
     queryWrapper.eq("strategy_name", req.getStrategyName());
     LogPrintStrategy before = logPrintStrategyMapper.selectOne(queryWrapper);
@@ -60,8 +61,8 @@ public class LogPrintStrategyServiceImpl implements LogPrintStrategyService {
     convert.setStatus(ValidStatusEnum.ACTIVE.getCode());
     convert.setDeleted(DeleteStatusEnum.ACTIVE.getCode());
     // todo: 这里修改为当前操作人
-    convert.setCreateId(req.getAdminId());
-    convert.setUpdateId(req.getAdminId());
+    convert.setCreateId(RequestHolder.getCurrentAdmin().getId());
+    convert.setUpdateId(RequestHolder.getCurrentAdmin().getId());
 
     LocalDateTime now = DateUtil.localDateTimeNow();
     convert.setCreateTime(now);
@@ -72,7 +73,7 @@ public class LogPrintStrategyServiceImpl implements LogPrintStrategyService {
   }
 
   @Override
-  public ApiResp<String> edit(LogPrintStrategyEditReq req) {
+  public ApiResp<String> update(LogPrintStrategyEditReq req) {
     QueryWrapper<LogPrintStrategy> queryWrapper = new QueryWrapper<>();
     queryWrapper.eq("id", req.getId());
     LogPrintStrategy before = logPrintStrategyMapper.selectOne(queryWrapper);

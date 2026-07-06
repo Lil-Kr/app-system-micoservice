@@ -4,12 +4,12 @@ import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONObject;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.dubbo.rpc.service.GenericService;
-import org.cy.micoservice.app.common.constants.gateway.GatewayInfraConsoleSdkConstants;
 import org.cy.micoservice.app.entity.gateway.model.RouteConfig;
 import org.cy.micoservice.app.gateway.facade.constants.GatewayConstants;
-import org.cy.micoservice.app.gateway.facade.enums.GatewayRouterSchemaEnum;
+import org.cy.micoservice.app.gateway.facade.enums.GatewaySchemaEnum;
 import org.cy.micoservice.app.gateway.filter.abst.AbstractGatewayFilter;
 import org.cy.micoservice.app.gateway.service.DubboInvokerService;
+import org.cy.micoservice.app.infra.console.facade.constants.InfraConsoleSdkConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.core.Ordered;
@@ -40,7 +40,7 @@ public class DubboInvokeFilter extends AbstractGatewayFilter implements Ordered 
     Object obj = exchange.getAttributes().get(GatewayConstants.GatewayAttrKey.X_ROUTE);
     if (Objects.isNull(obj)) return false;
     RouteConfig routeConfig = (RouteConfig) obj;
-    return GatewayRouterSchemaEnum.DUBBO.getCode().equals(routeConfig.getSchema());
+    return GatewaySchemaEnum.DUBBO.getCode().equals(routeConfig.getSchema());
   }
 
   @Override
@@ -62,7 +62,7 @@ public class DubboInvokeFilter extends AbstractGatewayFilter implements Ordered 
    */
   private Mono<Void> dubboInvoke(ServerWebExchange exchange, RouteConfig routeConfig) {
     String dobbuUri = routeConfig.getUri();
-    dobbuUri = dobbuUri.replaceAll(GatewayInfraConsoleSdkConstants.DUBBO_URL_PREFIX, "");
+    dobbuUri = dobbuUri.replaceAll(InfraConsoleSdkConstants.DUBBO_URL_PREFIX, "");
     String[] dobbUriArray = dobbuUri.split("#");
     log.info("dobbuUri: {}, dobbUriArray: {}", dobbUriArray[0], dobbUriArray[1]);
     GenericService genericService = dubboInvokerService.get(dobbUriArray[0]);

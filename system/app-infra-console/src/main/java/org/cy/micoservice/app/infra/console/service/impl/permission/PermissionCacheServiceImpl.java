@@ -3,10 +3,10 @@ package org.cy.micoservice.app.infra.console.service.impl.permission;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import org.apache.commons.collections4.CollectionUtils;
-import org.cy.micoservice.app.entity.infra.console.model.entity.sys.SysAcl;
-import org.cy.micoservice.app.entity.infra.console.model.entity.sys.SysAdmin;
-import org.cy.micoservice.app.entity.infra.console.model.entity.sys.SysDict;
-import org.cy.micoservice.app.entity.infra.console.model.entity.sys.SysDictDetail;
+import org.cy.micoservice.app.entity.infra.console.model.sys.SysAcl;
+import org.cy.micoservice.app.entity.infra.console.model.sys.SysAdmin;
+import org.cy.micoservice.app.entity.infra.console.model.sys.SysDict;
+import org.cy.micoservice.app.entity.infra.console.model.sys.SysDictDetail;
 import org.cy.micoservice.app.infra.console.service.interfaces.permission.PermissionCacheService;
 import org.springframework.stereotype.Service;
 
@@ -27,17 +27,17 @@ public class PermissionCacheServiceImpl implements PermissionCacheService, Seria
 	private static Cache<String, SysAdmin> userCache = CacheBuilder.newBuilder().build();
 
 	@Override
-	public void setUserTokenCache(String token, SysAdmin user) {
+	public void setAdminTokenCache(String token, SysAdmin user) {
 		userCache.put(token, user);
 	}
 
 	@Override
-	public SysAdmin getUserTokenCache(String token) {
+	public SysAdmin getAdminTokenCache(String token) {
 		return userCache.getIfPresent(token);
 	}
 
 	@Override
-	public void removeUserTokenCache(String token) {
+	public void removeAdminTokenCache(String token) {
 		userCache.invalidate(token);
 	}
 
@@ -45,7 +45,7 @@ public class PermissionCacheServiceImpl implements PermissionCacheService, Seria
 	private static Cache<Long, SysAdmin> userAdminCache = CacheBuilder.newBuilder().build();
 
 	@Override
-	public void initUserAdminIdCache(List<SysAdmin> list) {
+	public void initAdminIdCache(List<SysAdmin> list) {
 		list.parallelStream().forEach(user -> userAdminCache.put(user.getId(), user));
 	}
 
@@ -55,7 +55,7 @@ public class PermissionCacheServiceImpl implements PermissionCacheService, Seria
 	}
 
 	@Override
-	public SysAdmin getUserAdminIdCache(Long id) {
+	public SysAdmin getAdminIdCache(Long id) {
 		return userAdminCache.getIfPresent(id);
 	}
 
@@ -121,7 +121,7 @@ public class PermissionCacheServiceImpl implements PermissionCacheService, Seria
 	 * @param aclList
 	 */
 	@Override
-	public void saveUserAclCache(Long surrogateId, List<SysAcl> aclList) {
+	public void saveAdminAclCache(Long surrogateId, List<SysAcl> aclList) {
 		adminAclCache.put(surrogateId, aclList);
 	}
 
@@ -135,7 +135,7 @@ public class PermissionCacheServiceImpl implements PermissionCacheService, Seria
 	 * @param userIdList
 	 */
 	@Override
-	public void invalidUserAclCache(List<Long> userIdList) {
+	public void invalidAdminAclCache(List<Long> userIdList) {
 		if (CollectionUtils.isEmpty(userIdList)) {
 			return;
 		}
@@ -143,7 +143,7 @@ public class PermissionCacheServiceImpl implements PermissionCacheService, Seria
 	}
 
 	@Override
-	public void invalidAllUserAclCache() {
+	public void invalidAllAdminAclCache() {
 		adminAclCache.invalidateAll();
 	}
 }

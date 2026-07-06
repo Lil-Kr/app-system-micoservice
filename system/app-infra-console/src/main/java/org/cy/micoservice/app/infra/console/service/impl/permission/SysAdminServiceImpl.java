@@ -13,7 +13,7 @@ import org.cy.micoservice.app.common.enums.response.ApiReturnCodeEnum;
 import org.cy.micoservice.app.common.security.impl.AES128GCMCrypto;
 import org.cy.micoservice.app.common.utils.BeanCopyUtils;
 import org.cy.micoservice.app.common.utils.DateUtil;
-import org.cy.micoservice.app.entity.infra.console.model.entity.sys.SysAdmin;
+import org.cy.micoservice.app.entity.infra.console.model.sys.SysAdmin;
 import org.cy.micoservice.app.infra.console.vo.req.sys.admin.*;
 import org.cy.micoservice.app.infra.console.vo.resp.sys.admin.SysAdminResp;
 import org.cy.micoservice.app.infra.console.config.InfraApplicationProperties;
@@ -33,6 +33,7 @@ import java.util.*;
 import static org.cy.micoservice.app.common.enums.response.ApiReturnCodeEnum.*;
 import static org.cy.micoservice.app.infra.console.dto.permission.admin.AdminDTO.convertAddUserReq;
 import static org.cy.micoservice.app.infra.console.dto.permission.admin.AdminDTO.convertEditUserReq;
+import static org.cy.micoservice.app.infra.console.facade.constants.InfraLangConstants.LANG_ZH;
 
 /**
  * @Author: Lil-K
@@ -61,7 +62,7 @@ public class SysAdminServiceImpl extends ServiceImpl<SysAdminMapper, SysAdmin> i
   @Autowired
   private SysAdminMapper adminMapper;
   @Autowired
-  private PermissionCacheService permissionCacheService;
+  private PermissionCacheService cacheService;
   @Autowired
   private IdService idService;
 
@@ -92,8 +93,8 @@ public class SysAdminServiceImpl extends ServiceImpl<SysAdminMapper, SysAdmin> i
     }
 
     // update cache
-    permissionCacheService.setUserTokenCache(after.getToken(), after);
-    permissionCacheService.setUserAdminIdCache(after.getId(), after);
+    cacheService.setAdminTokenCache(after.getToken(), after);
+    cacheService.setUserAdminIdCache(after.getId(), after);
     return ApiResp.success(ApiReturnCodeEnum.SUCCESS);
   }
 
@@ -116,8 +117,8 @@ public class SysAdminServiceImpl extends ServiceImpl<SysAdminMapper, SysAdmin> i
     }
 
     // update cache
-    permissionCacheService.setUserTokenCache(user.getToken(), user);
-    permissionCacheService.setUserAdminIdCache(user.getId(), user);
+    cacheService.setAdminTokenCache(user.getToken(), user);
+    cacheService.setUserAdminIdCache(user.getId(), user);
     return ApiResp.success();
   }
 
@@ -142,8 +143,8 @@ public class SysAdminServiceImpl extends ServiceImpl<SysAdminMapper, SysAdmin> i
     }
 
     // update cache
-    permissionCacheService.setUserTokenCache(user.getToken(), user);
-    permissionCacheService.setUserAdminIdCache(user.getId(), user);
+    cacheService.setAdminTokenCache(user.getToken(), user);
+    cacheService.setUserAdminIdCache(user.getId(), user);
     return ApiResp.success();
   }
 
@@ -166,8 +167,8 @@ public class SysAdminServiceImpl extends ServiceImpl<SysAdminMapper, SysAdmin> i
     }
 
     // remove catch
-    permissionCacheService.removeUserTokenCache(admin.getToken());
-    permissionCacheService.removeUserAdminIdCache(admin.getId());
+    cacheService.removeAdminTokenCache(admin.getToken());
+    cacheService.removeUserAdminIdCache(admin.getId());
     return ApiResp.success();
   }
 
@@ -195,13 +196,9 @@ public class SysAdminServiceImpl extends ServiceImpl<SysAdminMapper, SysAdmin> i
     }
 
     // update cache
-    permissionCacheService.setUserTokenCache(admin.getToken(), admin);
-    permissionCacheService.setUserAdminIdCache(admin.getId(), admin);
-
-    Map<String, Long> map = new HashMap<>();
-    map.put(CommonConstants.DEFAULT_AUTH_KEY_USER_ID, admin.getId());
-    String token = this.aes128GCMCrypto.encrypt(JWTUtil.generateToken(JSONObject.toJSONString(map), authProperties.getSecretKey()));
-    return ApiResp.success(SysAdmin.builder().token(token).build());
+    cacheService.setAdminTokenCache(admin.getToken(), admin);
+    cacheService.setUserAdminIdCache(admin.getId(), admin);
+    return ApiResp.success(msgService.getMessage(LANG_ZH, "admin.login.success"), SysAdmin.builder().token(admin.getToken()).build());
   }
 
   @Override

@@ -26,4 +26,7 @@ public class RouteConfigQueryReq implements Serializable {
 
   private String uri;
 
+  private Integer status;
+
+  private Integer deleted;
 }

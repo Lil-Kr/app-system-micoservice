@@ -2,14 +2,14 @@ package org.cy.micoservice.app.infra.console.vo.req.sys.org;
 
 import jakarta.validation.constraints.*;
 import lombok.Data;
-import lombok.ToString;
+import lombok.EqualsAndHashCode;
 import org.cy.micoservice.app.entity.base.model.api.BaseReq;
 
 import java.io.Serial;
 import java.io.Serializable;
 
+@EqualsAndHashCode(callSuper = true)
 @Data
-@ToString
 public class OrgReq extends BaseReq implements Serializable {
 
   @Serial

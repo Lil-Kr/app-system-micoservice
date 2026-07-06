@@ -4,7 +4,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
-import org.cy.micoservice.app.entity.infra.console.model.entity.sys.SysOrg;
+import org.cy.micoservice.app.entity.infra.console.model.sys.SysOrg;
 import org.cy.micoservice.app.infra.console.vo.req.sys.org.OrgReq;
 import org.springframework.beans.BeanUtils;
 

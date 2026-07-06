@@ -3,29 +3,27 @@ package org.cy.micoservice.app.infra.console.controller.permission;
 import jakarta.validation.constraints.NotNull;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
-import org.cy.micoservice.app.common.base.api.ApiResp;
 import org.cy.micoservice.app.common.base.api.ApiPageResult;
+import org.cy.micoservice.app.common.base.api.ApiResp;
 import org.cy.micoservice.app.entity.base.model.api.BasePageReq;
+import org.cy.micoservice.app.infra.console.aspect.holder.RequestHolder;
+import org.cy.micoservice.app.infra.console.dto.permission.aclmodule.AclModuleDTO;
+import org.cy.micoservice.app.infra.console.service.interfaces.MessageLangService;
+import org.cy.micoservice.app.infra.console.service.interfaces.permission.SysRoleAclService;
+import org.cy.micoservice.app.infra.console.service.interfaces.permission.SysRoleAdminService;
+import org.cy.micoservice.app.infra.console.service.interfaces.permission.SysRoleService;
+import org.cy.micoservice.app.infra.console.service.interfaces.permission.SysTreeService;
 import org.cy.micoservice.app.infra.console.vo.req.sys.role.RoleListPageReq;
 import org.cy.micoservice.app.infra.console.vo.req.sys.role.RoleSaveReq;
 import org.cy.micoservice.app.infra.console.vo.req.sys.roleacl.RoleAclSaveReq;
 import org.cy.micoservice.app.infra.console.vo.req.sys.roleuser.RoleAdminReq;
 import org.cy.micoservice.app.infra.console.vo.resp.sys.role.RoleAdminResp;
 import org.cy.micoservice.app.infra.console.vo.resp.sys.role.SysRoleResp;
-import org.cy.micoservice.app.framework.web.starter.web.RequestContext;
-import org.cy.micoservice.app.infra.console.service.interfaces.MessageLangService;
-import org.cy.micoservice.app.infra.console.service.interfaces.permission.SysRoleAclService;
-import org.cy.micoservice.app.infra.console.service.interfaces.permission.SysRoleAdminService;
-import org.cy.micoservice.app.infra.console.service.interfaces.permission.SysRoleService;
-import org.cy.micoservice.app.infra.console.service.interfaces.permission.SysTreeService;
-import org.cy.micoservice.app.infra.console.dto.permission.aclmodule.AclModuleDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
-
-import static org.cy.micoservice.app.common.constants.CommonConstants.LANG_ZH;
+import static org.cy.micoservice.app.infra.console.facade.constants.InfraLangConstants.LANG_ZH;
 
 /**
  * @Author: Lil-K
@@ -84,12 +82,12 @@ public class RoleController {
   public ApiResp<String> edit(@RequestBody @Validated({RoleSaveReq.GroupEdite.class}) RoleSaveReq req) {
     return roleService.edit(req);
   }
-
   /**
    * freeze role info
    * @param req
    * @return
    */
+  
   @PostMapping("/freeze")
   public ApiResp<String> freeze(@RequestBody @Validated({RoleSaveReq.GroupFreeze.class}) RoleSaveReq req) {
     return roleService.freeze(req);
@@ -112,7 +110,7 @@ public class RoleController {
    */
   @PostMapping("/roleAclTree")
   public ApiResp<List<AclModuleDTO>> roleAclTree(@RequestBody @Validated({RoleSaveReq.GroupTreeOrDel.class}) RoleSaveReq req) {
-    req.setAdminId(RequestContext.getUserId());
+    req.setAdminId(RequestHolder.getCurrentAdmin().getId());
     List<AclModuleDTO> aclModuleDTOList = treeService.roleAclTree(req);
     if (CollectionUtils.isEmpty(aclModuleDTOList)) {
       return ApiResp.failure(msgLangService.getMessage(LANG_ZH, "sys.role.api.resp.msg1"));
@@ -139,7 +137,7 @@ public class RoleController {
    */
   @PostMapping("/updateRoleAcls")
   public ApiResp<String> updateRoleAcls(@RequestBody @Validated({RoleAclSaveReq.GroupUpdateRoleAcls.class}) RoleAclSaveReq req) {
-    req.setAdminId(RequestContext.getUserId());
+    req.setAdminId(RequestHolder.getCurrentAdmin().getId());
     return roleAclService.updateRoleAcls(req);
   }
 
@@ -151,7 +149,6 @@ public class RoleController {
    */
   @PostMapping("/updateRoleAdmins")
   public ApiResp<String> updateRoleAdmins(@RequestBody @Validated({RoleAdminReq.GroupChangeRoleUsers.class}) RoleAdminReq req) {
-    req.setAdminId(RequestContext.getUserId());
     return roleAdminService.updateRoleAdmins(req);
   }
 }

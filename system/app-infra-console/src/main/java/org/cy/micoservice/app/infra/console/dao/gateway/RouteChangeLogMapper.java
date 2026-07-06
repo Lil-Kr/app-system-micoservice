@@ -14,6 +14,6 @@ import java.util.List;
 @Repository
 public interface RouteChangeLogMapper extends BaseMapper<RouteChangeLog> {
 
-  List<RouteChangeLog> findGtVersion(Long version);
+  List<RouteChangeLog> queryGtVersion(Long version);
 
 }

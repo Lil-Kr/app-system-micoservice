@@ -4,7 +4,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.cy.micoservice.app.common.base.api.ApiPageResult;
-import org.cy.micoservice.app.entity.infra.console.model.entity.image.ImageCategory;
+import org.cy.micoservice.app.entity.infra.console.model.image.ImageCategory;
 
 import java.io.Serial;
 import java.io.Serializable;

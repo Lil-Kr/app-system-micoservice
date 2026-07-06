@@ -16,12 +16,12 @@
 		from <include refid="Table_Name" />
 		<where>
 			<if test="status != null and status != ''">
-				status = #{status}
+				`status` = #{status}
 			</if>
 		</where>
 	</select>
 	
-	<select id="findInConfigIds" resultType="org.cy.micoservice.app.entity.gateway.model.RouteConfig">
+	<select id="queryInConfigIds" resultType="org.cy.micoservice.app.entity.gateway.model.RouteConfig">
 		select <include refid="Base_Column_List" />
 		from <include refid="Table_Name" />
 		<where>
@@ -84,12 +84,12 @@
 		</where>
 	</select>
 	
-	<select id="routeConfigList" resultType="org.cy.micoservice.app.entity.gateway.model.RouteConfig">
+	<select id="queryRouteConfigList" resultType="org.cy.micoservice.app.entity.gateway.model.RouteConfig">
 		select <include refid="Base_Column_List"/>
 		from <include refid="Table_Name"/>
 		<where>
 			<if test="param.appName != null and param.appName != ''">
-				and app_name = #{param.appName}
+				app_name = #{param.appName}
 			</if>
 			<if test="param.schema != null and param.schema != ''">
 				and `schema` = #{param.schema}
@@ -103,13 +103,19 @@
 			<if test="param.uri != null and param.uri != ''">
 				and uri = #{param.uri}
 			</if>
+			<if test="param.status != null and param.status != ''">
+				and `status` = #{param.status}
+			</if>
+			<if test="param.deleted != null and param.deleted != ''">
+				and deleted = #{param.deleted}
+			</if>
 		</where>
 	</select>
 	
-	<select id="getAppNameList" resultType="org.cy.micoservice.app.entity.gateway.model.RouteConfig">
-		select id, app_name from sys_route_config
-		GROUP BY id, app_name
+	<select id="queryAppNameList" resultType="org.cy.micoservice.app.entity.gateway.model.RouteConfig">
+		select app_name from sys_route_config
+		where deleted = 0
+		GROUP BY app_name
 	</select>
-
 
 </mapper>

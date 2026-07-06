@@ -13,11 +13,10 @@
 	<packaging>jar</packaging>
 	
 	<properties>
-		<maven.compiler.source>17</maven.compiler.source>
-		<maven.compiler.target>17</maven.compiler.target>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<app-entity-parent.version>1.0.0</app-entity-parent.version>
 		<app-framework-parent.version>1.0.0</app-framework-parent.version>
+		<app-gateway-facade.version>1.0.0</app-gateway-facade.version>
 	</properties>
 	
 	<dependencies>
@@ -63,6 +62,13 @@
 			<groupId>org.cy.micoservice.app</groupId>
 			<artifactId>app-framework-identify-starter</artifactId>
 			<version>${app-framework-parent.version}</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.cy.micoservice.app</groupId>
+			<artifactId>app-gateway-facade</artifactId>
+			<version>${app-gateway-facade.version}</version>
+			<optional>true</optional>
 		</dependency>
 	</dependencies>
 </project>

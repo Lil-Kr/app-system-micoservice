@@ -20,13 +20,13 @@ public interface RouteConfigMapper extends BaseMapper<RouteConfig> {
 
   List<RouteConfig> routeConfigAllValidaList(Integer status);
 
-  List<RouteConfig> findInConfigIds(@Param("configIds") Collection<Long> saveConfigIds);
+  List<RouteConfig> queryInConfigIds(@Param("configIds") Collection<Long> saveConfigIds);
 
   List<RouteConfig> pageRouteConfigList(@Param("param") RouteConfigQueryPageReq req);
 
   Integer countPageRouteConfigList(@Param("param") RouteConfigQueryPageReq req);
 
-  List<RouteConfig> routeConfigList(@Param("param") RouteConfigQueryReq req);
+  List<RouteConfig> queryRouteConfigList(@Param("param") RouteConfigQueryReq req);
 
-  List<RouteConfig> getAppNameList();
+  List<RouteConfig> queryAppNameList();
 }

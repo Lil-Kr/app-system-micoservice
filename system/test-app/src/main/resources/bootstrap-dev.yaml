@@ -34,7 +34,7 @@ spring:
 # jetcache
 jetcache:
   ## 统计间隔, 单位分钟, 0 标识不统计
-  statIntervalMinutes: 15
+  statIntervalMinutes: 0
   ## 是否将areaName作为缓存key前缀, false更合理
   areaInCacheName: false
   ## 隐藏的包名前缀, 用于缩短自动生成的缓存名
@@ -105,8 +105,14 @@ identify:
 auth:
   template: jwt
 
-
 ## gateway
 gateway:
   decrypty:
     secret-key: PxMNarWuqoNFFGJ5QGgesg==
+
+## slf4j log level
+logging:
+  level:
+    root: INFO
+    org.cy.micoservice.app.test: DEBUG
+    org.cy.micoservice.app.infra.console.sdk: DEBUG

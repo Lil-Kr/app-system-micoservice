@@ -6,10 +6,11 @@ import feign.RequestInterceptor;
 import feign.RequestTemplate;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.cy.micoservice.app.common.constants.gateway.GatewayInfraConsoleSdkConstants;
+import org.cy.micoservice.app.infra.console.facade.constants.InfraConsoleSdkConstants;
 import org.cy.micoservice.app.infra.console.sdk.config.NacosServiceDiscovery;
 
 import static org.cy.micoservice.app.common.constants.CommonFormatConstants.COMMENT_FORMAT_COLON_SPLIT;
+import static org.cy.micoservice.app.infra.console.facade.constants.InfraConsoleConstant.*;
 
 /**
  * @Author: Lil-K
@@ -24,7 +25,7 @@ public class InfraConsoleSdkHttpRequestInterceptor implements RequestInterceptor
   private String serviceGroup;
   private NacosServiceDiscovery nacosServiceDiscovery;
 
-  public InfraConsoleSdkHttpRequestInterceptor(String serviceName, String serviceGroup, String clientName, NacosServiceDiscovery nacosServiceDiscovery) {
+  public InfraConsoleSdkHttpRequestInterceptor(String clientName, String serviceName, String serviceGroup, NacosServiceDiscovery nacosServiceDiscovery) {
     this.clientName = clientName;
     this.serviceName = serviceName;
     this.serviceGroup = serviceGroup;
@@ -36,12 +37,12 @@ public class InfraConsoleSdkHttpRequestInterceptor implements RequestInterceptor
     String httpUrl = null;
     try {
       Instance instance = nacosServiceDiscovery.getRandomHealthyInstance(serviceName, serviceGroup);
-      httpUrl = GatewayInfraConsoleSdkConstants.HTTP_URL_PREFIX + String.format(COMMENT_FORMAT_COLON_SPLIT, instance.getIp(), instance.getPort());
-
+      httpUrl = InfraConsoleSdkConstants.HTTP_URL_PREFIX + String.format(COMMENT_FORMAT_COLON_SPLIT, instance.getIp(), instance.getPort());
     } catch (NacosException e) {
       log.error("getRandomHealthyInstance error", e);
     }
-    requestTemplate.header("X-INFRA-CONSOLE-SDK-CLIENT", clientName);
+    requestTemplate.header(INFRA_CONSOLE_SDK_CLIENT, clientName);
+    requestTemplate.header(INTERNAL_CALL_HEADER, INTERNAL_CALL_HEADER_VALUE);
     if (StringUtils.isNotBlank(httpUrl)) {
       requestTemplate.target(httpUrl);
     }

@@ -5,9 +5,13 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.cy.micoservice.app.framework.web.starter.annotations.NoAuthCheck;
 import org.cy.micoservice.app.framework.web.starter.web.RequestContext;
+import org.cy.micoservice.app.infra.console.facade.dto.req.RouteConfigQueryReqDTO;
+import org.cy.micoservice.app.infra.console.sdk.core.InfraConsoleClient;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
+import java.util.Set;
 
 /**
  * @Author: Lil-K
@@ -16,11 +20,11 @@ import java.util.Map;
  */
 @Slf4j
 @RestController
-@RequestMapping("/demo")
+@RequestMapping("/test")
 public class DemoController {
 
-  // @Autowired
-  // private InfraConsoleClient infraConsoleClient;
+  @Autowired
+  private InfraConsoleClient infraConsoleClient;
 
   @NoAuthCheck
   @GetMapping("/test1")
@@ -43,17 +47,12 @@ public class DemoController {
     return "test-app test3 success" + "userId: " + userId;
   }
 
-  // @NoAuthCheck
-  // @GetMapping("/create")
-  // public ApiResp<Long> create() {
-  //   RouteConfigSaveRequest req = new RouteConfigSaveRequest();
-  //   req.setSchema("http");
-  //   req.setMethod("GET");
-  //   req.setPath("/api/test/test1");
-  //   req.setUri("lb://test-app");
-  //   req.setAuthType("jwt");
-  //   return infraConsoleClient.createRouteConfig(req);
-  // }
-
-
+  @NoAuthCheck
+  @GetMapping("/sdk")
+  public Set<String> testSdk() {
+    RouteConfigQueryReqDTO dto = new RouteConfigQueryReqDTO();
+    Set<String> routPathList = infraConsoleClient.routeList(dto);
+    log.debug("debug routPathList: {}", routPathList);
+    return routPathList;
+  }
 }

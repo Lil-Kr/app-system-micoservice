@@ -1,6 +1,7 @@
 package org.cy.micoservice.app.infra.console.vo.req.blog.topic;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.cy.micoservice.app.entity.base.model.api.BasePageReq;
 
 import java.io.Serial;
@@ -10,6 +11,7 @@ import java.io.Serial;
  * @Date: 2024/5/25
  * @Description:
  */
+@EqualsAndHashCode(callSuper = true)
 @Data
 public class BlogTopicPageReq extends BasePageReq {
 

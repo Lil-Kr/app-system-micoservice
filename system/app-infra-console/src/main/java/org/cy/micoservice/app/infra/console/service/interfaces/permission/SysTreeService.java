@@ -23,7 +23,7 @@ public interface SysTreeService {
 
 	List<AclModuleDTO> roleAclTree(RoleSaveReq req);
 
-	List<AclModuleDTO> userAclTree(Long userId);
+	List<AclModuleDTO> adminAclTree(Long adminId);
 
 	List<AclModuleDTO> aclListToTree(List<AclDTO> aclDTOList);
 

@@ -17,8 +17,8 @@
 		<app-framework-parent.version>1.0.0</app-framework-parent.version>
 		<app-common.version>1.0.0</app-common.version>
 		<app-gateway-facade.version>1.0.0</app-gateway-facade.version>
+		<app-infra-console-facade.version>1.0.0</app-infra-console-facade.version>
 		<app-gateway-model.version>1.0.0</app-gateway-model.version>
-		<app-infra-facade.version>1.0.0</app-infra-facade.version>
 	</properties>
 	
 	<dependencies>
@@ -54,30 +54,20 @@
 			<groupId>org.cy.micoservice.app</groupId>
 			<artifactId>app-framework-web-starter</artifactId>
 			<version>${app-framework-parent.version}</version>
+			<optional>true</optional>
 		</dependency>
 		
 		<dependency>
 			<groupId>org.cy.micoservice.app</groupId>
 			<artifactId>app-common</artifactId>
 			<version>${app-common.version}</version>
+			<optional>true</optional>
 		</dependency>
 		
 		<dependency>
 			<groupId>org.cy.micoservice.app</groupId>
-			<artifactId>app-gateway-facade</artifactId>
-			<version>${app-gateway-facade.version}</version>
-		</dependency>
-		
-		<dependency>
-			<groupId>org.cy.micoservice.app</groupId>
-			<artifactId>app-entity-gateway-model</artifactId>
-			<version>${app-gateway-model.version}</version>
-		</dependency>
-		
-		<dependency>
-			<groupId>org.cy.micoservice.app</groupId>
-			<artifactId>app-infra-facade</artifactId>
-			<version>${app-infra-facade.version}</version>
+			<artifactId>app-infra-console-facade</artifactId>
+			<version>${app-infra-console-facade.version}</version>
 		</dependency>
 	</dependencies>
 	

@@ -1,8 +1,7 @@
 package org.cy.micoservice.app.infra.console.vo.req.gateway;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
-import org.cy.micoservice.app.entity.base.model.api.BaseReq;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -13,11 +12,13 @@ import java.io.Serializable;
  * @Description:
  */
 @Data
-@EqualsAndHashCode(callSuper = true)
-public class RouteConfigDelReq extends BaseReq implements Serializable {
+public class RouteConfigDelReq implements Serializable {
 
   @Serial
   private static final long serialVersionUID = -3812154315344047111L;
+
+  private Long adminId;
+
+  @NotNull(message = "id 不能为空")
   private Long id;
-  private Long configId;
 }

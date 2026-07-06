@@ -5,7 +5,7 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.cy.micoservice.app.entity.gateway.model.RouteConfig;
 import org.cy.micoservice.app.framework.identiy.starter.response.TokenBodyResponse;
 import org.cy.micoservice.app.gateway.facade.constants.GatewayConstants;
-import org.cy.micoservice.app.gateway.facade.dto.LogRequestDTO;
+import org.cy.micoservice.app.gateway.facade.dto.gateway.req.LogReqDTO;
 import org.cy.micoservice.app.gateway.facade.print.abst.BaseLogPrintStrategy;
 import org.cy.micoservice.app.gateway.filter.abst.AbstractGatewayFilter;
 import org.cy.micoservice.app.gateway.service.LogPrintStrategyService;
@@ -35,20 +35,20 @@ public class LogPrintStrategyFilter extends AbstractGatewayFilter implements Ord
 
   @Override
   protected boolean isSupport(ServerWebExchange exchange) {
-    LogRequestDTO logRequestDTO = this.getLogRequestDTO(exchange);
-    return logPrintStrategyService.hasAvailableStrategy(logRequestDTO);
+    LogReqDTO logReqDTO = this.getLogRequestDTO(exchange);
+    return logPrintStrategyService.hasAvailableStrategy(logReqDTO);
   }
 
   @Override
   protected Mono<Void> doFilter(ServerWebExchange exchange, GatewayFilterChain chain) {
-    LogRequestDTO logRequestDTO = this.getLogRequestDTO(exchange);
+    LogReqDTO logReqDTO = this.getLogRequestDTO(exchange);
 
-    List<BaseLogPrintStrategy> availableStrategy = logPrintStrategyService.getAvailableStrategy(logRequestDTO);
+    List<BaseLogPrintStrategy> availableStrategy = logPrintStrategyService.getAvailableStrategy(logReqDTO);
     if (CollectionUtils.isNotEmpty(availableStrategy)) {
       /**
        * 统一日志打印, 也可以自定义
        */
-      log.info("path: {}, uri: {}, header: {}, userid: {}", logRequestDTO.getPath(), logRequestDTO.getServiceName(), logRequestDTO.getHeaders(), logRequestDTO.getUserId());
+      log.info("path: {}, uri: {}, header: {}, userid: {}", logReqDTO.getPath(), logReqDTO.getServiceName(), logReqDTO.getHeaders(), logReqDTO.getUserId());
     }
     return chain.filter(exchange);
   }
@@ -58,20 +58,20 @@ public class LogPrintStrategyFilter extends AbstractGatewayFilter implements Ord
    * @param exchange
    * @return
    */
-  private LogRequestDTO getLogRequestDTO(ServerWebExchange exchange) {
+  private LogReqDTO getLogRequestDTO(ServerWebExchange exchange) {
     ServerHttpRequest request = exchange.getRequest();
     String path = exchange.getRequest().getPath().toString();
     RouteConfig routeConfig = (RouteConfig) exchange.getAttributes().getOrDefault(GatewayConstants.GatewayAttrKey.X_ROUTE, RouteConfig.builder().build());
     TokenBodyResponse tokenBodyResponse = (TokenBodyResponse) exchange.getAttributes().getOrDefault(GatewayConstants.GatewayAttrKey.X_JWT_INFO, new TokenBodyResponse());
 
-    LogRequestDTO logRequestDTO = new LogRequestDTO();
-    logRequestDTO.setEventTime(System.currentTimeMillis());
-    logRequestDTO.setPath(path);
-    logRequestDTO.setServiceName(routeConfig.getUri());
-    logRequestDTO.setHeaders(this.getHttpHeaders(request));
-    logRequestDTO.setUserId(tokenBodyResponse.getSubject() == null ? null : Long.parseLong(tokenBodyResponse.getSubject()));
+    LogReqDTO logReqDTO = new LogReqDTO();
+    logReqDTO.setEventTime(System.currentTimeMillis());
+    logReqDTO.setPath(path);
+    logReqDTO.setServiceName(routeConfig.getUri());
+    logReqDTO.setHeaders(this.getHttpHeaders(request));
+    logReqDTO.setUserId(tokenBodyResponse.getSubject() == null ? null : Long.parseLong(tokenBodyResponse.getSubject()));
 
-    return logRequestDTO;
+    return logReqDTO;
   }
 
   /**

@@ -3,12 +3,12 @@ package org.cy.micoservice.app.infra.console.sdk.core;
 import lombok.extern.slf4j.Slf4j;
 import org.cy.micoservice.app.common.base.api.ApiResp;
 import org.cy.micoservice.app.entity.gateway.model.RouteConfig;
+import org.cy.micoservice.app.infra.console.facade.dto.req.RouteConfigQueryReqDTO;
+import org.cy.micoservice.app.infra.console.facade.dto.req.RouteConfigSaveReqDTO;
 import org.cy.micoservice.app.infra.console.sdk.config.FeignClientFactory;
 import org.cy.micoservice.app.infra.console.sdk.config.NacosServiceDiscovery;
 import org.cy.micoservice.app.infra.console.sdk.config.SdkProperties;
 import org.cy.micoservice.app.infra.console.sdk.http.InfraConsoleFacade;
-import org.cy.micoservice.app.infra.facade.dto.RouteConfigQueryListReqDTO;
-import org.cy.micoservice.app.infra.facade.dto.RouteConfigSaveReqDTO;
 import org.springframework.stereotype.Component;
 
 import java.util.Collections;
@@ -34,28 +34,32 @@ public class InfraConsoleClient {
     this.sdkProperties = sdkProperties;
   }
 
+  /**
+   * init openfeign factory
+   * @throws Exception
+   */
   public void init() throws Exception {
     log.info("sdkProperties: {}", sdkProperties);
     // 1. 初始化 Nacos 服务发现
-    nacosServiceDiscovery = new NacosServiceDiscovery(sdkProperties.getNacosAddress(),
+    this.nacosServiceDiscovery = new NacosServiceDiscovery(sdkProperties.getNacosAddress(),
       sdkProperties.getNacosNamespace(),
       sdkProperties.getNacosUser(),
       sdkProperties.getNacosPwd());
 
-    // 2. 创建 Feign 客户端工厂
+    // 2. create Feign client factory
     FeignClientFactory factory = new FeignClientFactory(nacosServiceDiscovery);
 
-    // 3. 创建 UserServiceClient (服务名: provider-service)
-    infraConsoleFacade = factory.createClient(InfraConsoleFacade.class, sdkProperties.getInfraConsoleServiceName(), sdkProperties.getInfraConsoleServiceGroup(), sdkProperties.getClientName());
+    // 3. create call client interface api
+    this.infraConsoleFacade = factory.createClient(InfraConsoleFacade.class, sdkProperties.getInfraConsoleServiceName(), sdkProperties.getInfraConsoleServiceGroup(), sdkProperties.getClientName());
     log.info("InfraConsoleClient init success");
   }
 
   private InfraConsoleFacade getInfraConsoleFacade() {
-    return infraConsoleFacade;
+    return this.infraConsoleFacade;
   }
 
   /**
-   * 创建路由配置
+   * create gateway route config API
    * @param request
    * @return
    */
@@ -64,11 +68,11 @@ public class InfraConsoleClient {
   }
 
   /**
-   * query all route list
+   * query all route list API
    * @param req
    * @return
    */
-  public Set<String> routeList(RouteConfigQueryListReqDTO req) {
+  public Set<String> routeList(RouteConfigQueryReqDTO req) {
     ApiResp<List<RouteConfig>> resp = this.getInfraConsoleFacade().routeList(req);
     return Optional.ofNullable(resp.getData())
       .orElse(Collections.emptyList())

@@ -22,7 +22,7 @@ public class RoleAdminResp implements Serializable {
 	@Serial
 	private static final long serialVersionUID = 1751006874425398424L;
 
-	private List<SysAdminResp> selectedUserList;
+	private List<SysAdminResp> selectedAdminList;
 
-	private List<SysAdminResp> unSelectedUserList;
+	private List<SysAdminResp> unSelectedAdminList;
 }

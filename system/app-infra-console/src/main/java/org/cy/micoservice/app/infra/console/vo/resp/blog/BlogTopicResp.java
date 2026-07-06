@@ -1,7 +1,7 @@
 package org.cy.micoservice.app.infra.console.vo.resp.blog;
 
 
-import org.cy.micoservice.app.entity.infra.console.model.entity.blog.BlogTopic;
+import org.cy.micoservice.app.entity.infra.console.model.blog.BlogTopic;
 
 import java.io.Serial;
 import java.io.Serializable;

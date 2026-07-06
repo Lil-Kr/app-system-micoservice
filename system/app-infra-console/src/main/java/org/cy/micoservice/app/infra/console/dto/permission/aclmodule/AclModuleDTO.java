@@ -6,7 +6,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.cy.micoservice.app.infra.console.dto.permission.acl.AclDTO;
-import org.cy.micoservice.app.entity.infra.console.model.entity.sys.SysAclModule;
+import org.cy.micoservice.app.entity.infra.console.model.sys.SysAclModule;
 import org.springframework.beans.BeanUtils;
 import java.io.Serial;
 import java.util.ArrayList;

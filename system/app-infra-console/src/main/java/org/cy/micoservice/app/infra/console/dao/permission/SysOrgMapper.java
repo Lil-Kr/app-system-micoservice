@@ -2,7 +2,7 @@ package org.cy.micoservice.app.infra.console.dao.permission;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Param;
-import org.cy.micoservice.app.entity.infra.console.model.entity.sys.SysOrg;
+import org.cy.micoservice.app.entity.infra.console.model.sys.SysOrg;
 import org.cy.micoservice.app.infra.console.vo.req.sys.org.OrgListAllReq;
 import org.cy.micoservice.app.infra.console.vo.req.sys.org.OrgPageReq;
 import org.cy.micoservice.app.infra.console.vo.resp.sys.org.SysOrgResp;

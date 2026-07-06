@@ -36,6 +36,7 @@ public enum ApiReturnCodeEnum implements BaseEnum {
   ILLEGAL_CHARACTERS_ERROR(505, "参数中含有非法字符"),
   TOO_MANY_REQUEST(506, "too many request"),
   NO_ACCESS(510, "无权访问"),
+  INVALID_REQUEST(511, "无效的请求"),
   GATEWAY_STARTING_ERROR(601, "Gateway启动异常"),
   GATEWAY_ROUTE_ERROR(508, "网关路由转发异常"),
   DO_NOT_INJECT(4003, "禁止注入扫描"),

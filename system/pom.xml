@@ -24,7 +24,6 @@
 		<module>app-flink</module>
 		<module>app-gateway-facade</module>
 		<module>app-gateway</module>
-		<module>app-infra-facade</module>
 		<module>app-infra-console</module>
 		<module>app-infra-console-sdk</module>
 		<module>app-im</module>
@@ -68,6 +67,7 @@
 		<module>app-mall-marketing-api</module>
 		<module>app-mall-marketing-facade</module>
 		<module>app-mall-marketing-provider</module>
+		<module>app-infra-console-facade</module>
 	</modules>
 
 	<properties>

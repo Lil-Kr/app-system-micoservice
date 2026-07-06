@@ -3,7 +3,7 @@ package org.cy.micoservice.app.infra.console.vo.resp.sys.role;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
-import org.cy.micoservice.app.entity.infra.console.model.entity.sys.SysRole;
+import org.cy.micoservice.app.entity.infra.console.model.sys.SysRole;
 
 import java.io.Serial;
 

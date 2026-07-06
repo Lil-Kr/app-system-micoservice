@@ -6,7 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.cy.micoservice.app.common.enums.biz.DeleteStatusEnum;
 import org.cy.micoservice.app.entity.gateway.model.LogPrintStrategy;
 import org.cy.micoservice.app.gateway.dao.LogPrintStrategyMapper;
-import org.cy.micoservice.app.gateway.facade.dto.LogRequestDTO;
+import org.cy.micoservice.app.gateway.facade.dto.gateway.req.LogReqDTO;
 import org.cy.micoservice.app.gateway.facade.enums.LogPrintStrategyTypeEnum;
 import org.cy.micoservice.app.gateway.facade.print.*;
 import org.cy.micoservice.app.gateway.facade.print.abst.BaseLogPrintStrategy;
@@ -61,13 +61,13 @@ public class LogPrintStrategyServiceImpl implements LogPrintStrategyService {
   }
 
   @Override
-  public List<BaseLogPrintStrategy> getAvailableStrategy(LogRequestDTO logRequestDTO) {
-    return this.getLogPrintStrategiesCache().stream().filter(s -> s.isSupport(logRequestDTO)).toList();
+  public List<BaseLogPrintStrategy> getAvailableStrategy(LogReqDTO logReqDTO) {
+    return this.getLogPrintStrategiesCache().stream().filter(s -> s.isSupport(logReqDTO)).toList();
   }
 
   @Override
-  public boolean hasAvailableStrategy(LogRequestDTO logRequestDTO) {
-    return this.getLogPrintStrategiesCache().stream().anyMatch(item -> item.isSupport(logRequestDTO));
+  public boolean hasAvailableStrategy(LogReqDTO logReqDTO) {
+    return this.getLogPrintStrategiesCache().stream().anyMatch(item -> item.isSupport(logReqDTO));
   }
 
   private BaseLogPrintStrategy convertFrom(LogPrintStrategy logPrintStrategy) {

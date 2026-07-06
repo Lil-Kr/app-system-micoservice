@@ -3,7 +3,7 @@ package org.cy.micoservice.app.infra.console.vo.resp.sys.aclmodule;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
-import org.cy.micoservice.app.entity.infra.console.model.entity.sys.SysAclModule;
+import org.cy.micoservice.app.entity.infra.console.model.sys.SysAclModule;
 
 import java.io.Serial;
 import java.io.Serializable;

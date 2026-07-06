@@ -4,6 +4,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import jakarta.validation.groups.Default;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.cy.micoservice.app.common.constants.CommonConstants;
 import org.cy.micoservice.app.infra.console.vo.req.blog.category.BlogCategoryReq;
 import org.cy.micoservice.app.infra.console.vo.req.blog.label.BlogLabelReq;
@@ -17,6 +18,7 @@ import java.util.List;
  * @Date: 2024/5/25
  * @Description:
  */
+@EqualsAndHashCode(callSuper = true)
 @Data
 public class BlogTopicReq extends BaseReq {
 

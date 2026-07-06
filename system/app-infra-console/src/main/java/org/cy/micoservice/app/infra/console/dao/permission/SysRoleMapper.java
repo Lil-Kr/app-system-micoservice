@@ -2,7 +2,7 @@ package org.cy.micoservice.app.infra.console.dao.permission;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Param;
-import org.cy.micoservice.app.entity.infra.console.model.entity.sys.SysRole;
+import org.cy.micoservice.app.entity.infra.console.model.sys.SysRole;
 import org.cy.micoservice.app.infra.console.vo.req.sys.role.RoleListPageReq;
 import org.cy.micoservice.app.infra.console.vo.resp.sys.role.SysRoleResp;
 import org.springframework.stereotype.Repository;

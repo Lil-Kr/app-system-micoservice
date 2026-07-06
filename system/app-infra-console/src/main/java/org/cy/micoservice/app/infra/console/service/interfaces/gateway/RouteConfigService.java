@@ -18,17 +18,19 @@ public interface RouteConfigService {
   ApiPageResult<RouteConfig> pageRouteConfigList(RouteConfigQueryPageReq req);
 
   ApiResp<List<RouteConfig>> routeConfigList(RouteConfigQueryReq req);
-  ApiResp<List<RouteConfig>> routeConfigInternalList(RouteConfigQueryReq req);
 
   ApiResp<Long> create(RouteConfigAddReq req) throws Exception;
 
-  ApiResp<Long> createInternal(RouteConfigAddReq req) throws Exception;
-
-  ApiResp<String> edit(RouteConfigEditReq req) throws Exception;
+  ApiResp<String> update(RouteConfigEditReq req) throws Exception;
 
   ApiResp<String> delete(RouteConfigDelReq req) throws Exception;
 
-  ApiResp<List<RouteChangeLog>> getConfigLog(Long configId);
+  ApiResp<List<RouteChangeLog>> routeConfigLogList(Long configId);
 
-  ApiResp<List<RouteConfig>> getAppNameList();
+  ApiResp<List<RouteConfig>> appNameList();
+
+  ApiResp<Long> createInternal(RouteConfigAddReq req) throws Exception;
+
+  ApiResp<List<RouteConfig>> routeConfigInternalList(RouteConfigQueryReq req);
+
 }

@@ -1,9 +1,9 @@
 package org.cy.micoservice.app.infra.console.service.interfaces.permission;
 
-import org.cy.micoservice.app.entity.infra.console.model.entity.sys.SysAcl;
-import org.cy.micoservice.app.entity.infra.console.model.entity.sys.SysAdmin;
-import org.cy.micoservice.app.entity.infra.console.model.entity.sys.SysDict;
-import org.cy.micoservice.app.entity.infra.console.model.entity.sys.SysDictDetail;
+import org.cy.micoservice.app.entity.infra.console.model.sys.SysAcl;
+import org.cy.micoservice.app.entity.infra.console.model.sys.SysAdmin;
+import org.cy.micoservice.app.entity.infra.console.model.sys.SysDict;
+import org.cy.micoservice.app.entity.infra.console.model.sys.SysDictDetail;
 
 import java.util.List;
 
@@ -15,16 +15,19 @@ import java.util.List;
 public interface PermissionCacheService {
 
 	/** ================= admin-user cache by token ============== **/
-	void setUserTokenCache(String token, SysAdmin user);
+	void setAdminTokenCache(String token, SysAdmin user);
 
-	SysAdmin getUserTokenCache(String token);
+	SysAdmin getAdminTokenCache(String token);
 
-	void removeUserTokenCache(String token);
+	void removeAdminTokenCache(String token);
 
 	/** ================= admin-user cache by id, use for data transform case  ================= **/
-	void initUserAdminIdCache(List<SysAdmin> list);
-	SysAdmin getUserAdminIdCache(Long id);
+	void initAdminIdCache(List<SysAdmin> list);
+
+	SysAdmin getAdminIdCache(Long id);
+
 	void setUserAdminIdCache(Long id, SysAdmin user);
+
 	void removeUserAdminIdCache(Long id);
 
 	/**
@@ -47,11 +50,11 @@ public interface PermissionCacheService {
 	/**
 	 * ================================== sys admin-user acl ===============================
 	 */
-	void saveUserAclCache(Long surrogateId, List<SysAcl> aclList);
+	void saveAdminAclCache(Long surrogateId, List<SysAcl> aclList);
 
 	List<SysAcl> getAdminAclListCache(Long userId);
 
-	void invalidUserAclCache(List<Long> userIdList);
+	void invalidAdminAclCache(List<Long> userIdList);
 
-	void invalidAllUserAclCache();
+	void invalidAllAdminAclCache();
 }

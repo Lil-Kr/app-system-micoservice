@@ -1,7 +1,7 @@
 package org.cy.micoservice.app.gateway.service;
 
 import org.cy.micoservice.app.entity.gateway.model.LogPrintStrategy;
-import org.cy.micoservice.app.gateway.facade.dto.LogRequestDTO;
+import org.cy.micoservice.app.gateway.facade.dto.gateway.req.LogReqDTO;
 import org.cy.micoservice.app.gateway.facade.print.abst.BaseLogPrintStrategy;
 
 import java.util.List;
@@ -27,10 +27,10 @@ public interface LogPrintStrategyService {
   /**
    * 获取满足条件的日志打印策略配置集合
    */
-  List<BaseLogPrintStrategy> getAvailableStrategy(LogRequestDTO logRequestDTO);
+  List<BaseLogPrintStrategy> getAvailableStrategy(LogReqDTO logReqDTO);
 
   /**
    * 判断是否有满足条件的日志打印策略配置
    */
-  boolean hasAvailableStrategy(LogRequestDTO logRequestDTO);
+  boolean hasAvailableStrategy(LogReqDTO logReqDTO);
 }

@@ -2,7 +2,7 @@ package org.cy.micoservice.app.infra.console.dao.permission;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Param;
-import org.cy.micoservice.app.entity.infra.console.model.entity.sys.SysDict;
+import org.cy.micoservice.app.entity.infra.console.model.sys.SysDict;
 import org.cy.micoservice.app.infra.console.vo.req.sys.dict.DictListPageReq;
 import org.cy.micoservice.app.infra.console.vo.resp.sys.dic.SysDictResp;
 import org.springframework.stereotype.Repository;

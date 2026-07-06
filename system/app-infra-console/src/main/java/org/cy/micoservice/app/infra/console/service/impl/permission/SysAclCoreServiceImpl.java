@@ -8,42 +8,57 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.cy.micoservice.app.common.enums.biz.ValidStatusEnum;
-import org.cy.micoservice.app.entity.infra.console.model.entity.sys.SysAcl;
-import org.cy.micoservice.app.entity.infra.console.model.entity.sys.SysAclData;
-import org.cy.micoservice.app.entity.infra.console.model.entity.sys.SysAdmin;
-import org.cy.micoservice.app.infra.console.vo.resp.sys.role.SysRoleResp;
+import org.cy.micoservice.app.entity.infra.console.model.sys.SysAcl;
+import org.cy.micoservice.app.entity.infra.console.model.sys.SysAclData;
+import org.cy.micoservice.app.entity.infra.console.model.sys.SysAdmin;
+import org.cy.micoservice.app.infra.console.aspect.holder.RequestHolder;
 import org.cy.micoservice.app.infra.console.dao.permission.*;
 import org.cy.micoservice.app.infra.console.service.interfaces.permission.PermissionCacheService;
 import org.cy.micoservice.app.infra.console.service.interfaces.permission.SysAclCoreService;
+import org.cy.micoservice.app.infra.console.vo.resp.sys.role.SysRoleResp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-@Service
 @Slf4j
+@Service
 public class SysAclCoreServiceImpl implements SysAclCoreService {
 
 	@Autowired
 	private SysAclMapper aclMapper;
-
 	@Autowired
 	private SysRoleMapper roleMapper;
-
 	@Autowired
 	private SysRoleAdminMapper roleUserMapper;
-
 	@Autowired
 	private SysRoleAclMapper roleAclMapper;
-
 	@Autowired
 	private SysAclDataMapper aclDataMapper;
-
 	@Autowired
-	private PermissionCacheService permissionCacheService;
+	private PermissionCacheService cacheService;
+
+	@Override
+	public List<SysAcl> getCurrentAdminAclList() {
+		// retrieve current user id
+		Long adminId = RequestHolder.getCurrentAdmin().getId();
+
+		/**
+		 * retrieve from cache for [user - acl]
+		 * if cache not exist, then get from DB
+		 */
+		List<SysAcl> adminAclList = Optional.ofNullable(cacheService.getAdminAclListCache(adminId))
+			.filter(CollectionUtils::isNotEmpty)
+			.orElseGet(() -> {
+				List<SysAcl> aclList = this.getAdminAclList(adminId);
+				cacheService.saveAdminAclCache(adminId, aclList);
+				return aclList;
+			});
+
+		return adminAclList;
+	}
 
 	@Override
 	public List<SysAcl> getCurrentAdminAclList(Long adminId) {
@@ -51,27 +66,28 @@ public class SysAclCoreServiceImpl implements SysAclCoreService {
 		 * retrieve from cache for [user - acl]
 		 * if cache not exist, then get from DB
 		 */
-		return Optional.ofNullable(permissionCacheService.getAdminAclListCache(adminId))
+		return Optional.ofNullable(cacheService.getAdminAclListCache(adminId))
 			.filter(CollectionUtils::isNotEmpty)
 			.orElseGet(() -> {
 				List<SysAcl> aclList = this.getAdminAclList(adminId);
-				permissionCacheService.saveUserAclCache(adminId, aclList);
+				cacheService.saveAdminAclCache(adminId, aclList);
 				return aclList;
 			});
 	}
 
 	/**
 	 * retrieve [admin-role-acl] list
-	 * @param userId adminId
+	 * @param adminId adminId
 	 * @return
 	 * @throws Exception
 	 */
 	@Override
-	public List<SysAcl> getAdminAclList(Long userId) {
+	public List<SysAcl> getAdminAclList(Long adminId) {
 		// if current is supper admin, then return all acl list
-		if (this.isSuperAdmin(userId)) {
+		if (this.isSuperAdmin(adminId)) {
 			QueryWrapper<SysAcl> wrapper = new QueryWrapper<>();
-			wrapper.eq("status", ValidStatusEnum.ACTIVE.getCode());// 查询启用的权限点
+			// 查询启用的权限点
+			wrapper.eq("status", ValidStatusEnum.ACTIVE.getCode());
 			return aclMapper.selectList(wrapper);
 		}
 
@@ -80,7 +96,7 @@ public class SysAclCoreServiceImpl implements SysAclCoreService {
 		 * 1 step. if not supper admin, then retrieve current adminUser already own roleId list
 		 * remark: an adminUser can be assigned multiple roles
 		 */
-		List<Long> adminRoleIdList = roleUserMapper.selectRoleIdListByAdminId(userId);
+		List<Long> adminRoleIdList = roleUserMapper.selectRoleIdListByAdminId(adminId);
 		if (CollectionUtils.isEmpty(adminRoleIdList)) {
 			return Lists.newArrayList();
 		}
@@ -111,7 +127,7 @@ public class SysAclCoreServiceImpl implements SysAclCoreService {
 	@Override
 	public List<SysAcl> getAdminAclList(Long adminId, Integer type) {
 		// 如果当前用户是超级管理员, 返回所有的菜单权限点列表
-		if (isSuperAdmin(adminId)) {
+		if (this.isSuperAdmin(adminId)) {
 			QueryWrapper<SysAcl> wrapper = new QueryWrapper<>();
 			wrapper.eq("type", type);
 			wrapper.eq("status", ValidStatusEnum.ACTIVE.getCode());
@@ -119,13 +135,13 @@ public class SysAclCoreServiceImpl implements SysAclCoreService {
 		}
 
 		// 1. 如果不是超级管理员, 就取出当前用户已经分配的角色id列表, 一个用户可以被分配到多个角色, 最后权限取多个角色的并集
-		List<Long> userRoleIdList = roleUserMapper.selectRoleIdListByAdminId(adminId);
-		if (CollectionUtils.isEmpty(userRoleIdList)) {
+		List<Long> adminRoleIdList = roleUserMapper.selectRoleIdListByAdminId(adminId);
+		if (CollectionUtils.isEmpty(adminRoleIdList)) {
 			return Lists.newArrayList();
 		}
 
 		// 2. 根据角色id获取对应用户已经分配的权限点列表id(acl_id)
-		List<Long> userAclIdList = roleAclMapper.selectAclIdListByRoleIdList(userRoleIdList);
+		List<Long> userAclIdList = roleAclMapper.selectAclIdListByRoleIdList(adminRoleIdList);
 		if (CollectionUtils.isEmpty(userAclIdList)) {
 			return Lists.newArrayList();
 		}
@@ -163,9 +179,9 @@ public class SysAclCoreServiceImpl implements SysAclCoreService {
 	 * @return
 	 * @throws Exception
 	 */
-	private Boolean isSuperAdmin(Long userSurrogateId) {
+	private Boolean isSuperAdmin(Long adminId) {
 		// 查询当前用户分配的角色中是否包含是超级管理员
-		List<Long> roleIdList = roleUserMapper.selectRoleIdListByAdminId(userSurrogateId);
+		List<Long> roleIdList = roleUserMapper.selectRoleIdListByAdminId(adminId);
 		if (CollectionUtils.isEmpty(roleIdList)) {
 			return false;
 		}
@@ -189,7 +205,7 @@ public class SysAclCoreServiceImpl implements SysAclCoreService {
 		/**
 		 * 1. 超级管理员可以访问所有url
 		 */
-		if (isSuperAdmin(adminId)) {
+		if (this.isSuperAdmin(adminId)) {
 			return true;
 		}
 

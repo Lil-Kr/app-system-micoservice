@@ -1,8 +1,6 @@
 package org.cy.micoservice.app.infra.console.controller.permission;
 
 import org.cy.micoservice.app.common.base.api.ApiResp;
-import org.cy.micoservice.app.infra.console.vo.req.sys.permission.PermissionReq;
-import org.cy.micoservice.app.framework.web.starter.web.RequestContext;
 import org.cy.micoservice.app.infra.console.service.interfaces.permission.SysPermissionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,8 +27,6 @@ public class AuthController {
    */
   @GetMapping("/permission")
   public ApiResp<Map<String, Object>> permission() {
-    PermissionReq req = new PermissionReq();
-    req.setAdminId(RequestContext.getUserId());
-    return permissionService.permission(req);
+    return permissionService.permission();
   }
 }

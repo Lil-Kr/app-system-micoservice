@@ -5,7 +5,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
-import org.cy.micoservice.app.entity.infra.console.model.entity.sys.SysAcl;
+import org.cy.micoservice.app.entity.infra.console.model.sys.SysAcl;
 import org.springframework.beans.BeanUtils;
 
 import java.io.Serial;

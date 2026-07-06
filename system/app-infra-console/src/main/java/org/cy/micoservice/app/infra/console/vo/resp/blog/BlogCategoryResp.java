@@ -3,7 +3,7 @@ package org.cy.micoservice.app.infra.console.vo.resp.blog;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
-import org.cy.micoservice.app.entity.infra.console.model.entity.blog.BlogCategory;
+import org.cy.micoservice.app.entity.infra.console.model.blog.BlogCategory;
 
 import java.io.Serial;
 import java.io.Serializable;

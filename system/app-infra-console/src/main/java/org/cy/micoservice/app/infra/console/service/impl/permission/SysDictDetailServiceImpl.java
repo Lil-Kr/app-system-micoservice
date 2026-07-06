@@ -6,11 +6,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.cy.micoservice.app.common.base.api.ApiResp;
 import org.cy.micoservice.app.common.base.api.ApiPageResult;
-import org.cy.micoservice.app.entity.infra.console.model.entity.sys.SysDictDetail;
+import org.cy.micoservice.app.entity.infra.console.model.sys.SysDictDetail;
 import org.cy.micoservice.app.infra.console.vo.req.sys.dict.DictDetailPageListReq;
 import org.cy.micoservice.app.infra.console.vo.req.sys.dict.SaveDictDetailReq;
 import org.cy.micoservice.app.infra.console.vo.resp.sys.dic.SysDictDetailResp;
-import org.cy.micoservice.app.infra.console.constant.CommonConstants;
+import org.cy.micoservice.app.infra.console.facade.constants.CommonConstants;
 import org.cy.micoservice.app.infra.console.dao.permission.SysDictDetailMapper;
 import org.cy.micoservice.app.infra.console.service.interfaces.MessageLangService;
 import org.cy.micoservice.app.infra.console.service.interfaces.permission.PermissionCacheService;
@@ -18,12 +18,10 @@ import org.cy.micoservice.app.infra.console.service.interfaces.permission.SysDic
 import org.cy.micoservice.app.framework.id.starter.service.IdService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-
-import static org.cy.micoservice.app.common.constants.CommonConstants.LANG_ZH;
+import static org.cy.micoservice.app.infra.console.facade.constants.InfraLangConstants.LANG_ZH;
 
 /**
  * @Author: Lil-K
@@ -36,10 +34,8 @@ public class SysDictDetailServiceImpl extends ServiceImpl<SysDictDetailMapper, S
 
 	@Autowired
 	private SysDictDetailMapper dictDetailMapper;
-
 	@Autowired
 	private MessageLangService msgService;
-
 	@Autowired
 	private PermissionCacheService permissionCacheService;
 

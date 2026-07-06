@@ -3,7 +3,7 @@ package org.cy.micoservice.app.infra.console.vo.resp.image;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
-import org.cy.micoservice.app.entity.infra.console.model.entity.image.ImageInfo;
+import org.cy.micoservice.app.entity.infra.console.model.image.ImageInfo;
 
 import java.io.Serial;
 import java.io.Serializable;

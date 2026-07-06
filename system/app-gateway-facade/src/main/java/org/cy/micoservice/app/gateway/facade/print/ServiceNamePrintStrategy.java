@@ -3,7 +3,7 @@ package org.cy.micoservice.app.gateway.facade.print;
 
 import com.alibaba.fastjson2.JSON;
 import org.cy.micoservice.app.gateway.facade.print.abst.BaseLogPrintStrategy;
-import org.cy.micoservice.app.gateway.facade.dto.LogRequestDTO;
+import org.cy.micoservice.app.gateway.facade.dto.gateway.req.LogReqDTO;
 
 import java.io.Serial;
 
@@ -30,8 +30,8 @@ public class ServiceNamePrintStrategy extends BaseLogPrintStrategy {
   }
 
   @Override
-  public boolean isSupport(LogRequestDTO logRequestDTO) {
-    return logRequestDTO.getServiceName() != null && logRequestDTO.getServiceName().equals(this.getServiceName());
+  public boolean isSupport(LogReqDTO logReqDTO) {
+    return logReqDTO.getServiceName() != null && logReqDTO.getServiceName().equals(this.getServiceName());
   }
 
   public String getServiceName() {

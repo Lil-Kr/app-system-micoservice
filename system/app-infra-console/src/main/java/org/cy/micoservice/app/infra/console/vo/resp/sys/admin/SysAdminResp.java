@@ -3,7 +3,7 @@ package org.cy.micoservice.app.infra.console.vo.resp.sys.admin;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
-import org.cy.micoservice.app.entity.infra.console.model.entity.sys.SysAdmin;
+import org.cy.micoservice.app.entity.infra.console.model.sys.SysAdmin;
 
 import java.io.Serial;
 

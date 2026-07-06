@@ -7,14 +7,14 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.cy.micoservice.app.common.constants.CommonConstants;
-import org.cy.micoservice.app.common.constants.gateway.GatewayHeadersConstants;
 import org.cy.micoservice.app.common.enums.response.ApiReturnCodeEnum;
 import org.cy.micoservice.app.common.exception.BizException;
 import org.cy.micoservice.app.common.security.impl.AES128GCMCrypto;
 import org.cy.micoservice.app.framework.identiy.starter.config.AuthProperties;
 import org.cy.micoservice.app.framework.identiy.starter.uitls.JWTUtil;
-import org.cy.micoservice.app.framework.web.starter.enums.RequestEnum;
 import org.cy.micoservice.app.framework.web.starter.annotations.NoAuthCheck;
+import org.cy.micoservice.app.framework.web.starter.enums.RequestEnum;
+import org.cy.micoservice.app.gateway.facade.constants.GatewayHeadersConstants;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -36,14 +36,23 @@ public class AuthInterceptor implements HandlerInterceptor, InitializingBean {
 
   @Value("${decrypty.secret-key:}")
   private String decryptSecretKey;
-
   @Autowired
   private AuthProperties authProperties;
 
   private AES128GCMCrypto aes128GCMCrypto;
 
   @Override
-  public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+  public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) {
+    RequestContext.remove();
+  }
+
+  @Override
+  public void afterPropertiesSet() {
+    this.aes128GCMCrypto = new AES128GCMCrypto(decryptSecretKey);
+  }
+
+  @Override
+  public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
     if (!(handler instanceof HandlerMethod)) {
       log.debug("invalid request,uri:{}", request.getRequestURI());
       return true;
@@ -71,15 +80,5 @@ public class AuthInterceptor implements HandlerInterceptor, InitializingBean {
       throw new BizException(ApiReturnCodeEnum.NO_ACCESS);
     }
     return true;
-  }
-
-  @Override
-  public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
-    RequestContext.remove();
-  }
-
-  @Override
-  public void afterPropertiesSet() throws Exception {
-    this.aes128GCMCrypto = new AES128GCMCrypto(decryptSecretKey);
   }
 }

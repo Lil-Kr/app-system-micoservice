@@ -1,8 +1,8 @@
 package org.cy.micoservice.app.infra.console.vo.resp.blog;
 
 import lombok.Data;
-import lombok.ToString;
-import org.cy.micoservice.app.entity.infra.console.model.entity.blog.BlogDiary;
+import lombok.EqualsAndHashCode;
+import org.cy.micoservice.app.entity.infra.console.model.blog.BlogDiary;
 
 import java.io.Serial;
 
@@ -11,7 +11,7 @@ import java.io.Serial;
  * @Date: 2025/5/8
  * @Description:
  */
-@ToString
+@EqualsAndHashCode(callSuper = true)
 @Data
 public class BlogDiaryPageListResp extends BlogDiary {
 

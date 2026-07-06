@@ -55,7 +55,7 @@
 		</where>
 	</select>
 
-	<select id="selectDictList" resultType="org.cy.micoservice.app.entity.infra.console.model.entity.sys.SysDict">
+	<select id="selectDictList" resultType="org.cy.micoservice.app.entity.infra.console.model.sys.SysDict">
 		select
 		<include refid="Base_Column_List"/>
 		from sys_dict

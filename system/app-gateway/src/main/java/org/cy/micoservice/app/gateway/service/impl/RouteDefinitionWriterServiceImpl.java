@@ -5,7 +5,7 @@ import org.cy.micoservice.app.common.enums.response.RpcReturnCodeEnum;
 import org.cy.micoservice.app.common.utils.AssertUtil;
 import org.cy.micoservice.app.entity.gateway.model.RouteConfig;
 import org.cy.micoservice.app.gateway.constants.RouteConstant;
-import org.cy.micoservice.app.gateway.facade.enums.GatewayRouterSchemaEnum;
+import org.cy.micoservice.app.gateway.facade.enums.GatewaySchemaEnum;
 import org.cy.micoservice.app.gateway.service.RouteDefinitionWriterService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.gateway.event.RefreshRoutesEvent;
@@ -53,7 +53,7 @@ public class RouteDefinitionWriterServiceImpl implements RouteDefinitionWriterSe
         return false;
       }
       String schema = routeConfig.getSchema();
-      AssertUtil.isNotBlank(GatewayRouterSchemaEnum.getByCode(schema), RpcReturnCodeEnum.RPC_PARAMETER_ERROR);
+      AssertUtil.isNotBlank(GatewaySchemaEnum.getByCode(schema), RpcReturnCodeEnum.RPC_PARAMETER_ERROR);
 
       RouteDefinition routeDefinition = new RouteDefinition();
       routeDefinition.setId(RouteConstant.ROUTE_CONFIG_PREFIX + routeConfig.getId());
@@ -99,7 +99,7 @@ public class RouteDefinitionWriterServiceImpl implements RouteDefinitionWriterSe
       return false;
     }
 
-    if (Objects.isNull(GatewayRouterSchemaEnum.getByCode(routeConfig.getSchema()))) {
+    if (Objects.isNull(GatewaySchemaEnum.getByCode(routeConfig.getSchema()))) {
       return false;
     }
 

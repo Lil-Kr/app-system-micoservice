@@ -25,5 +25,5 @@ public interface RouteConfigChangeLogService {
 
   Integer deleteById(RouteChangeLog routeChangeLog);
 
-  List<RouteChangeLog> selectById(Long configId);
+  List<RouteChangeLog> queryRouteChangeLogList(Long configId);
 }

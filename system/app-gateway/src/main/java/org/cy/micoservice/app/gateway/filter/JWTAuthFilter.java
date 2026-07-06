@@ -3,14 +3,14 @@ package org.cy.micoservice.app.gateway.filter;
 import com.alibaba.fastjson2.JSONObject;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.cy.micoservice.app.common.constants.gateway.GatewayHeadersConstants;
+import org.cy.micoservice.app.gateway.facade.constants.GatewayHeadersConstants;
 import org.cy.micoservice.app.common.security.impl.AES128GCMCrypto;
 import org.cy.micoservice.app.entity.gateway.model.RouteConfig;
 import org.cy.micoservice.app.framework.identiy.starter.response.TokenBodyResponse;
 import org.cy.micoservice.app.framework.identiy.starter.template.AuthTemplate;
 import org.cy.micoservice.app.gateway.config.GatewayApplicationProperties;
 import org.cy.micoservice.app.gateway.facade.constants.GatewayConstants;
-import org.cy.micoservice.app.gateway.facade.enums.GatewayRouterAuthTypeEnum;
+import org.cy.micoservice.app.gateway.facade.enums.GatewayAuthTypeEnum;
 import org.cy.micoservice.app.gateway.filter.abst.AbstractGatewayFilter;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,7 +46,7 @@ public class JWTAuthFilter extends AbstractGatewayFilter implements Initializing
   @Override
   protected boolean isSupport(ServerWebExchange exchange) {
     RouteConfig routeConfig = exchange.getAttribute(GatewayConstants.GatewayAttrKey.X_ROUTE);
-    if (Objects.isNull(routeConfig) || ! GatewayRouterAuthTypeEnum.JWT.getCode().equals(routeConfig.getAuthType())) return false;
+    if (Objects.isNull(routeConfig) || ! GatewayAuthTypeEnum.JWT.getCode().equals(routeConfig.getAuthType())) return false;
     return exchange.getAttributes().get(GatewayConstants.GatewayAttrKey.X_AUTHORIZATION) != null;
   }
 

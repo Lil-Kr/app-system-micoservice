@@ -4,7 +4,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.cy.micoservice.app.common.utils.DateUtil;
 import org.cy.micoservice.app.common.utils.EncryptUtils;
 import org.cy.micoservice.app.common.utils.IdWorker;
-import org.cy.micoservice.app.entity.infra.console.model.entity.sys.SysAdmin;
+import org.cy.micoservice.app.entity.infra.console.model.sys.SysAdmin;
 import org.cy.micoservice.app.infra.console.vo.req.sys.admin.AdminRegisterReq;
 import org.cy.micoservice.app.infra.console.vo.req.sys.admin.AdminSaveReq;
 import org.springframework.beans.BeanUtils;

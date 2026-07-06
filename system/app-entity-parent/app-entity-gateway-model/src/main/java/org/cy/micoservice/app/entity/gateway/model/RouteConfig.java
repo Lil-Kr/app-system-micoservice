@@ -1,5 +1,6 @@
 package org.cy.micoservice.app.entity.gateway.model;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -47,19 +48,19 @@ public class RouteConfig extends BaseEntity {
    * 留给后续做rpc转发扩展用
    * http / dubbo
    */
-  // @TableField("`schema`")
+  @TableField("`schema`")
   private String schema;
 
   /**
    * 请求类型: GET, POST ...
    */
-  // @TableField("`method`")
+  @TableField("`method`")
   private String method;
 
   /**
    * 网关请求的路径
    */
-  // @TableField("`path`")
+  @TableField("`path`")
   private String path;
 
   /**
@@ -84,7 +85,7 @@ public class RouteConfig extends BaseEntity {
    * 生效状态: 0, 1
    * see org.cy.micoservice.app.gateway.facade.enums.GatewayRouterStatusEnum
    */
-  // @TableField("`status`")
+  @TableField("`status`")
   private Integer status;
 
 }

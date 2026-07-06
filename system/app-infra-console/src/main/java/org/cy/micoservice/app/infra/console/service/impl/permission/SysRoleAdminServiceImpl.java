@@ -9,7 +9,8 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.cy.micoservice.app.common.base.api.ApiResp;
 import org.cy.micoservice.app.common.exception.BizException;
 import org.cy.micoservice.app.common.utils.DateUtil;
-import org.cy.micoservice.app.entity.infra.console.model.entity.sys.SysRoleAdmin;
+import org.cy.micoservice.app.entity.infra.console.model.sys.SysRoleAdmin;
+import org.cy.micoservice.app.infra.console.aspect.holder.RequestHolder;
 import org.cy.micoservice.app.infra.console.vo.req.sys.roleuser.RoleAdminReq;
 import org.cy.micoservice.app.infra.console.vo.resp.sys.admin.SysAdminResp;
 import org.cy.micoservice.app.infra.console.vo.resp.sys.role.RoleAdminResp;
@@ -22,14 +23,12 @@ import org.cy.micoservice.app.framework.id.starter.service.IdService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
-
-import static org.cy.micoservice.app.common.constants.CommonConstants.LANG_ZH;
+import static org.cy.micoservice.app.infra.console.facade.constants.InfraLangConstants.LANG_ZH;
 
 /**
  * @Author: Lil-K
@@ -92,39 +91,39 @@ public class SysRoleAdminServiceImpl extends ServiceImpl<SysRoleAdminMapper, Sys
 		/**
 		 * 更新[角色-用户]信息
 		 */
-		this.updateRoleUsers(req.getRoleId(), userIdList, req.getAdminId());
+		this.updateRoleUsers(req.getRoleId(), userIdList, RequestHolder.getCurrentAdmin().getId());
 
 		/**
 		 * 缓存失效: 用户的权限点失效
 		 */
-		permissionCacheService.invalidUserAclCache(userIdList);
+		permissionCacheService.invalidAdminAclCache(userIdList);
 		return ApiResp.success(msgService.getMessage(LANG_ZH, "sys.role.user.resp.msg4"));
 	}
 
 	/**
 	 * 更新[角色-用户]信息
 	 * @param roleId
-	 * @param userIdList
+	 * @param adminIdList
 	 */
 	@Transactional
-	public void updateRoleUsers(Long roleId, List<Long> userIdList, Long adminId) {
-		if (CollectionUtils.isEmpty(userIdList)) {
+	public void updateRoleUsers(Long roleId, List<Long> adminIdList, Long adminId) {
+		if (CollectionUtils.isEmpty(adminIdList)) {
 			return;
 		}
 		// 删除旧的 [角色-用户] 对应关系数据
 		QueryWrapper<SysRoleAdmin> wrapper = new QueryWrapper<>();
-		wrapper.eq("role_id",roleId);
+		wrapper.eq("role_id", roleId);
 		int delete = roleAdminMapper.delete(wrapper);
 		if (delete < 1) {
 			throw new BizException(msgService.getMessage(LANG_ZH, "sys.role.user.resp.msg5"));
 		}
 
 		Date currentTime = DateUtil.dateTimeNow();
-		List<SysRoleAdmin> roleUsers = userIdList.stream()
-			.map(userId -> SysRoleAdmin.builder()
+		List<SysRoleAdmin> roleAdmins = adminIdList.stream()
+			.map(id -> SysRoleAdmin.builder()
 				.surrogateId(idService.getId())
 				.roleId(roleId)
-				.userId(userId)
+				.userId(id)
 				.operateIp("127.0.0.1")
 				.operator(adminId)
 				.createTime(currentTime)
@@ -133,7 +132,7 @@ public class SysRoleAdminServiceImpl extends ServiceImpl<SysRoleAdminMapper, Sys
 			.collect(Collectors.toList());
 
 		// 批量更新角色-用户信息
-		this.saveBatch(roleUsers);
+		this.saveBatch(roleAdmins);
 	}
 
 	/**
@@ -164,8 +163,8 @@ public class SysRoleAdminServiceImpl extends ServiceImpl<SysRoleAdminMapper, Sys
 		}
 
 		RoleAdminResp build = RoleAdminResp.builder()
-			.selectedUserList(roleAdminSelectList)
-			.unSelectedUserList(roleAdminAllList)
+			.selectedAdminList(roleAdminSelectList)
+			.unSelectedAdminList(roleAdminAllList)
 			.build();
 		return ApiResp.success(build);
 	}

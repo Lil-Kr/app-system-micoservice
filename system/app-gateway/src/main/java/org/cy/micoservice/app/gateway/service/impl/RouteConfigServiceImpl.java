@@ -1,7 +1,7 @@
 package org.cy.micoservice.app.gateway.service.impl;
 
 import org.cy.micoservice.app.entity.gateway.model.RouteConfig;
-import org.cy.micoservice.app.gateway.facade.enums.GatewayRouterStatusEnum;
+import org.cy.micoservice.app.gateway.facade.enums.GatewayStatusEnum;
 import org.cy.micoservice.app.gateway.dao.RouteConfigMapper;
 import org.cy.micoservice.app.gateway.service.RouteConfigService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +23,7 @@ public class RouteConfigServiceImpl implements RouteConfigService {
 
   @Override
   public List<RouteConfig> queryRouteConfigAllValidaList() {
-    return routeConfigMapper.queryRouteConfigAllValidaList(GatewayRouterStatusEnum.VALID.getCode());
+    return routeConfigMapper.queryRouteConfigAllValidaList(GatewayStatusEnum.VALID.getCode());
   }
 
   @Override

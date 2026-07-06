@@ -119,5 +119,25 @@
 			<scope>compile</scope>
 			<optional>true</optional>
 		</dependency>
+		
+		<!-- test start -->
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<optional>true</optional>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-api</artifactId>
+			<optional>true</optional>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-engine</artifactId>
+			<optional>true</optional>
+		</dependency>
+		<!-- test end -->
 	</dependencies>
 </project>

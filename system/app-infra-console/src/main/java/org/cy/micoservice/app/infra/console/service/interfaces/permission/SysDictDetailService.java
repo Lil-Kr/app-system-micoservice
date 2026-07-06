@@ -3,7 +3,7 @@ package org.cy.micoservice.app.infra.console.service.interfaces.permission;
 import com.baomidou.mybatisplus.extension.service.IService;
 import org.cy.micoservice.app.common.base.api.ApiResp;
 import org.cy.micoservice.app.common.base.api.ApiPageResult;
-import org.cy.micoservice.app.entity.infra.console.model.entity.sys.SysDictDetail;
+import org.cy.micoservice.app.entity.infra.console.model.sys.SysDictDetail;
 import org.cy.micoservice.app.infra.console.vo.req.sys.dict.DictDetailPageListReq;
 import org.cy.micoservice.app.infra.console.vo.req.sys.dict.SaveDictDetailReq;
 import org.cy.micoservice.app.infra.console.vo.resp.sys.dic.SysDictDetailResp;
